@@ -37,7 +37,7 @@ router.post('/',
       sendPath = '/account-pending';
     }
     res.send(JSON.stringify(Object.assign({},{
-      user: req.user,
+      user: req.user.toJSON(),
       path: sendPath
     })));
 
