@@ -1,7 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
 import './index.css';
+import Home from './home';
+import Router from './router';
+
+const App = props => {
+
+  return <div>
+      <Router />
+  </div>
+}
 
 ReactDOM.render(
   <App />,
