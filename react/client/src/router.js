@@ -4,8 +4,13 @@ export default class Router extends React.Component {
   constructor (props) {
     super (props);
     this.state = { path: '/',
-                   email: "",
-                   token: "" }
+                   user:{
+                     email: "",
+                     token: "",
+                     user_id: 2,
+                     is_admin: false
+                        }
+                 }
   }
 
 // find user is going to find the current user by their session and add it to the state
