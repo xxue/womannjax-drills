@@ -1,5 +1,11 @@
 import React from 'react';
-import Home from './home'
+import Home from './home';
+// Display Message wil be used for both Password instructions
+// and Thank you for signing up
+import DisplayMessage from './DisplayMessage';
+
+
+
 export default class Router extends React.Component {
   constructor (props) {
     super (props);
@@ -22,8 +28,8 @@ export default class Router extends React.Component {
     // this is where we'll have all the switch statements to render
     // the page we want, based on the state
     if (this.state.path==='/'){
-      return  <Home />
-      
+      return  <DisplayMessage text="Hey There!" />
+
     }
 
   }
