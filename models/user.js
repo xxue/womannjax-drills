@@ -1,4 +1,8 @@
 'use strict';
+
+const Promise = require("bluebird"),
+    bcrypt = Promise.promisifyAll(require('bcrypt-nodejs'));
+
 module.exports = function(sequelize, DataTypes) {
   var User = sequelize.define('User', {
     first_name: DataTypes.STRING,
@@ -23,7 +27,13 @@ module.exports = function(sequelize, DataTypes) {
         User.hasMany(models.MyDrills);
         User.belongsToMany(models.DrillGroup, {through: 'MyDrills'});
 
-      }
+      },
+      validPassword: function(password, passwd){
+				return bcrypt.compareAsync(password, passwd ).then(isMatch => {
+          return isMatch
+        }
+        ).catch(console.error)
+			}
     },
     indexes: [
       // Create a unique index on email
@@ -32,6 +42,17 @@ module.exports = function(sequelize, DataTypes) {
         fields: ['email']
       }
     ]
+  });
+  User.beforeCreate((user,options,done)=>{
+    bcrypt.genSaltAsync(SALT_WORK_FACTOR)
+             .then((salt)=> {
+               return bcrypt.hashAsync(user.password, salt, null);
+             })
+             .then((hash)=> {
+               user.password = hash;
+               return done(null,user);
+             })
+             .catch(console.error);
   });
   return User;
 };
