@@ -1,5 +1,6 @@
 import React from 'react';
 import Home from './home'
+import Topnav from './topnav'
 export default class Router extends React.Component {
   constructor (props) {
     super (props);
@@ -22,7 +23,10 @@ export default class Router extends React.Component {
     // this is where we'll have all the switch statements to render
     // the page we want, based on the state
     if (this.state.path==='/'){
-      return  <Home />
+      return <div>
+       <Topnav />
+       <Home />
+     </div>
     }
 
   }
