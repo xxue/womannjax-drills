@@ -11,13 +11,13 @@ router.get('/', function(req, res, next) {
 // users#create
 // sign up user/ create the user in db
 router.post('/', function(req, res, next) {
-  const { email, password } = req.body;
+  const { first_name, last_name, email, password, } = req.body;
   console.log(email,password)
   User.create({email,password})
     .then((user)=>{
       console.log('created user');
       res.send(JSON.stringify(Object.assign({},{
-        user: user,
+        user: user.toJSON(),
         path: '/account-pending'
       })));
     })

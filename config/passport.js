@@ -18,9 +18,9 @@ passport.deserializeUser(function(user, done){
 
 // For Authentication Purposes
 passport.use(new LocalStrategy(
-	function(username, password, done){
-    console.log('username ', username);
-		db.User.findOne({where: {email: username}})
+	function(email, password, done){
+    console.log('username ', email);
+		db.User.findOne({where: {email: email}})
       .then((user) => {
         if(!user) return done(null, false);
         console.log(user)

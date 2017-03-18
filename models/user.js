@@ -35,6 +35,17 @@ module.exports = function(sequelize, DataTypes) {
         ).catch(console.error)
 			}
     },
+    instanceMethods: {
+      toJSON: function(){
+        return { id: this.id,
+                 first_name: this.first_name,
+                 last_name: this.last_name,
+                 email:this.email,
+        //         token: this.token,
+                 isAdmin: this.is_admin
+               }
+      }
+    },
     indexes: [
       // Create a unique index on email
       {
