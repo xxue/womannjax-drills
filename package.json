@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
+    "s": "sequelize",
     "debug": "nodemon --inspect ./bin/www"
   },
   "dependencies": {

@@ -12,6 +12,8 @@ module.exports = function(sequelize, DataTypes) {
       associate: function(models) {
         // associations can be defined here
         DrillGroup.hasMany(models.Drill);
+        DrillGroup.hasMany(models.MyDrills);
+        DrillGroup.belongsToMany(models.User, {through: 'MyDrills'});
       }
     }
   });
