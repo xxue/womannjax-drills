@@ -8,9 +8,9 @@ module.exports = function(sequelize, DataTypes) {
               unique: true
             },
     password: DataTypes.STRING,
-    is_verified: {
-                  type: DataTypes.BOOLEAN,
-                  defaultValue: false
+    token: {
+                  type: DataTypes.STRING,
+                  defaultValue: null
                 },
     is_admin: {
                   type: DataTypes.BOOLEAN,
