@@ -5,10 +5,33 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var passport = require('passport');
+var passportConfig = require('./config/passport');
+var http= require('http');
+var session = require('express-session');
+var methodOverride = require('method-override');
+
 var index = require('./routes/index');
 var users = require('./routes/users');
+var sessions = require('./routes/sessions');
+
+var config = require('./config/config.json')
+
+SALT_WORK_FACTOR = 12;
+BASE_URL = 'localhost:3000';
 
 var app = express();
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", `${BASE_URL}`);
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  next();
+});
+
+app.use(methodOverride('X-HTTP-Method'));          // Microsoft
+app.use(methodOverride('X-HTTP-Method-Override')); // Google/GData
+app.use(methodOverride('X-Method-Override'));      // IBM
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -20,6 +43,15 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(methodOverride(function (req, res) {
+  if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+    // look in urlencoded POST bodies and delete it
+    console.log('jansdjknakjnsdakjnsdjknasdjknjknsadjknjnkadjkn',req.body);
+    var method = req.body._method
+    delete req.body._method
+    return method
+  }
+}));
 app.use(require('node-sass-middleware')({
   src: path.join(__dirname, 'public'),
   dest: path.join(__dirname, 'public'),
@@ -28,8 +60,17 @@ app.use(require('node-sass-middleware')({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(session({
+  secret:'123abc',
+  resave: false,
+  saveUninitialized:false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use('/', index);
 app.use('/users', users);
+app.use('/sessions', sessions);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
