@@ -16,15 +16,15 @@ module.exports = {
       },
       email: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true
       },
       password: {
         type: Sequelize.STRING
       },
-      is_verified: {
-        allowNull: false,
-        type: Sequelize.BOOLEAN
-      },
+      token: {
+        type: Sequelize.STRING
+      }
       is_admin: {
         allowNull: false,
         type: Sequelize.BOOLEAN
