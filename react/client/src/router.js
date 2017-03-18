@@ -23,6 +23,7 @@ export default class Router extends React.Component {
     // the page we want, based on the state
     if (this.state.path==='/'){
       return  <Home />
+      
     }
 
   }
