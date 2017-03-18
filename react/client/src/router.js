@@ -1,6 +1,7 @@
 import React from 'react';
 import Home from './home';
 import CreateDrillGroup from './CreateDrillGroup';
+import ManageDrillGroups from './ManageDrillGroups';
 
 export default class Router extends React.Component {
   constructor (props) {
@@ -17,7 +18,8 @@ export default class Router extends React.Component {
 
   render () {
     return <main>
-      <CreateDrillGroup />
+      <CreateDrillGroup drillGroup={""}/>
+      <ManageDrillGroups />
     </main>
   }
 }

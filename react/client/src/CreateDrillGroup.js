@@ -1,7 +1,6 @@
 import React from 'react';
 import { Grid, Row, Col, ControlLabel, FormControl, HelpBlock, FormGroup, Radio, Button } from 'react-bootstrap';
 
-
 export default props => {
   function FieldGroup({ id, label, help, ...props }) {
     return (
@@ -15,6 +14,9 @@ export default props => {
 
   return (
     <Grid>
+      <Row>
+        <h2>Create New Drill Group</h2>
+      </Row>
       <Row className="show-grid">
         <Col xs={12} md={12}>
           <form>
