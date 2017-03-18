@@ -1,5 +1,7 @@
 import React from 'react';
-import Home from './home'
+import Home from './home';
+import CreateDrillGroup from './CreateDrillGroup';
+
 export default class Router extends React.Component {
   constructor (props) {
     super (props);
@@ -9,21 +11,13 @@ export default class Router extends React.Component {
                      token: "",
                      user_id: 2,
                      is_admin: false
-                        }
+                   }
                  }
   }
 
-// find user is going to find the current user by their session and add it to the state
-  // function FindUser(){
-  //
-  //     }
-
   render () {
-    // this is where we'll have all the switch statements to render
-    // the page we want, based on the state
-    if (this.state.path==='/'){
-      return  <Home />
-    }
-
+    return <main>
+      <CreateDrillGroup />
+    </main>
   }
 }
