@@ -29,7 +29,7 @@ export default class Router extends React.Component {
     // this is where we'll have all the switch statements to render
     // the page we want, based on the state
     if (this.state.path==='/'){
-      return  <SignIn />
+      return  <DisplayMessage text="Hey friends" />
 
     }
 
