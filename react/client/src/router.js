@@ -1,7 +1,5 @@
 import React from 'react';
 import Topnav from './topnav'
-import CreateDrillGroup from './CreateDrillGroup';
-import ManageDrillGroups from './ManageDrillGroups';
 import Home from './home';
 // Display Message wil be used for both Password instructions
 // and Thank you for signing up
