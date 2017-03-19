@@ -44,7 +44,8 @@ export default class SignIn extends React.Component {
 
 const main={
     'display':'flex',
-    'flex-direction':'column'
+    'flex-direction':'column',
+    'text-align': 'center'
 }
 
 const links={
@@ -55,12 +56,13 @@ const links={
 
     return <div style={main} className="container">
               <h2>Sign In</h2>
+              {this.props.errors.join(", ")}
               {formInstance}
               <div style={links}>
                 {/* I really should have added these links into the bottom
                    of the form but i didn't I'm sorry */}
-                <p>Forgot Password?</p>
-                <p>Don't have an Account? </p>
+                <a href='' onClick={this.props.goToForgotPassword} >Forgot Password?</a>
+                <a href='' onClick={this.props.goToSignUp} >Don't have an Account? </a>
               </div>
             </div>
   }
