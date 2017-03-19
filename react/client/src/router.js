@@ -1,9 +1,10 @@
 import React from 'react';
 import Home from './home'
 import Topnav from './topnav'
-import Home from './home';
+// import Home from './home';
 import CreateDrillGroup from './CreateDrillGroup';
 import ManageDrillGroups from './ManageDrillGroups';
+import ShowDrillGroup from './ShowDrillGroup'
 // Display Message wil be used for both Password instructions
 // and Thank you for signing up
 import DisplayMessage from './DisplayMessage';
@@ -29,9 +30,10 @@ export default class Router extends React.Component {
 //     if (this.state.path==='/'){
 //     }
     return <main>
-      <CreateDrillGroup drillGroup={""}/>
-      <ManageDrillGroups />
-      <DisplayMessage text="Hey friends" />
+      {/* <CreateDrillGroup drillGroup={""}/>
+      <ManageDrillGroups /> */}
+      <ShowDrillGroup />
+      {/* <DisplayMessage text="Hey friends" /> */}
     </main>
   }
 }

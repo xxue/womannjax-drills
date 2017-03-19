@@ -17,7 +17,7 @@ export default props => {
       </Row>
       <br />
       <Panel>
-        <div><h4>Hello</h4></div>
+        <div><h4>{"< Drill Group Title >"}</h4></div>
         <div style={style}>
           <ButtonToolbar>
             <Button href="#">View</Button>
