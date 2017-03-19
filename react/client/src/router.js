@@ -8,6 +8,8 @@ import SignIn from './SignIn';
 import UserDrillBoard from './UserDrillBoard';
 import CreateDrillGroup from './CreateDrillGroup';
 import ManageDrillGroups from './ManageDrillGroups';
+import ShowDrillGroup from './ShowDrillGroup';
+
 
 import Handlers from './handlers';
 
@@ -18,7 +20,8 @@ export default class Router extends React.Component {
     console.dir(Handlers);
     this.signIn = Handlers.prototype.signIn.bind(this);
     this.createNewDrillGroup = Handlers.prototype.createNewDrillGroup.bind(this);
-    
+    this.updateDrillGroup = Handlers.prototype.updateDrillGroup.bind(this);
+
     this.goToSignIn = Handlers.prototype.goToSignIn.bind(this);
     this.goToSignUp = Handlers.prototype.goToSignUp.bind(this);
     this.goToForgotPassword = Handlers.prototype.goToForgotPassword.bind(this);
@@ -56,7 +59,23 @@ export default class Router extends React.Component {
         toRender = <ManageDrillGroups />;
         break;
       case '/admin/drill_group/new' === this.state.path:
-        toRender = <CreateDrillGroup onSubmit={this.createNewDrillGroup} errors={this.state.errors} drillGroup={{}}/>;
+        toRender = <CreateDrillGroup
+                      onSubmit={this.createNewDrillGroup}
+                      errors={this.state.errors}
+                      drillGroup={{}}
+                    />;
+        break;
+      case /\/admin\/\/drill_group\/\d+/.test(this.state.path):
+        toRender = <ShowDrillGroup
+                      drillGroup={{}/*TODO: put drillgroup here*/}
+                    />;
+        break;
+      case /\/admin\/\/drill_group\/\d+\/edit/.test(this.state.path):
+      toRender = <CreateDrillGroup
+                    onSubmit={this.updateDrillGroup}
+
+                    drillGroup={{}/* TODO: find drill group and put it here */}
+                  />;
         break;
       case '/drill_baby_drill' === this.state.path:
         // toRender = <SignIn onSubmit={this.signIn} errors={[]}/>;

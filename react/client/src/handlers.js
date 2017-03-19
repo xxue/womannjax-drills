@@ -20,6 +20,34 @@ function sendFetch (path, method, body){
 
 class Handlers {
 
+  updateDrillGroup (event) {
+    event.preventDefault();
+    const {target} = event;
+    const name = target.querySelector('#drill-group-name').value;
+    const description = target.querySelector('#drill-group-description').value;
+    let level = ""; target.querySelectorAll('input[name="level"]')
+      .forEach(radio=>{
+        if (radio.checked){
+          level = radio.value;
+        }
+      });
+
+    sendFetch('/drill-groups/:id','PUT',{
+        drillGroup: {
+          name: `${name}`,
+          description:`${description}`,
+          level: `${level}`
+        },
+        user: {
+          token: this.state.user.token
+        }
+      })
+    .then((json)=>{
+      console.log("here",json)
+    })
+    .catch(console.error)
+  }
+
   createNewDrillGroup (event) {
     event.preventDefault();
     const {target} = event;

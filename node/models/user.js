@@ -41,12 +41,59 @@ module.exports = function(sequelize, DataTypes) {
                  first_name: this.first_name,
                  last_name: this.last_name,
                  email:this.email,
-        //         token: this.token,
+                 token: this.token,
                  isAdmin: this.is_admin
                }
       },
       generateToken: function() {
-        
+        // This is a while loop with promises
+        // generates a token, checks to see if token already exists in db
+        // if already exists, loop
+        // else assign token to 'this' user which we call 'that'
+        const that = this;
+
+        const Promise = require('bluebird');
+
+        const promiseWhile = function(condition, action) {
+            var resolver = Promise.defer();
+
+            var loop = function() {
+                condition().then(res=>{
+                  if(!res){
+                    return resolver.resolve();
+                  }
+                  return Promise.cast(action())
+                      .then(loop)
+                      .catch(resolver.reject);
+                })
+            };
+
+            process.nextTick(loop);
+
+            return resolver.promise;
+        };
+
+        promiseWhile(function() {
+            // Condition for stopping
+            return bcrypt
+              .genSaltAsync(SALT_WORK_FACTOR)
+              .then((salt)=> {
+                 return bcrypt.hashAsync(Math.random(), salt, null);
+              })
+              .then((hash)=> {
+                 return Promise.all([hash, User.find({where: {token: hash}})])
+                          .then(([hash,r])=>{
+                            if(r==null){
+                              that.token = hash;
+
+                              that.save();
+                              return false;
+                            }
+                            return true;
+                          });
+              })
+        }, function() {
+        });
       }
     },
     indexes: [
