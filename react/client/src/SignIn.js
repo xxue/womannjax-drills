@@ -44,7 +44,8 @@ export default class SignIn extends React.Component {
 
 const main={
     'display':'flex',
-    'flex-direction':'column'
+    'flex-direction':'column',
+    'text-align': 'center'
 }
 
 const links={
