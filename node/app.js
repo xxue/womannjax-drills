@@ -14,6 +14,7 @@ const methodOverride = require('method-override');
 const index = require('./routes/index');
 const users = require('./routes/users');
 const drillGroups = require('./routes/drillgroups');
+const drills = require('./routes/drills');
 const sessions = require('./routes/sessions');
 
 const config = require('./config/config.json');
@@ -93,6 +94,7 @@ app.use(passport.session());
 app.use('/', index);
 app.use('/users', users);
 app.use('/drill-groups', drillGroups);
+app.use('/drills', drills);
 app.use('/sessions', sessions);
 
 
