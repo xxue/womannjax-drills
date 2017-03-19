@@ -1,76 +1,127 @@
 import React from 'react';
-import { Grid, Row, Panel, ButtonToolbar, Button, Accordion, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
+import Solutions from './Solutions'
+import { Grid, Row, Panel, ButtonToolbar, Button, Form, Accordion, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 
-export default props => {
-  const style = {
-    display: 'flex',
-    justifyContent: 'flex-end'
-  };
+function FieldGroup({ id, label, help, ...props }) {
+  return (
+    <FormGroup controlId={id}>
+      <ControlLabel>{label}</ControlLabel>
+      <FormControl {...props} />
+      {help && <HelpBlock>{help}</HelpBlock>}
+    </FormGroup>
+  );
+}
 
-  function FieldGroup({ id, label, help, ...props }) {
-    return (
-      <FormGroup controlId={id}>
-        <ControlLabel>{label}</ControlLabel>
-        <FormControl {...props} />
-        {help && <HelpBlock>{help}</HelpBlock>}
-      </FormGroup>
-    );
+export default class ShowDrillGroup extends React.Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      solutionsCount: 1,
+      solutions:[]
+    }
+    this.addAnotherSolution = this.addAnotherSolution.bind(this)
+    // this.addTextField = this.addTextField.bind(this)
   }
 
-  return (
-    <Grid>
-      <Row>
-        <h2>Drill Group: {"< Rails Routes >"}</h2>
-      </Row>
-      <Row>
-        <p>{"< Drills for Rails basic routing >"}</p>
-      </Row>
-      <Row style={style}>
-        <Button href="#">
-          Add Group
-        </Button>
-      </Row>
+  addAnotherSolution () {
 
-      <br />
+    this.state.solutions.push({
+      DrillId:1,
+    })
+    this.setState ({ solutionsCount: this.state.solutionsCount++ })
+  }
 
-      <Accordion>
-        <Panel header={"< Drill 1 >"} eventKey="1">
-          <div>
-            {"< Drill: Create a route to do a 'get' request that goes to the campaigns controller index action >"}
-          </div>
-          <div style={style}>
-            <ButtonToolbar>
-              <Button href="#">Edit</Button>
-              <Button href="#">Delete</Button>
-            </ButtonToolbar>
-          </div>
-        </Panel>
-      </Accordion>
-      <br />
+  // addTextField () {
+  //   console.log('addTextField');
+  //   const result = []
+  //   let form = <FormControl className="solution" componentClass="textarea" placeholder="e.g. Drills for basic routing" />;
+  //   for(let i = 0; i < this.state.solutionsCount; i++) {
+  //
+  //     result.push(form)
+  //   }
+  //   return (
+  //     <div>
+  //       {result}
+  //     </div>
+  //   );
+  // }
 
-      <Panel header={"Add New Drill"}>
-        <FormGroup controlId="new-drill-description">
-          <ControlLabel>Description</ControlLabel>
-          <FormControl componentClass="textarea" placeholder="e.g. Drills for basic routing" />
-        </FormGroup>
-
-        <FormGroup controlId="new-drill-solution">
-          <ControlLabel>Solution</ControlLabel>
-          <FormControl componentClass="textarea" placeholder="e.g. Drills for basic routing" />
-        </FormGroup>
-
-        <div>
+  render () {
+    return (
+      <Grid>
+        <Row>
+          <h2>Drill Group: {"< Rails Routes >"}</h2>
+        </Row>
+        <Row>
+          <p>{"< Drills for Rails basic routing >"}</p>
+        </Row>
+        <Row style={{
+          display: 'flex',
+          justifyContent: 'flex-end'
+        }}>
           <Button href="#">
-            Add Another Solution
+            Add Group
           </Button>
-        </div>
+        </Row>
 
-        <div style={style}>
-          <Button type="submit">
-            Save
-          </Button>
-        </div>
-      </Panel>
-    </Grid>
-  )
+        <br />
+
+        <Accordion>
+          <Panel header={"< Drill 1 >"} eventKey="1">
+            <div>
+              {"< Drill: Create a route to do a 'get' request that goes to the campaigns controller index action >"}
+            </div>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'flex-end'
+            }}>
+              <ButtonToolbar>
+                <Button href="#">Edit</Button>
+                <Button href="#">Delete</Button>
+              </ButtonToolbar>
+            </div>
+          </Panel>
+        </Accordion>
+        <br />
+
+        <Panel header={"Add New Drill"}>
+          <Form onSubmit={this.props.onSubmit}>
+            <FormGroup controlId="new-drill-description">
+              <ControlLabel>Description</ControlLabel>
+              <FormControl componentClass="textarea" placeholder="e.g. Drills for basic routing" />
+            </FormGroup>
+
+            <FieldGroup
+              id="drill-points"
+              type="integer"
+              min={0}
+              label="Points"
+              placeholder="e.g. 10"
+            />
+
+            <FormGroup controlId="new-drill-solution" id="solution-container">
+              <ControlLabel>Solution</ControlLabel>
+
+            </FormGroup>
+
+            <div>
+              <Button onClick={this.addAnotherSolution}>
+                Add Another Solution
+              </Button>
+            </div>
+
+            <div style={{
+              display: 'flex',
+              justifyContent: 'flex-end'
+            }}>
+              <Button type="submit">
+                Save
+              </Button>
+            </div>
+          </Form>
+        </Panel>
+      </Grid>
+    )
+  }
 }

@@ -7,6 +7,7 @@ import DisplayMessage from './DisplayMessage';
 import SignIn from './SignIn';
 import UserDrillBoard from './UserDrillBoard';
 import CreateDrillGroup from './CreateDrillGroup';
+import ShowDrillGroup from './ShowDrillGroup';
 
 const BASE_URL = 'http://localhost:3000';
 
@@ -23,6 +24,7 @@ export default class Router extends React.Component {
                  }
     this.signIn = this.signIn.bind(this);
     this.createNewDrillGroup = this.createNewDrillGroup.bind(this);
+    this.addNewDrill = this.addNewDrill.bind(this);
   }
 
   signIn  (event) {
@@ -46,9 +48,6 @@ export default class Router extends React.Component {
     })
     .catch(console.error)
   }
-
-
-
 
 
   createNewDrillGroup (event) {
@@ -87,10 +86,40 @@ export default class Router extends React.Component {
       console.log(json)
     })
     .catch(console.error)
-
   }
 
+  addNewDrill (event) {
+    event.preventDefault();
+    const {target} = event;
+    const description = target.querySelector('#new-drill-description').value;
+    const points = target.querySelector('#drill-points').value;
+    const solution = target.querySelector('#new-drill-solution').value;
 
+    fetch(`${BASE_URL}/drill_groups/:drill-group-id/drills`, {
+      credentials: 'include',
+    	method: 'POST',
+    	mode: 'cors',
+    	body: JSON.stringify({
+          drill: {
+            exercise:`${description}`,
+            points: `${points}`,
+            solutions: [{body: `${solution}`}]
+          },
+          user: {
+            token: this.state.user.token
+          }
+      }),
+    	headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+    })
+    .then(r=>r.json())
+    .then((json)=>{
+      console.log(json)
+    })
+    .catch(console.error)
+  }
 
 
 
@@ -101,14 +130,14 @@ export default class Router extends React.Component {
   //     }
 
   render () {
-    // this is where we'll have all the switch statements to render
-    // the page we want, based on the state
-//     if (this.state.path==='/'){
-//     }
+        // return <CreateDrillGroup onSubmit={this.createNewDrillGroup} drillGroup={""}/>
+        return (<ShowDrillGroup
+            onSubmit={this.addNewDrill}
+            drill={""}
+        />)
 
-        {/*
-        <ManageDrillGroups /> */}
-        return <CreateDrillGroup onSubmit={this.createNewDrillGroup} drillGroup={""}/>
+    {/* this is where we'll have all the switch statements to render
+    the page we want, based on the state */}
     // if (this.state.path === '/' ) {
     //
     //   return <SignIn onSubmit={this.signIn}/>
