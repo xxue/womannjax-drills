@@ -7,15 +7,6 @@ import { Button } from 'react-bootstrap';
 // Turns out i don't know how to make this change the state to user/SignIn
 // Sincerly John.
 export default class Home extends React.Component {
-  constructor (props) {
-      super(props);
-
-      this.changepath = this.changepath.bind(this);
-    }
-
-  changepath (event) {
-    this.setState({path: 'user/SignIn'})
-  }
 
   render () {
     const mainHome = {
@@ -47,7 +38,7 @@ export default class Home extends React.Component {
             </Jumbotron>
             <div style={glyphBox}>
               <div></div>
-              <Button bsSize="large" onClick={this.changepath}>Enter if you dare!</Button>
+              <Button bsSize="large" onClick={this.props.onClick}> Enter if you dare!</Button>
               <div></div>
             </div>
           </div>

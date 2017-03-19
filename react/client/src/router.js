@@ -20,6 +20,8 @@ export default class Router extends React.Component {
                         }
                  }
     this.signIn = this.signIn.bind(this);
+    this.goToSignIn = this.goToSignIn.bind(this);
+
   }
 
   signIn  (event) {
@@ -43,6 +45,9 @@ export default class Router extends React.Component {
     })
     .catch(console.error)
   }
+  goToSignIn (event) {
+    this.setState({path: 'user/SignIn'})
+  }
 
 // find user is going to find the current user by their session and add it to the state
   // function FindUser(){
@@ -61,7 +66,28 @@ export default class Router extends React.Component {
     //   return <DisplayMessage text={this.state.user.first_name} />
     //
     // }
-    return  <UserDrillBoard />
+    return  <div>
 
+          <UserDrillBoard
+            state={
+              {
+                myDrillGroups: [{
+                  name:'Rails Routes',
+                  attempts: 4,
+                  score: 70.0
+                },
+                  {name: 'Javascript Objects',
+                  attempts: 15,
+                  score: 5.0
+                }
+                ],
+                allDrillGroups:
+                  [
+                    {name: "Javascipt Arrays"},
+                    {name: "Javascipt Functions"}
+                  ]
+                }
+            }/>
+        </div>
   }
 }
