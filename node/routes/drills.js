@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {Solution, Drill} = require('../models/index');
+const {Drill} = require('../models/index');
 
 router.get('/', function (req,res,next) {
     res.send ({name:"hello"})
