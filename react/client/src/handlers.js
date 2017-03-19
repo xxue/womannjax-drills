@@ -4,17 +4,25 @@ export const thankYou = "Thank you for registering! You will be notified when yo
 
 export const instructions = "Password reset instructions have been sent to you.";
 
-function sendFetch (path, method, body){
-  return fetch(`${BASE_URL}${path}`,{
-    credentials: 'include',
-    method: `${method}`,
-    mode: 'cors',
-    body: JSON.stringify(body),
+function sendFetch (path, method, body, user = {}){
+  let req = {
     headers: {
+      'user': JSON.stringify(user)
+    }
+  }
+  if (method.toLowerCase() != 'get'){
+    Object.assign(req, {
+      credentials: 'include',
+      method: `${method}`,
+      mode: 'cors',
+      body: JSON.stringify(body)
+    });
+    Object.assign(req.headers,{
       'Accept': 'application/json',
       'Content-Type': 'application/json'
-    }
-  })
+    });
+  }
+  return fetch(`${BASE_URL}${path}`,req)
   .then(r=>{
     if(r.status === 400) {
       return {};
@@ -37,16 +45,17 @@ class Handlers {
         }
       });
 
-    sendFetch('/drill-groups/:id','PUT',{
-        drillGroup: {
-          name: `${name}`,
-          description:`${description}`,
-          level: `${level}`
-        },
-        user: {
-          token: this.state.user.token
-        }
-      })
+    sendFetch('/drill-groups/:id',
+              'PUT',{
+                drillGroup: {
+                name: `${name}`,
+                description:`${description}`,
+                level: `${level}`
+                }
+              },
+          {
+            token: this.state.user.token
+          })
     .then((json)=>{
       console.log("here",json)
     })
@@ -70,11 +79,10 @@ class Handlers {
           name: `${name}`,
           description:`${description}`,
           level: `${level}`
-        },
-        user: {
-          token: this.state.user.token
         }
-      })
+      },{
+          token: this.state.user.token
+        })
     .then((json)=>{
       console.log("here",json)
     })
