@@ -1,9 +1,5 @@
 const BASE_URL = 'http://localhost:3000';
 
-export const thankYou = "Thank you for registering! You will be notified when you account is approved.";
-
-export const instructions = "Password reset instructions have been sent to you.";
-
 function sendFetch (path, method, body, user = {}){
   let req = {
     headers: {
@@ -24,7 +20,7 @@ function sendFetch (path, method, body, user = {}){
   }
   return fetch(`${BASE_URL}${path}`,req)
   .then(r=>{
-    if(r.status === 400) {
+    if(r.status === 400 || r.status === 401) {
       return {};
     }
     return r.json();
@@ -105,11 +101,21 @@ class Handlers {
   signUp  (event) {
     event.preventDefault();
     const {target} = event;
+    const firstName = target.querySelector('#formHorizontalFirstName').value;
+    const lastName = target.querySelector('#formHorizontalLastName').value;
     const email = target.querySelector('#formHorizontalEmail').value;
     const password = target.querySelector('#formHorizontalPassword').value;
-    sendFetch('/users','POST',{username: `${email}`,password:`${password}`})
+    const passwordConfirmation = target.querySelector('#formHorizontalPasswordConfirmation').value;
+    sendFetch('/users','POST',{
+      first_name: `${firstName}`,
+      last_name: `${lastName}`,
+      email: `${email}`,
+      password:`${password}`,
+      passwordConfirmation:`${passwordConfirmation}`
+    })
     .then((json)=>{
-      this.setState({ path: json.path, user: json.user, errors: json.errors})
+      console.log(json);
+      this.setState({ path: json.path, user: json.user, errors: json.errors })
     })
     .catch(console.error)
   }

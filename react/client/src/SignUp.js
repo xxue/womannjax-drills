@@ -5,7 +5,7 @@ export default class SignIn extends React.Component {
 
   render () {
     const formInstance = (
-      <Form horizontal>
+      <Form horizontal onSubmit={this.props.onSubmit}>
         <FormGroup controlId="formHorizontalFirstName">
           <Col componentClass={ControlLabel} sm={2}>
             First Name
@@ -47,7 +47,7 @@ export default class SignIn extends React.Component {
             Password Confirmation
           </Col>
           <Col sm={10}>
-            <FormControl type="passwordConfirmation" placeholder="Password Confirmation" />
+            <FormControl type="password" placeholder="Password Confirmation" />
           </Col>
         </FormGroup>
 
@@ -63,6 +63,7 @@ export default class SignIn extends React.Component {
 
     return <div className="container">
               <h1>Create An Account</h1>
+              {this.props.errors.join(", ")}
               {formInstance}
             </div>
   }

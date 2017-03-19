@@ -16,12 +16,16 @@ import ShowDrillGroup from './ShowDrillGroup';
 
 import Handlers from './handlers';
 
+export const thankYou = "Thank you for registering! You will be notified when you account is approved.";
+
+export const instructions = "Password reset instructions have been sent to you.";
+
 export default class Router extends React.Component {
   constructor (props) {
     super (props);
     this.state = props.state;
-    console.dir(Handlers);
     this.signIn = Handlers.prototype.signIn.bind(this);
+    this.signUp = Handlers.prototype.signUp.bind(this);
     this.createNewDrillGroup = Handlers.prototype.createNewDrillGroup.bind(this);
     this.updateDrillGroup = Handlers.prototype.updateDrillGroup.bind(this);
 
@@ -31,7 +35,8 @@ export default class Router extends React.Component {
   }
 
   render () {
-    console.log('pathName: ', this.state.path)
+    console.log('pathName: ', this.state.path);
+    console.log('errors: ',this.state.errors);
     let toRender = <div></div>;
     switch(true){
       case '/' === this.state.path:
@@ -42,7 +47,8 @@ export default class Router extends React.Component {
         toRender = <SignIn onSubmit={this.signIn} goToForgotPassword={this.goToForgotPassword} goToSignUp={this.goToSignUp} errors={this.state.errors}/>;
         break;
       case '/users/new' === this.state.path:
-        // toRender = <SignUp onSubmit={this.signUp} errors={[]}/>;
+        toRender = <SignUp onSubmit={this.signUp} errors={this.state.errors}/>;
+        toRender = <SignUp onSubmit={this.signUp} errors={this.state.errors}/>;
         break;
       case /\/users\/\d+\/drill_group/.test(this.state.path):
         toRender = <UserDrillBoard />;
@@ -51,13 +57,13 @@ export default class Router extends React.Component {
         // toRender = <LeaderBoard onSubmit={this.signIn} errors={[]}/>;
         break;
       case '/account-pending' === this.state.path:
-        toRender = <DisplayMessage text={Handlers.thankYou}/>;
+        toRender = <DisplayMessage text={thankYou}/>;
         break;
       case '/reset_password/new' === this.state.path:
         // toRender = <ResetPasswordForm onSubmit={this.sendEmail} errors={[]}/>;
         break;
       case '/reset_password' === this.state.path:
-        toRender = <DisplayMessage text={Handlers.instructions}/>;
+        toRender = <DisplayMessage text={instructions}/>;
         break;
       case '/admin/drill_board' === this.state.path:
         toRender = <ManageDrillGroups />;
