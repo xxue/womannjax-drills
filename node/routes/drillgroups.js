@@ -41,15 +41,18 @@ router.post('/', function (req, res, next) {
   // We destructure form fields for our DrillGroup from the req.body
   // title..etc map to the name (i.e. html attribute name) of
   // the respective fields in our new DrillGroup form
-  const {title, description, price} = req.body;
+  const {name, description, level} = req.body.drillGroup;
 
   // All Sequelize models have a .create method that takes an object
   // that represent the attributes of the model instance to be created
   DrillGroup
-    .create({title, description, price})
-    .then(drillgroup => {
+    .create({name, description, level})
+    .then(drillGroup => {
       // req.flash('notice', `DrillGroups #${drillgroup.id} created!`);
-      res.redirect(`/drillgroups/${drillgroup.id}`);
+      res.send(JSON.stringify({
+        path: `/drillgroups/${drillGroup.id}`,
+        drillGroup: drillGroup
+      }));
     })
     // next is a function passed to this callback that will
     // make the next middleware handle the request
