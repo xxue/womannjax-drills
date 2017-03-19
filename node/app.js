@@ -19,7 +19,7 @@ var sessions = require('./routes/sessions');
 var config = require('./config/config.json')
 
 SALT_WORK_FACTOR = 12;
-BASE_URL = 'http://localhost:55025';
+BASE_URL = 'http://localhost:3006';
 
 var app = express();
 
@@ -45,6 +45,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(methodOverride(function (req, res) {
+  console.log(req);
   if (req.body && typeof req.body === 'object' && '_method' in req.body) {
     // look in urlencoded POST bodies and delete it
     var method = req.body._method
@@ -70,7 +71,7 @@ app.use(passport.session());
 
 app.use('/', index);
 app.use('/users', users);
-app.use('/drillgroups', drillGroups);
+app.use('/drill-groups', drillGroups);
 app.use('/sessions', sessions);
 
 

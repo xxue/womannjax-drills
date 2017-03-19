@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Row, Col, ControlLabel, FormControl, HelpBlock, FormGroup, Radio, Button } from 'react-bootstrap';
+import { Grid, Row, Col, ControlLabel, FormControl, HelpBlock, FormGroup, Radio, Button, Form } from 'react-bootstrap';
 
 export default props => {
   function FieldGroup({ id, label, help, ...props }) {
@@ -19,43 +19,42 @@ export default props => {
       </Row>
       <Row className="show-grid">
         <Col xs={12} md={12}>
-          <form>
-          <FieldGroup
-            id="drill-group-name"
-            type="text"
-            label="Name"
-            placeholder="e.g. Rails Routes"
-          />
+          <Form onSubmit={props.onSubmit}>
+            <FieldGroup
+              id="drill-group-name"
+              type="text"
+              label="Name"
+              placeholder="e.g. Rails Routes"
+            />
+            <FormGroup controlId="drill-group-description">
+              <ControlLabel>Description</ControlLabel>
+              <FormControl componentClass="textarea" placeholder="e.g. Drills for basic routing" />
+            </FormGroup>
 
-          <FormGroup controlId="drill-group-description">
-            <ControlLabel>Description</ControlLabel>
-            <FormControl componentClass="textarea" placeholder="e.g. Drills for basic routing" />
-          </FormGroup>
+            <FormGroup>
+              <Radio name="level" value="Beginner" inline>
+                Beginner
+              </Radio>
+              {' '}
+              <Radio name="level" value="Intermediate" inline>
+                Intermediate
+              </Radio>
+              {' '}
+              <Radio name="level" value="Advanced" inline>
+                Advanced
+              </Radio>
+            </FormGroup>
 
-          <FormGroup>
-            <Radio inline>
-              Beginner
-            </Radio>
-            {' '}
-            <Radio inline>
-              Intermediate
-            </Radio>
-            {' '}
-            <Radio inline>
-              Advanced
-            </Radio>
-          </FormGroup>
+            {/* <FieldGroup
+              id="drill-group-points"
+              type="text"
+              label="Points"
+            /> */}
 
-          <FieldGroup
-            id="drill-group-points"
-            type="text"
-            label="Points"
-          />
-
-          <Button type="submit">
-            Save
-          </Button>
-        </form>
+            <Button type="submit">
+              Save
+            </Button>
+          </Form>
         </Col>
       </Row>
     </Grid>

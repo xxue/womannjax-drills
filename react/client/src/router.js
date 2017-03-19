@@ -1,15 +1,14 @@
 import React from 'react';
 import Topnav from './topnav'
-import CreateDrillGroup from './CreateDrillGroup';
-import ManageDrillGroups from './ManageDrillGroups';
-import ShowDrillGroup from './ShowDrillGroup;
 import Home from './home';
 // Display Message wil be used for both Password instructions
 // and Thank you for signing up
 import DisplayMessage from './DisplayMessage';
 import SignIn from './SignIn';
 import UserDrillBoard from './UserDrillBoard';
+import CreateDrillGroup from './CreateDrillGroup';
 
+const BASE_URL = 'http://localhost:3000';
 
 export default class Router extends React.Component {
   constructor (props) {
@@ -23,6 +22,7 @@ export default class Router extends React.Component {
                         }
                  }
     this.signIn = this.signIn.bind(this);
+    this.createNewDrillGroup = this.createNewDrillGroup.bind(this);
   }
 
   signIn  (event) {
@@ -30,7 +30,7 @@ export default class Router extends React.Component {
     const {target} = event;
     const email = target.querySelector('#formHorizontalEmail').value;
     const password = target.querySelector('#formHorizontalPassword').value;
-    fetch('http://localhost:3000/sessions',{
+    fetch(`${BASE_URL}/sessions`,{
     	credentials: 'include',
     	method: 'post',
     	mode: 'cors',
@@ -47,6 +47,54 @@ export default class Router extends React.Component {
     .catch(console.error)
   }
 
+
+
+
+
+  createNewDrillGroup (event) {
+    event.preventDefault();
+    const {target} = event;
+    const name = target.querySelector('#drill-group-name').value;
+    const description = target.querySelector('#drill-group-description').value;
+    let level = ""; target.querySelectorAll('input[name="level"]')
+      .forEach(radio=>{
+        if (radio.checked){
+          level = radio.value;
+        }
+      });
+
+    fetch(`${BASE_URL}/drill-groups`,{
+    	credentials: 'include',
+    	method: 'POST',
+    	mode: 'cors',
+    	body: JSON.stringify({
+          drillGroup: {
+            name: `${name}`,
+            description:`${description}`,
+            level: `${level}`
+          },
+          user: {
+            token: this.state.user.token
+          }
+      }),
+    	headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+    })
+    .then(r=>r.json())
+    .then((json)=>{
+      console.log(json)
+    })
+    .catch(console.error)
+
+  }
+
+
+
+
+
+
 // find user is going to find the current user by their session and add it to the state
   // function FindUser(){
   //
@@ -57,16 +105,16 @@ export default class Router extends React.Component {
     // the page we want, based on the state
 //     if (this.state.path==='/'){
 //     }
-//     return <main>
-//       {/* <CreateDrillGroup drillGroup={""}/>
-//       <ManageDrillGroups /> */}
-//       <ShowDrillGroup />
-//       {/* <DisplayMessage text="Hey friends" /> */}
-//     </main>
-    if (this.state.path === '/' ) {
-      return <SignIn onSubmit={this.signIn}/>
-    } else {
-      return <DisplayMessage text={this.state.user.first_name} />
-    }
+
+        {/*
+        <ManageDrillGroups /> */}
+        return <CreateDrillGroup onSubmit={this.createNewDrillGroup} drillGroup={""}/>
+    // if (this.state.path === '/' ) {
+    //
+    //   return <SignIn onSubmit={this.signIn}/>
+    // } else {
+    //   return <DisplayMessage text={this.state.user.first_name} />
+    //
+    // }
   }
 }
