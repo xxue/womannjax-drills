@@ -71,7 +71,7 @@ app.use(passport.session());
 
 app.use('/', index);
 app.use('/users', users);
-app.use('/drillgroups', drillGroups);
+app.use('/drill-groups', drillGroups);
 app.use('/sessions', sessions);
 
 

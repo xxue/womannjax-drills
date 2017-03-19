@@ -5,25 +5,45 @@ const router = express.Router();
 // const models = require('../models/index');
 // models.DrillGroup ð gets DrillGroup model object
 
-const {DrillGroup, Drill} = require('../models/index');
+const {DrillGroup, Drill, Solution} = require('../models/index');
 
 // Drills#create
-// PATH /drillgroups/:drillgroupId/drills METHOD: post
+// PATH /drill-groups/:drillgroupId/drills METHOD: post
 router.post('/:drillgroupId/drills', function (req, res, next) {
   const {drillgroupId} = req.params;
-  const {exercise, points} = req.body;
+  const {exercise, points, solutions} = req.body;
+  let jsonResponse = {};
+  let drillId;
+  let solutionsArray = [];
 
   Drill
     .create({exercise, points, DrillGroupId: drillgroupId})
-    .then((drill) => res.send(JSON.stringify(
+    .then((drill) => {
+      drillId = drill.id;
+
+      //Create solution array with DrillId appended for bulk record creation
+      for(solution of solutions) {
+        solutionsArray.push( Object.assign( {},
+            {
+              DrillId: drillId,
+              body: solution.body
+            }
+        ));
+      }
+
+      Object.assign(jsonResponse,
         {
-          id: drill.id,
           exercise: exercise,
           points: points,
-          DrillGroupId: drillgroupId
+          DrillGroupId: drillgroupId,
+          solutions: solutions
         }
-    )))
+      );
+    })
+    .then( () => Solution.bulkCreate(solutionsArray) )
+    .then( () => res.send(JSON.stringify(jsonResponse)))
     .catch(err => next(err));
+
 });
 
 // DrillGroup#create
