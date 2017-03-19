@@ -4,21 +4,23 @@ import { Jumbotron } from 'react-bootstrap';
 import { Glyphicon } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 
+// Turns out i don't know how to make this change the state to user/SignIn
+// Sincerly John.
 export default class Home extends React.Component {
 
   render () {
     const mainHome = {
       display: 'flex',
-      'justify-content':'center',
-      'flex-direction': 'column'
+      'justifyContent':'center',
+      'flexDirection': 'column'
     }
     const glyphBox = {
       display: 'flex',
-      'justify-content':'space-around',
-      'text-align': 'center'
+      'justifyContent':'space-around',
+      'textAlign': 'center'
     }
     const glyphi = {
-      'font-size': '8em'
+      'fontSize': '8em'
 
     }
     return <div>
@@ -36,7 +38,9 @@ export default class Home extends React.Component {
             </Jumbotron>
             <div style={glyphBox}>
               <div></div>
+
               <Button onClick={this.props.onClick} bsSize="large">Enter if you dare!</Button>
+
               <div></div>
             </div>
           </div>

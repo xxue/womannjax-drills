@@ -19,18 +19,48 @@ import Handlers from './handlers';
 export default class Router extends React.Component {
   constructor (props) {
     super (props);
+
     this.state = props.state;
     console.dir(Handlers);
     this.signIn = Handlers.prototype.signIn.bind(this);
     this.createNewDrillGroup = Handlers.prototype.createNewDrillGroup.bind(this);
     this.updateDrillGroup = Handlers.prototype.updateDrillGroup.bind(this);
 
+
     this.goToSignIn = Handlers.prototype.goToSignIn.bind(this);
     this.goToSignUp = Handlers.prototype.goToSignUp.bind(this);
     this.goToForgotPassword = Handlers.prototype.goToForgotPassword.bind(this);
   }
+  goToSignIn (event) {
+    this.setState({path: 'user/SignIn'})
+  }
 
   render () {
+
+//     return  <div>
+
+//           <UserDrillBoard
+//             state={
+//               {
+//                 myDrillGroups: [{
+//                   name:'Rails Routes',
+//                   attempts: 4,
+//                   score: 70.0
+//                 },
+//                   {name: 'Javascript Objects',
+//                   attempts: 15,
+//                   score: 5.0
+//                 }
+//                 ],
+//                 allDrillGroups:
+//                   [
+//                     {name: "Javascipt Arrays"},
+//                     {name: "Javascipt Functions"}
+//                   ]
+//                 }
+//             }/>
+//         </div>
+
     console.log('pathName: ', this.state.path)
     let toRender = <div></div>;
     switch(true){
