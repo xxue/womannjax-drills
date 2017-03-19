@@ -59,7 +59,24 @@ export default class Router extends React.Component {
         toRender = <SignUp onSubmit={this.signUp} errors={this.state.errors}/>;
         break;
       case /\/users\/\d+\/drill_group/.test(this.state.path):
-        toRender = <UserDrillBoard user={this.state.user}/>;
+        toRender = <UserDrillBoard state={
+                      {
+                        myDrillGroups: [{
+                          name:'Rails Routes',
+                          attempts: 4,
+                          score: 70.0
+                        },
+                          {name: 'Javascript Objects',
+                          attempts: 15,
+                          score: 5.0
+                        }
+                        ],
+                        allDrillGroups:
+                          [
+                            {name: "Javascipt Arrays"},
+                            {name: "Javascipt Functions"}
+                          ]
+                        }}/>;
         break;
       case '/leaderboard' === this.state.path:
         // toRender = <LeaderBoard onSubmit={this.signIn} errors={[]}/>;
