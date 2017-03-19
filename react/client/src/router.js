@@ -1,5 +1,4 @@
 import React from 'react';
-import Home from './home'
 import Topnav from './topnav'
 import Home from './home';
 import CreateDrillGroup from './CreateDrillGroup';
@@ -20,6 +19,29 @@ export default class Router extends React.Component {
                      is_admin: false
                    }
                  }
+    this.signIn = this.signIn.bind(this);
+  }
+
+  signIn  (event) {
+    event.preventDefault();
+    const {target} = event;
+    const email = target.querySelector('#formHorizontalEmail').value;
+    const password = target.querySelector('#formHorizontalPassword').value;
+    fetch('http://localhost:3000/sessions',{
+    	credentials: 'include',
+    	method: 'post',
+    	mode: 'cors',
+    	body: JSON.stringify({username: `${email}`,password:`${password}`}),
+    	headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+    })
+    .then(r=>r.json())
+    .then((json)=>{
+      this.setState({ path: json.path, user: json.user})
+    })
+    .catch(console.error)
   }
 
   render () {
@@ -28,10 +50,14 @@ export default class Router extends React.Component {
 
 //     if (this.state.path==='/'){
 //     }
-    return <main>
-      <CreateDrillGroup drillGroup={""}/>
-      <ManageDrillGroups />
-      <DisplayMessage text="Hey friends" />
-    </main>
+
+        {/* <CreateDrillGroup drillGroup={""}/>
+        <ManageDrillGroups /> */}
+        if (this.state.path === '/' ) {
+
+          return <SignIn onSubmit={this.signIn}/>
+        } else {
+          return <DisplayMessage text={this.state.user.first_name} />
+        }
   }
 }

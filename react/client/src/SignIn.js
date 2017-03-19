@@ -3,9 +3,11 @@ import {Form, FormGroup, Col, Button, ControlLabel, Checkbox, FormControl} from 
 
 export default class SignIn extends React.Component {
 
+
+
   render () {
     const formInstance = (
-      <Form horizontal>
+      <Form horizontal onSubmit={this.props.onSubmit}>
         <FormGroup controlId="formHorizontalEmail">
           <Col componentClass={ControlLabel} sm={2}>
             Email
