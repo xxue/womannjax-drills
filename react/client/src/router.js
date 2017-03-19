@@ -23,6 +23,7 @@ export const instructions = "Password reset instructions have been sent to you."
 export default class Router extends React.Component {
   constructor (props) {
     super (props);
+
     this.state = props.state;
     this.signIn = Handlers.prototype.signIn.bind(this);
     this.signUp = Handlers.prototype.signUp.bind(this);
@@ -30,15 +31,20 @@ export default class Router extends React.Component {
     this.updateDrillGroup = Handlers.prototype.updateDrillGroup.bind(this);
     this.logout = Handlers.prototype.logout.bind(this);
 
+
     this.goToSignIn = Handlers.prototype.goToSignIn.bind(this);
     this.goToSignUp = Handlers.prototype.goToSignUp.bind(this);
     this.goToProfile = Handlers.prototype.goToProfile.bind(this);
     this.goToForgotPassword = Handlers.prototype.goToForgotPassword.bind(this);
   }
+  goToSignIn (event) {
+    this.setState({path: 'user/SignIn'})
+  }
 
   render () {
     console.log('pathName: ', this.state.path);
     console.log('errors: ',this.state.errors);
+
     let toRender = <div></div>;
     switch(true){
       case '/' === this.state.path:

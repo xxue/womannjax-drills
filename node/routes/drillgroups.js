@@ -5,53 +5,60 @@ const router = express.Router();
 // const models = require('../models/index');
 // models.DrillGroup ð gets DrillGroup model object
 
-const {DrillGroup, Drill} = require('../models/index');
-
-// DrillGroups#new
-// PATH: /drillgroups/new
-router.get('/new', function (req, res, next) {
-  res.send(JSON.stringify(
-    {
-      drillgroup: DrillGroup.build({name: '', description:'', level:''})
-    }));
-});
+const {DrillGroup, Drill, Solution} = require('../models/index');
 
 // Drills#create
-// PATH /drillgroups/:drillgroupId/drills METHOD: post
+// PATH /drill-groups/:drillgroupId/drills METHOD: post
 router.post('/:drillgroupId/drills', function (req, res, next) {
   const {drillgroupId} = req.params;
-  const {exercise, points} = req.body;
+  const {exercise, points, solutions} = req.body;
+  let jsonResponse = {};
+  let drillId;
+  let solutionsArray = [];
 
   Drill
     .create({exercise, points, DrillGroupId: drillgroupId})
-    .then((drill) => res.send(JSON.stringify(
+    .then((drill) => {
+      drillId = drill.id;
+
+      //Create solution array with DrillId appended for bulk record creation
+      for(solution of solutions) {
+        solutionsArray.push( Object.assign( {},
+            {
+              DrillId: drillId,
+              body: solution.body
+            }
+        ));
+      }
+
+      Object.assign(jsonResponse,
         {
-          id: drill.id
+          exercise: exercise,
+          points: points,
+          DrillGroupId: drillgroupId,
+          solutions: solutions
         }
-    )))
+      );
+    })
+    .then( () => Solution.bulkCreate(solutionsArray) )
+    .then( () => res.send(JSON.stringify(jsonResponse)))
     .catch(err => next(err));
+
 });
 
 // DrillGroup#create
 // PATH: /drillgroups/
 router.post('/', function (req, res, next) {
-  // check if we received body params from form post
-  // res.send(req.body)
+  const {name, description, level} = req.body;
 
-  // We destructure form fields for our DrillGroup from the req.body
-  // title..etc map to the name (i.e. html attribute name) of
-  // the respective fields in our new DrillGroup form
-  const {name, description, level} = req.body.drillGroup;
-
-  // All Sequelize models have a .create method that takes an object
-  // that represent the attributes of the model instance to be created
   DrillGroup
     .create({name, description, level})
     .then(drillGroup => {
-      // req.flash('notice', `DrillGroups #${drillgroup.id} created!`);
-      res.send(JSON.stringify({
-        path: `/drillgroups/${drillGroup.id}`,
-        drillGroup: drillGroup
+      res.send(JSON.stringify(
+        {
+          name: name,
+          description: description,
+          level: level
       }));
     })
     // next is a function passed to this callback that will
@@ -73,7 +80,10 @@ router.get('/', function(req, res, next) {
     .findAll({order: [['createdAt', 'DESC'], ['updatedAt', 'DESC']]})
     .then(
       drillgroups => {
-        res.render('drillgroups/index', {drillgroups})
+        res.send(JSON.stringify(
+          {
+            drillgroups
+          }));
       }
     )
 });
@@ -83,20 +93,11 @@ router.get('/', function(req, res, next) {
 router.get('/:id', function(req, res, next) {
   const {id} = req.params;
 
-  // .findById is an asynchronous method that queries the database which
-  // means that it returns a promise. To the get the resolved value of the promise,
-  // we use its .then method and pass it a callback
   DrillGroup
     .findById(id)
-    // promises can only resolve one value
-    // to resolve "multiple values" we wrap them in an array
-    // If any of the values in our array is a promise, we need to resolve them
-    // use Promise.all to do so. It will resolve an array with the resolved values
-    // of elements of the array.
     .then(drillgroup => Promise.all([drillgroup, drillgroup.getDrills({order: [['updatedAt', 'DESC']]})]))
     .then(
-      ([drillgroup, drills]) => res.render('drillgroups/show', {drillgroup, drills})
-    )
+      ([drillgroup, drills]) =>  res.send(JSON.stringify( {drillgroup, drills})))
     .catch(
       // The next function is a parameter passed to the callback function this is
       // part of. Calling it will tell express to move on to the next middleware
@@ -106,14 +107,19 @@ router.get('/:id', function(req, res, next) {
     )
 });
 
-  // DrillGroups#edit
+// DrillGroups#edit
 // PATH /drillgroups/:id/edit METHOD: get
 router.get('/:id/edit', function (req, res, next) {
   const {id} = req.params;
 
   DrillGroup
     .findById(id)
-    .then(drillgroup => res.render('drillgroups/edit', {drillgroup}))
+    .then(drillgroup => res.send( JSON.stringify(
+      {
+        name: drillgroup.name,
+        description: drillgroup.description,
+        level: drillgroup.level
+      })))
     .catch(err => next(err))
 })
 
@@ -121,24 +127,29 @@ router.get('/:id/edit', function (req, res, next) {
 // PATH /drillgroups/:id Method: patch
 router.patch('/:id', function (req, res, next) {
   const {id} = req.params;
-  const {title, description, price} = req.body;
+  const {name, description, level} = req.body;
 
   DrillGroup
     .findById(id)
-    .then(drillgroup => drillgroup.update({title, description, price}))
-    .then(() => res.redirect(`/drillgroups/${id}`))
+    .then(drillgroup => drillgroup.update({name, description, level}))
+    .then(drillgroup => res.send( JSON.stringify(
+      {
+        name: drillgroup.name,
+        description: drillgroup.description,
+        level: drillgroup.level
+      })))
     .catch(err => next(err))
 })
 
 // DrillGroups#destroy
-// PATH /drill s/:id METHOD: delete
+// PATH /drillgroups/:id METHOD: delete
 router.delete('/:id', function(req, res, next) {
   const {id} = req.params;
 
   DrillGroup
     .findById(id)
     .then(drillgroup  => drillgroup.destroy())
-    .then(() => res.redirect(`/drillgroups/`))
+    .then(() => res.send(JSON.stringify({drillgroup: 'DrillGroup Deleted!'})))
     .catch(err => next(err))
 });
 
