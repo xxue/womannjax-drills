@@ -22,7 +22,7 @@ router.get('/new', function(req, res, next) {
   }
 */
 router.post('/',
-  passport.authenticate('local', { failureRedirect: '/sessions/new' }),
+  passport.authenticate('local'),
   function(req, res) {
     res.setHeader('Content-Type', 'application/json');
     // found a user.check that user "is verified"
@@ -40,6 +40,6 @@ router.post('/',
       user: req.user,
       path: sendPath
     })));
-
   });
+
 module.exports = router;

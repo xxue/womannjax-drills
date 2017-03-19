@@ -1,31 +1,36 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 
-var passport = require('passport');
-var passportConfig = require('./config/passport');
-var http= require('http');
-var session = require('express-session');
-var methodOverride = require('method-override');
+const passport = require('passport');
+const passportConfig = require('./config/passport');
+const http= require('http');
+const session = require('express-session');
+const methodOverride = require('method-override');
 
-var index = require('./routes/index');
-var users = require('./routes/users');
-var drillGroups = require('./routes/drillgroups');
-var sessions = require('./routes/sessions');
+const index = require('./routes/index');
+const users = require('./routes/users');
+const drillGroups = require('./routes/drillgroups');
+const drills = require('./routes/drills');
+const mydrills = require('./routes/mydrills');
+const sessions = require('./routes/sessions');
 
-var config = require('./config/config.json')
+const config = require('./config/config.json');
+
+const db = require('./models/index');
+
 
 SALT_WORK_FACTOR = 12;
 BASE_URL = 'http://localhost:3006';
 
-var app = express();
+const app = express();
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", `${BASE_URL}`);
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, user");
   res.setHeader('Access-Control-Allow-Credentials', true);
   next();
 });
@@ -45,7 +50,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(methodOverride(function (req, res) {
-  console.log(req);
+  console.log('body: ',req.body);
   if (req.body && typeof req.body === 'object' && '_method' in req.body) {
     // look in urlencoded POST bodies and delete it
     var method = req.body._method
@@ -53,6 +58,24 @@ app.use(methodOverride(function (req, res) {
     return method
   }
 }));
+
+app.use(function(req, res, next){
+  const userHeader = req.get('user');
+  if (userHeader){
+    let user = JSON.parse(userHeader);
+    db.User
+      .find({ where: user })
+      .then(user=>{
+        console.log(user);
+        req.user = user;
+        next();
+      });
+  } else {
+    req.user = null;
+    next();
+  }
+});
+
 app.use(require('node-sass-middleware')({
   src: path.join(__dirname, 'public'),
   dest: path.join(__dirname, 'public'),
@@ -72,6 +95,8 @@ app.use(passport.session());
 app.use('/', index);
 app.use('/users', users);
 app.use('/drill-groups', drillGroups);
+app.use('/drills', drills);
+// app.use('/mydrills', mydrills);
 app.use('/sessions', sessions);
 
 
