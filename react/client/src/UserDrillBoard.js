@@ -15,7 +15,7 @@ export default class UserDrillBoard extends React.Component {
     return (
       <div className='container' style={centered}>
         <div className='displayBox' style={displayBox}>
-          <p>hey</p>
+          <p>{this.props.user.first_name}</p>
         </div>
       </div>
     )

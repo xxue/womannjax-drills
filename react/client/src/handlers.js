@@ -92,7 +92,7 @@ class Handlers {
     const password = target.querySelector('#formHorizontalPassword').value;
     sendFetch('/sessions','POST',{username: `${email}`,password:`${password}`})
     .then((json)=>{
-      this.setState({ path: json.path || '/sessions/new', user: json.user, errors: json.errors || ['Could not verify your credentials']})
+      this.setState({ path: json.path || '/sessions/new', user: json.user || {}, errors: json.errors || ['Could not verify your credentials']})
     })
     .then(console.log(this.state))
     .catch(console.error)
@@ -122,17 +122,27 @@ class Handlers {
 
   goToSignIn (event) {
     event.preventDefault();
-    this.setState({ path: '/sessions/new', errors: [] });
+    this.setState(Object.assign({},{ path: '/sessions/new', user: this.state.user, errors: [] }));
   }
 
   goToSignUp (event) {
     event.preventDefault();
-    this.setState({ path: '/users/new', errors: [] });
+    this.setState({ path: '/users/new', user: this.state.user, errors: [] });
+  }
+
+  goToProfile (event) {
+    event.preventDefault();
+    this.setState(Object.assign({},{ path: `/users/${this.state.user.id}`, user: this.state.user, errors: [] }));
   }
 
   goToForgotPassword (event) {
     event.preventDefault();
-    this.setState({ path: '/reset_password/new', errors: [] });
+    this.setState(Object.assign({},{ path: `/reset_password/new`, user: this.state.user, errors: [] }));
+  }
+
+  logout (event) {
+    event.preventDefault();
+    this.setState(Object.assign({},{ path: '/', user: {}, errors: [] }));
   }
 
 }
