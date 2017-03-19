@@ -159,72 +159,12 @@ export default class Router extends React.Component {
           />
           {toRender}
 
-        </div>
-    // console.log('pathName: ', this.state.path)
-    // let toRender = <div></div>;
-    // switch(true){
-    //   case '/' === this.state.path:
-    //     toRender = <Home onClick={this.goToSignIn}/>;
-    //     break;
-    //   case '/sessions/new' === this.state.path:
-    //     console.log(this.state.errors);
-    //     toRender = <SignIn onSubmit={this.signIn} goToForgotPassword={this.goToForgotPassword} goToSignUp={this.goToSignUp} errors={this.state.errors}/>;
-    //     break;
-    //   case '/users/new' === this.state.path:
-    //     // toRender = <SignUp onSubmit={this.signUp} errors={[]}/>;
-    //     break;
-    //   case /\/users\/\d+\/drill_group/.test(this.state.path):
-    //     toRender = <UserDrillBoard />;
-    //     break;
-    //   case '/leaderboard' === this.state.path:
-    //     // toRender = <LeaderBoard onSubmit={this.signIn} errors={[]}/>;
-    //     break;
-    //   case '/account-pending' === this.state.path:
-    //     toRender = <DisplayMessage text={Handlers.thankYou}/>;
-    //     break;
-    //   case '/reset_password/new' === this.state.path:
-    //     // toRender = <ResetPasswordForm onSubmit={this.sendEmail} errors={[]}/>;
-    //     break;
-    //   case '/reset_password' === this.state.path:
-    //     toRender = <DisplayMessage text={Handlers.instructions}/>;
-    //     break;
-    //   case '/admin/drill_board' === this.state.path:
-    //     toRender = <ManageDrillGroups />;
-    //     break;
-    //   case '/admin/drill_group/new' === this.state.path:
-    //     toRender = <CreateDrillGroup
-    //                   onSubmit={this.createNewDrillGroup}
-    //                   errors={this.state.errors}
-    //                   drillGroup={{}}
-    //                 />;
-    //     break;
-    //   case /\/admin\/\/drill_group\/\d+/.test(this.state.path):
-    //     toRender = <ShowDrillGroup
-    //                   drillGroup={{}/*TODO: put drillgroup here*/}
-    //                 />;
-    //     break;
-    //   case /\/admin\/\/drill_group\/\d+\/edit/.test(this.state.path):
-    //   toRender = <CreateDrillGroup
-    //                 onSubmit={this.updateDrillGroup}
-    //                 drillGroup={{}/* TODO: find drill group and put it here */}
-    //               />;
-    //     break;
-    //   case '/drill_baby_drill' === this.state.path:
-    //     // toRender = <SignIn onSubmit={this.signIn} errors={[]}/>;
-    //     break;
-    // }
-    // if ('/' !== this.state.path){
-    //   toRender = (
-    //     <div>
-    //       <Topnav />
-    //       {toRender}
-    //     </div>
-    //   );
-    // }
-    // return (
-    //   <div>
-    //     {toRender}
-    //   </div>
-    // );
+        </div>)
+      }
+    return (
+      <div>
+        {toRender}
+      </div>
+    );
   }
 }
