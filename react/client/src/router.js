@@ -1,5 +1,8 @@
 import React from 'react';
 import Topnav from './topnav'
+import CreateDrillGroup from './CreateDrillGroup';
+import ManageDrillGroups from './ManageDrillGroups';
+import ShowDrillGroup from './ShowDrillGroup;
 import Home from './home';
 // Display Message wil be used for both Password instructions
 // and Thank you for signing up
@@ -54,15 +57,16 @@ export default class Router extends React.Component {
     // the page we want, based on the state
 //     if (this.state.path==='/'){
 //     }
-
-        {/* <CreateDrillGroup drillGroup={""}/>
-        <ManageDrillGroups /> */}
+//     return <main>
+//       {/* <CreateDrillGroup drillGroup={""}/>
+//       <ManageDrillGroups /> */}
+//       <ShowDrillGroup />
+//       {/* <DisplayMessage text="Hey friends" /> */}
+//     </main>
     if (this.state.path === '/' ) {
-
       return <SignIn onSubmit={this.signIn}/>
     } else {
       return <DisplayMessage text={this.state.user.first_name} />
-
     }
   }
 }
