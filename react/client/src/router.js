@@ -61,9 +61,7 @@ export default class Router extends React.Component {
     //   return <DisplayMessage text={this.state.user.first_name} />
     //
     // }
-    return <div>
-            <Home />
-            {this.state.path}
-           </div>
+    return  <UserDrillBoard />
+
   }
 }
