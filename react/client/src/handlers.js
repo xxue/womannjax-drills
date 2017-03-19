@@ -114,6 +114,16 @@ class Handlers {
     .catch(console.error)
   }
 
+  startDrill (event){
+    event.preventDefault();
+    const {currentTarget, target} = event;
+    const drillId = currentTarget.parentNode.id;
+    sendFetch(`/drill_group/${drillId}/drills`, 'GET', {}, {})
+    .then((json)=>{
+      this.setState({path: json.path, })
+    })
+  }
+
   goToSignIn (event) {
     event.preventDefault();
     this.setState({ path: '/sessions/new', errors: [] });
@@ -128,7 +138,6 @@ class Handlers {
     event.preventDefault();
     this.setState({ path: '/reset_password/new', errors: [] });
   }
-
 }
 
 module.exports = Handlers;

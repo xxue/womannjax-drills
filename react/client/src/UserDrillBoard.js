@@ -3,28 +3,30 @@ import { Glyphicon, Nav, NavItem, Button } from 'react-bootstrap';
 
 // render a single Drill group in MyDrillz
 
-function MyDrill (name, attempts, score){
-  // STYLES
-  const drillGroup= {
-    'width': '40%',
-    'height': '40%',
-    border: 'solid darkseagreen'
-  }
-  // FUNCTIONS
+class MyDrill extends React.Component {
+  render() {
+    // STYLES
+    const drillGroup= {
+      'width': '40%',
+      'height': '40%',
+      border: 'solid darkseagreen'
+    }
+    // FUNCTIONS
 
-  // RETURN
-  return (<div style={drillGroup}>
-            <h3>{name}</h3>
-            <p>Taken: {attempts} Times</p>
-            <p>{score}%</p>
-            <Button>Start</Button>
-            <Button>Remove</Button>
-          </div>)
+    // RETURN
+    return (<div style={drillGroup} id={this.props.id}>
+      <h3>{this.props.name}</h3>
+      <p>Taken: {this.props.attempts} Times</p>
+      <p>{this.props.score}%</p>
+      <Button onClick={this.props.onStart}>Start</Button>
+      <Button>Remove</Button>
+    </div>)
+  }
 }
 
 // render a single drill group in AllDrillz
 
-function AllDrill (name){
+function AllDrill ({id, name}){
 
   // STYLES
   const drillGroup= {
@@ -36,7 +38,7 @@ function AllDrill (name){
 
   // RETURN
 
-  return (<div style={drillGroup}>
+  return (<div style={drillGroup} id={id}>
               <h3>{name}</h3>
               <Button>Add To My Drillz</Button>
           </div>)
@@ -51,6 +53,7 @@ export default class UserDrillBoard extends React.Component {
     super(props)
 
     this.state = props.state;
+
     this.generateMyDrillz = this.generateMyDrillz.bind(this);
     this.generateAllDrillz = this.generateAllDrillz.bind(this);
   }
@@ -64,18 +67,25 @@ export default class UserDrillBoard extends React.Component {
     // loop over array of drillGroups and call MyDrill every time,
     //  using appropriate params
     for (let i=0;i<DrillGroups.length; i++){
-      MyDrillArray.push(MyDrill(DrillGroups[i].name, DrillGroups[i].attempts, DrillGroups[i].score))
+      const {id, name, attempts, score} = DrillGroups[i];
+      MyDrillArray.push(<MyDrill
+                          id={id}
+                          name={name}
+                          attempts={attempts}
+                          score={score}
+                          onStart={this.props.onStart}
+                        />);
     }
     return MyDrillArray
   }
 
   //  The next will generate all Drillz using the AllDrillz function
- generateAllDrillz(AllDrillGroups) {
+  generateAllDrillz(DrillGroups) {
     let AllDrillArray = [];
     // loop over array of drillGroups and call AllDrill everytime,
     //  using appropriate title param
-    for (let i=0;i<AllDrillGroups;i++){
-      AllDrillArray.push(AllDrill(AllDrillGroups[i].name))
+    for (let i=0;i<DrillGroups.length;i++){
+      AllDrillArray.push(AllDrill(DrillGroups[i]))
     }
 
     return AllDrillArray
@@ -110,7 +120,7 @@ export default class UserDrillBoard extends React.Component {
       border: 'solid black',
       'display': 'flex',
       'justifyContent': 'space-around',
-      'alignContent':'space-between',
+      'alignContent':'center',
       'flexDirection':'row',
       'flexWrap': 'wrap'
     }
@@ -146,6 +156,7 @@ export default class UserDrillBoard extends React.Component {
         <div className='displayBox' style={displayBox}>
           {/* {MyDrill("Rails Routes", 4, 70)} */}
           {/* {AllDrill("Javascript Arrays")} */}
+
           {this.generateAllDrillz(this.state.allDrillGroups)}
           {/* All drills is broken and i don't know why... */}
           {this.generateMyDrillz(this.state.myDrillGroups)}
