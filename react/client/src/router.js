@@ -1,4 +1,5 @@
 import React from 'react';
+import Topnav from './topnav'
 import Home from './home';
 // Display Message wil be used for both Password instructions
 // and Thank you for signing up
@@ -18,6 +19,29 @@ export default class Router extends React.Component {
                      is_admin: false
                         }
                  }
+    this.signIn = this.signIn.bind(this);
+  }
+
+  signIn  (event) {
+    event.preventDefault();
+    const {target} = event;
+    const email = target.querySelector('#formHorizontalEmail').value;
+    const password = target.querySelector('#formHorizontalPassword').value;
+    fetch('http://localhost:3000/sessions',{
+    	credentials: 'include',
+    	method: 'post',
+    	mode: 'cors',
+    	body: JSON.stringify({username: `${email}`,password:`${password}`}),
+    	headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+    })
+    .then(r=>r.json())
+    .then((json)=>{
+      this.setState({ path: json.path, user: json.user})
+    })
+    .catch(console.error)
   }
 
 // find user is going to find the current user by their session and add it to the state
@@ -28,10 +52,17 @@ export default class Router extends React.Component {
   render () {
     // this is where we'll have all the switch statements to render
     // the page we want, based on the state
-    if (this.state.path==='/'){
-      return  <UserDrillBoard />
+//     if (this.state.path==='/'){
+//     }
+
+        {/* <CreateDrillGroup drillGroup={""}/>
+        <ManageDrillGroups /> */}
+    if (this.state.path === '/' ) {
+
+      return <SignIn onSubmit={this.signIn}/>
+    } else {
+      return <DisplayMessage text={this.state.user.first_name} />
 
     }
-
   }
 }
