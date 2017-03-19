@@ -6,9 +6,28 @@ export default class Topnav extends React.Component {
 
   constructor (props) {
     super (props);
-    this.state=  null;
+    this.state = null;
+    this.rightNav = this.rightNav.bind(this);
   };
 
+  rightNav () {
+    if(this.props.user.email){
+      return (
+        <Nav pullRight>
+          <NavItem disabled><h4>Hello {this.props.user.first_name}</h4></NavItem>
+          <NavItem href="" onClick={this.props.goToProfile}><h4>Profile</h4></NavItem>
+          <NavItem href="" onClick={this.props.logout}><h4>Logout</h4></NavItem>
+        </Nav>
+      )
+    } else {
+      return (
+        <Nav pullRight>
+          <NavItem href="" onClick={this.props.goToSignUp}><h4>Sign Up</h4></NavItem>
+          <NavItem href="" onClick={this.props.goToSignIn}><h4>Login</h4></NavItem>
+        </Nav>
+      )
+    }
+  }
 
   render () {
     const navstyle = {
@@ -25,6 +44,7 @@ export default class Topnav extends React.Component {
      const linkstyle = {
       paddingTop: '20px'
      };
+
     return <Navbar style={navstyle}  >
         <Navbar.Header style={leftbar}>
           <Navbar.Brand>
@@ -34,15 +54,10 @@ export default class Topnav extends React.Component {
         </Navbar.Header>
         <div style={linkstyle}>
         <Nav>
-          <NavItem href="#"><h4>Drills</h4></NavItem>
-         <NavItem href="#"><h4>Leaderboard</h4></NavItem>
+          <NavItem href="" onClick={this.props.handleDrills}><h4>Drills</h4></NavItem>
+          <NavItem href="" onClick={this.props.handleLeaderboard}><h4>Leaderboard</h4></NavItem>
         </Nav>
-
-         <Nav pullRight>
-          <NavItem href="#"><h4>Hello ______</h4></NavItem>
-         <NavItem href="#"><h4>Profile</h4></NavItem>
-         <NavItem href="#"><h4>Logout</h4></NavItem>
-         </Nav>
+          {this.rightNav()}
        </div>
       </Navbar>
   }
