@@ -79,17 +79,6 @@ export default class Router extends React.Component {
       case /\/admin\/\/drill_group\/\d+\/edit/.test(this.state.path):
       toRender = <CreateDrillGroup
                     onSubmit={this.updateDrillGroup}
-
-
-//     if (this.state.path==='/'){
-//     }
-    return <main>
-    <Topnav />
-      <WriteDrill />
-      {/* <CreateDrillGroup drillGroup={""}/>
-      <ManageDrillGroups />
-      <DisplayMessage text="Hey friends" /> */}
-    </main>
                     drillGroup={{}/* TODO: find drill group and put it here */}
                   />;
         break;
