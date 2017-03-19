@@ -35,6 +35,7 @@ export default class Router extends React.Component {
         toRender = <Home onClick={this.goToSignIn}/>;
         break;
       case '/sessions/new' === this.state.path:
+        console.log(this.state.errors);
         toRender = <SignIn onSubmit={this.signIn} goToForgotPassword={this.goToForgotPassword} goToSignUp={this.goToSignUp} errors={this.state.errors}/>;
         break;
       case '/users/new' === this.state.path:
@@ -44,7 +45,7 @@ export default class Router extends React.Component {
         toRender = <UserDrillBoard />;
         break;
       case '/leaderboard' === this.state.path:
-        // toRender = <SignIn onSubmit={this.signIn} errors={[]}/>;
+        // toRender = <LeaderBoard onSubmit={this.signIn} errors={[]}/>;
         break;
       case '/account-pending' === this.state.path:
         toRender = <DisplayMessage text={Handlers.thankYou}/>;

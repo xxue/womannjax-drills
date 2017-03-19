@@ -15,7 +15,12 @@ function sendFetch (path, method, body){
       'Content-Type': 'application/json'
     }
   })
-  .then(r=>r.json())
+  .then(r=>{
+    if(r.status === 400) {
+      return {};
+    }
+    return r.json();
+  })
 }
 
 class Handlers {
@@ -85,6 +90,7 @@ class Handlers {
     .then((json)=>{
       this.setState({ path: json.path || '/sessions/new', user: json.user, errors: json.errors || ['Could not verify your credentials']})
     })
+    .then(console.log(this.state))
     .catch(console.error)
   }
 
