@@ -1,10 +1,15 @@
 import React from 'react';
 import Topnav from './topnav'
+import CreateDrillGroup from './CreateDrillGroup';
+import ManageDrillGroups from './ManageDrillGroups';
 import Home from './home';
 // Display Message wil be used for both Password instructions
 // and Thank you for signing up
 import DisplayMessage from './DisplayMessage';
 import SignIn from './SignIn';
+import SignUp from './SignUp';
+import LeaderBoard from './Leaderboard';
+import WriteDrill from './WriteDrill';
 import UserDrillBoard from './UserDrillBoard';
 import CreateDrillGroup from './CreateDrillGroup';
 import ManageDrillGroups from './ManageDrillGroups';
@@ -75,6 +80,16 @@ export default class Router extends React.Component {
       toRender = <CreateDrillGroup
                     onSubmit={this.updateDrillGroup}
 
+
+//     if (this.state.path==='/'){
+//     }
+    return <main>
+    <Topnav />
+      <WriteDrill />
+      {/* <CreateDrillGroup drillGroup={""}/>
+      <ManageDrillGroups />
+      <DisplayMessage text="Hey friends" /> */}
+    </main>
                     drillGroup={{}/* TODO: find drill group and put it here */}
                   />;
         break;
