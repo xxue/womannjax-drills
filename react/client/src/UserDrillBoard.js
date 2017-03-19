@@ -1,6 +1,32 @@
 import React from 'react';
 import { Glyphicon, Nav, NavItem, Button } from 'react-bootstrap';
 
+// How to use in router!!!!
+//     return  <div>
+
+//           <UserDrillBoard
+//             state={
+//               {
+//                 myDrillGroups: [{
+//                   name:'Rails Routes',
+//                   attempts: 4,
+//                   score: 70.0
+//                 },
+//                   {name: 'Javascript Objects',
+//                   attempts: 15,
+//                   score: 5.0
+//                 }
+//                 ],
+//                 allDrillGroups:
+//                   [
+//                     {name: "Javascipt Arrays"},
+//                     {name: "Javascipt Functions"}
+//                   ]
+//                 }
+//             }/>
+//         </div>
+
+
 // render a single Drill group in MyDrillz
 
 function MyDrill (name, attempts, score){
