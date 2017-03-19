@@ -76,9 +76,11 @@ export default class UserDrillBoard extends React.Component {
   constructor(props){
     super(props)
 
-    this.state = props.state;
+    this.state = Object.assign({},props.state,{mydrills_not_alldrills: true});
     this.generateMyDrillz = this.generateMyDrillz.bind(this);
     this.generateAllDrillz = this.generateAllDrillz.bind(this);
+    this.changeToMyDrills = this.changeToMyDrills.bind(this);
+    this.changeToAllDrills = this.changeToAllDrills.bind(this);
   }
 
 
@@ -100,14 +102,22 @@ export default class UserDrillBoard extends React.Component {
     let AllDrillArray = [];
     // loop over array of drillGroups and call AllDrill everytime,
     //  using appropriate title param
-    for (let i=0;i<AllDrillGroups;i++){
+    for (let i=0;i<AllDrillGroups.length;i++){
       AllDrillArray.push(AllDrill(AllDrillGroups[i].name))
     }
 
     return AllDrillArray
   }
 
+  changeToMyDrills (event) {
+    event.preventDefault();
+    this.setState(Object.assign({},this.state,{mydrills_not_alldrills: true}));
+  }
 
+  changeToAllDrills (event) {
+    event.preventDefault();
+    this.setState(Object.assign({},this.state,{mydrills_not_alldrills: false}));
+  }
 // STYLES
 
   render () {
@@ -147,22 +157,19 @@ export default class UserDrillBoard extends React.Component {
 
             // FUNCTIONS
 
-    function changeTab (selectedKey) {
-      // this sould change the active key, to whatever is pressed
-      // it should also clear the display box and call the approriate function above
-
-    }
-
     // CHUNKS OF BOOTSTRAP/HTML
 
     const DrillzTabs= (
-      <Nav bsStyle="tabs" activeKey={1} onSelect={changeTab}>
-        <NavItem style={li} eventKey={1}>My Drillz</NavItem>
-        <NavItem style={li} eventKey={2}>All Drillz</NavItem>
+      <Nav bsStyle="tabs" activeKey={1} onSelect={()=>{}}>
+        <NavItem style={li} eventKey={1} onClick={this.changeToMyDrills}>My Drillz</NavItem>
+        <NavItem style={li} eventKey={2} onClick={this.changeToAllDrills}>All Drillz</NavItem>
       </Nav>
     )
 
      // RETURN
+     let toReturn = this.state.mydrills_not_alldrills ?
+     this.generateMyDrillz(this.state.myDrillGroups) :
+     this.generateAllDrillz(this.state.allDrillGroups);
 
     return (
       <div className='container' style={centered}>
@@ -170,11 +177,7 @@ export default class UserDrillBoard extends React.Component {
           {DrillzTabs}
         </div>
         <div className='displayBox' style={displayBox}>
-          {/* {MyDrill("Rails Routes", 4, 70)} */}
-          {/* {AllDrill("Javascript Arrays")} */}
-          {this.generateAllDrillz(this.state.allDrillGroups)}
-          {/* All drills is broken and i don't know why... */}
-          {this.generateMyDrillz(this.state.myDrillGroups)}
+          {toReturn}
         </div>
       </div>
     )
