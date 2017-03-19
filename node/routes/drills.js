@@ -6,22 +6,10 @@ router.get('/', function (req,res,next) {
     res.send ({name:"hello"})
 })
 
-//drill#edit
-//PATH /drills/:id/edit
-//works
-router.get('/:id/edit', function (req, res, next) {
-  const {id} = req.params;
-  console.log(req.params);
-  Drill
-    .findById(id)
-    .then(drill => res.render('/drills/edit', {drill}))
-    .catch(err => next(err))
-})
-
 //drill#destroy
 //PATH /drills/:id
 //works
-router.delete('/:id', function(req, res, next) {
+router.delete('/drill-groups/:drillgroupId/drills/:id', function(req, res, next) {
   const {id} = req.params;
   // const id = req.params.id;
   Drill
