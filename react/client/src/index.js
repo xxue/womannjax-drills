@@ -6,7 +6,7 @@ import Router from './router';
 const App = props => {
 
   return <div>
-      <Router state={ { path: '/', user: {} } }/>
+      <Router state={ { path: '/', user: {}, errors: [] } }/>
   </div>
 }
 
