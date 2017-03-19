@@ -1,14 +1,15 @@
 import React from 'react';
-import Home from './home'
 import Topnav from './topnav'
-// import Home from './home';
 import CreateDrillGroup from './CreateDrillGroup';
 import ManageDrillGroups from './ManageDrillGroups';
-import ShowDrillGroup from './ShowDrillGroup'
+import ShowDrillGroup from './ShowDrillGroup;
+import Home from './home';
 // Display Message wil be used for both Password instructions
 // and Thank you for signing up
 import DisplayMessage from './DisplayMessage';
 import SignIn from './SignIn';
+import UserDrillBoard from './UserDrillBoard';
+
 
 export default class Router extends React.Component {
   constructor (props) {
@@ -19,21 +20,53 @@ export default class Router extends React.Component {
                      token: "",
                      user_id: 2,
                      is_admin: false
-                   }
+                        }
                  }
+    this.signIn = this.signIn.bind(this);
   }
+
+  signIn  (event) {
+    event.preventDefault();
+    const {target} = event;
+    const email = target.querySelector('#formHorizontalEmail').value;
+    const password = target.querySelector('#formHorizontalPassword').value;
+    fetch('http://localhost:3000/sessions',{
+    	credentials: 'include',
+    	method: 'post',
+    	mode: 'cors',
+    	body: JSON.stringify({username: `${email}`,password:`${password}`}),
+    	headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+    })
+    .then(r=>r.json())
+    .then((json)=>{
+      this.setState({ path: json.path, user: json.user})
+    })
+    .catch(console.error)
+  }
+
+// find user is going to find the current user by their session and add it to the state
+  // function FindUser(){
+  //
+  //     }
 
   render () {
     // this is where we'll have all the switch statements to render
     // the page we want, based on the state
-
 //     if (this.state.path==='/'){
 //     }
-    return <main>
-      {/* <CreateDrillGroup drillGroup={""}/>
-      <ManageDrillGroups /> */}
-      <ShowDrillGroup />
-      {/* <DisplayMessage text="Hey friends" /> */}
-    </main>
+//     return <main>
+//       {/* <CreateDrillGroup drillGroup={""}/>
+//       <ManageDrillGroups /> */}
+//       <ShowDrillGroup />
+//       {/* <DisplayMessage text="Hey friends" /> */}
+//     </main>
+    if (this.state.path === '/' ) {
+      return <SignIn onSubmit={this.signIn}/>
+    } else {
+      return <DisplayMessage text={this.state.user.first_name} />
+    }
   }
 }
