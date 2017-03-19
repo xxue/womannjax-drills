@@ -11,7 +11,7 @@ import UserDrillBoard from './UserDrillBoard';
 export default class Router extends React.Component {
   constructor (props) {
     super (props);
-    this.state = { path: '/',
+    this.state = this.state || { path: '/',
                    user:{
                      email: "",
                      token: "",
@@ -52,17 +52,18 @@ export default class Router extends React.Component {
   render () {
     // this is where we'll have all the switch statements to render
     // the page we want, based on the state
-//     if (this.state.path==='/'){
-//     }
-
-        {/* <CreateDrillGroup drillGroup={""}/>
-        <ManageDrillGroups /> */}
-    if (this.state.path === '/' ) {
-
-      return <SignIn onSubmit={this.signIn}/>
-    } else {
-      return <DisplayMessage text={this.state.user.first_name} />
-
-    }
+        /* <CreateDrillGroup drillGroup={""}/>
+        <ManageDrillGroups /> */
+    // if (this.state.path === '/' ) {
+    //
+    //   return <SignIn onSubmit={this.signIn}/>
+    // } else {
+    //   return <DisplayMessage text={this.state.user.first_name} />
+    //
+    // }
+    return <div>
+            <Home />
+            {this.state.path}
+           </div>
   }
 }
