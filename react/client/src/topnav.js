@@ -1,5 +1,5 @@
 import React from 'react';
-import {Navbar, Nav, NavItem, pullRight} from 'react-bootstrap'
+import {Navbar, Nav, NavItem} from 'react-bootstrap'
 import logo from '../public/logo.jpeg';
 
 export default class Topnav extends React.Component {

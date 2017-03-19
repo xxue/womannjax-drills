@@ -1,13 +1,15 @@
 import React from 'react';
 import Home from './home'
 import Topnav from './topnav'
-import Home from './home';
 import CreateDrillGroup from './CreateDrillGroup';
-import ManageDrillGroups from './ManageDrillGroups';
+ import ManageDrillGroups from './ManageDrillGroups';
 // Display Message wil be used for both Password instructions
 // and Thank you for signing up
 import DisplayMessage from './DisplayMessage';
 import SignIn from './SignIn';
+import SignUp from './SignUp';
+import LeaderBoard from './Leaderboard';
+import WriteDrill from './WriteDrill';
 
 export default class Router extends React.Component {
   constructor (props) {
@@ -29,9 +31,11 @@ export default class Router extends React.Component {
 //     if (this.state.path==='/'){
 //     }
     return <main>
-      <CreateDrillGroup drillGroup={""}/>
+    <Topnav />
+      <WriteDrill />
+      {/* <CreateDrillGroup drillGroup={""}/>
       <ManageDrillGroups />
-      <DisplayMessage text="Hey friends" />
+      <DisplayMessage text="Hey friends" /> */}
     </main>
   }
 }
