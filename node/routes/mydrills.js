@@ -6,3 +6,6 @@ const {User, DrillGroup} = require('../models/index');
 //attempts
 //score
 //drillsvisible
+router.get('/', function (req,res,next) {
+    res.send ({name:"mydrillsprofile"})
+})

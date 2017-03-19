@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const {Drill} = require('../models/index');
 
-router.get('/', function (req,res,next) {
-    res.send ({name:"hello"})
-})
+// router.get('/', function (req,res,next) {
+//     res.send ({name:"hello"})
+// })
 
 //drill#edit
 //PATH /drills/:id/edit
@@ -14,7 +14,31 @@ router.get('/:id/edit', function (req, res, next) {
   console.log(req.params);
   Drill
     .findById(id)
-    .then(drill => res.render('/drills/edit', {drill}))
+    .then(drill => res.send(JSON.stringify({
+        exercise: drill.exercise,
+        points: drill.points,
+        DrillGroupId: drill.DrillGroupId
+      }
+    )))
+    .catch(err => next(err))
+})
+
+//drill#update
+//PATH /drills/:id/edit
+//works
+router.patch('/:id/edit', function (req, res, next) {
+  const {id} = req.params;
+  const {exercise, points, DrillGroupId} = req.body;
+  console.log(req.params);
+  Drill
+    .findById(id)
+    .then(drill => drill.update({exercise, points, DrillGroupId}))
+    .then(drill => res.send(JSON.stringify({
+      exercise: drill.exercise,
+      points: drill.points,
+      DrillGroupId: drill.DrillGroupId
+      }
+    )))
     .catch(err => next(err))
 })
 
@@ -27,7 +51,9 @@ router.delete('/:id', function(req, res, next) {
   Drill
     .findById(id)
     .then(drill  => drill.destroy())
-    .then(drill => res.send({drill:"deleted"}))
+    .then(drill => res.send(JSON.stringify(
+      {drill:"deleted"}))
+    )
     .catch(err => next(err))
 });
 
