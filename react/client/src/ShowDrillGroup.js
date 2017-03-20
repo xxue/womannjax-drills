@@ -61,7 +61,7 @@ export default class ShowDrillGroup extends React.Component{
     let drillsArr = [];
 
     drills.forEach((drill, i)=>{
-      drillsArr.push(<Drill key={i} index={i+1} drill={drill} />)
+      drillsArr.push(<Drill key={i} index={i+1} drill={drill}  deleteDrill={this.props.deleteDrill}/>)
     })
     return drillsArr;
   }
