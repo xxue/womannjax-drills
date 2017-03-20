@@ -1,8 +1,6 @@
 import React from 'react';
 import {Col, Row, Grid} from 'react-bootstrap';
 
-
-
 function getUserData() {
   let userArray = (["Neal", "XinXin", "Max", "Aldo", "Nicole", "John", "Annie"]);
   return userArray;
@@ -78,7 +76,7 @@ export default class Leaderboard extends React.Component {
     return <Grid>
             <Row className="show-grid">
               <Col xs={8}>
-                {userBoard(this.state.users)}
+                {userBoard(["Neal", "XinXin", "Max", "Aldo", "Nicole", "John", "Annie"])}
               </Col>
               <Col xs={4}>
                 {userModule()}

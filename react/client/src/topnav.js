@@ -46,7 +46,7 @@ export default class Topnav extends React.Component {
       marginRight: '5px',
       border: '1px solid wheat'
      };
-     
+
     const logostyle = {
       height: '100px',
       paddingLeft: '30px'
@@ -58,7 +58,7 @@ export default class Topnav extends React.Component {
       paddingTop: '10px'
      };
 
-    return <div><Navbar style={navstyle}  >
+    return <div><Navbar style={navstyle} >
         <Navbar.Header style={leftbar}>
           <Navbar.Brand>
           <img src={logo} style={logostyle}/>

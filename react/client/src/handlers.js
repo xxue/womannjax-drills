@@ -380,6 +380,10 @@ class Handlers {
     event.preventDefault();
     this.setState(Object.assign({},{ path: `/reset_password/new`, user: this.state.user, errors: [] }));
   }
+  goToLeaderboard (event) {
+    event.preventDefault();
+    this.setState(Object.assign({},{ path: `/leaderboard`, user: this.state.user, errors: [] }));
+  }
 
 
   goToAdminCreateDrillGroup (event) {

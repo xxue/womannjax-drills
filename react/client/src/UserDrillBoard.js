@@ -1,32 +1,6 @@
 import React from 'react';
 import { Glyphicon, Nav, NavItem, Button } from 'react-bootstrap';
 
-// How to use in router!!!!
-//     return  <div>
-
-//           <UserDrillBoard
-//             state={
-//               {
-//                 myDrillGroups: [{
-//                   name:'Rails Routes',
-//                   attempts: 4,
-//                   score: 70.0
-//                 },
-//                   {name: 'Javascript Objects',
-//                   attempts: 15,
-//                   score: 5.0
-//                 }
-//                 ],
-//                 allDrillGroups:
-//                   [
-//                     {name: "Javascipt Arrays"},
-//                     {name: "Javascipt Functions"}
-//                   ]
-//                 }
-//             }/>
-//         </div>
-
-
 // render a single Drill group in MyDrillz
 
 class MyDrill extends React.Component {
@@ -37,11 +11,15 @@ class MyDrill extends React.Component {
       'height': '40%',
       border: 'solid darkseagreen'
     }
+    const h3={
+      'font-size': '3.1vw'
+    }
     // FUNCTIONS
     console.log(this.props);
     // RETURN
+
     return (<div style={drillGroup} data-id={this.props.myDrillsId} data-attempts={this.props.attempts} id={this.props.id}>
-      <h3>{this.props.name}</h3>
+      <h3 style={h3}>{this.props.name}</h3>
       <p>Taken: {this.props.attempts} Time(s)</p>
       <p>Points: {this.props.score}</p>
       <Button onClick={this.props.onStart}>Start</Button>
@@ -60,13 +38,18 @@ function AllDrill ({id, name}, onAddToMyDrills){
     'height': '40%',
     border: 'solid goldenrod'
   }
+  const h3={
+    'font-size': '3.1vw'
+  }
   // FUNCTIONS
 
   // RETURN
 
   return (<div style={drillGroup} id={id}>
-              <h3>{name}</h3>
+
+              <h3 style={h3}>{name}</h3>
               <Button onClick={onAddToMyDrills}>Add To My Drillz</Button>
+
           </div>)
 }
 
@@ -139,28 +122,30 @@ export default class UserDrillBoard extends React.Component {
       'alignItems':'center',
       'flexDirection': 'column',
       // this will likely need changing when we render the topNav as well
-       width: '100vw',
-       height:'100vh',
+       width: '90%',
+       height:'90%',
     }
 
     const nav ={
       'display': 'flex',
       'flexDirection':'row',
       'justifyContent': 'flex-start',
-      'width': '80vw',
+      'width': '80%',
     }
 
     const displayBox ={
       // this will probably need to be changed when we render the
       // topnav as well, probably should switch to 65vh/w
-      width: '80vw',
-      height:'80vh',
+      width: '80%',
+      'min-width': '400px',
+      height:'80%',
+      'min-height': '250px',
       border: 'solid black',
       'display': 'flex',
       'justifyContent': 'space-around',
-      'alignContent':'center',
+      'alignContent':'space-around',
       'flexDirection':'row',
-      'flexWrap': 'wrap'
+      'flex-wrap': 'wrap'
     }
 
     const li= {

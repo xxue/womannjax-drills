@@ -56,7 +56,7 @@ export default class Router extends React.Component {
     this.goToAdminDrills = Handlers.prototype.goToAdminDrills.bind(this);
     this.goToForgotPassword = Handlers.prototype.goToForgotPassword.bind(this);
     this.goToAdminCreateDrillGroup = Handlers.prototype.goToAdminCreateDrillGroup.bind(this);
-
+    this.goToLeaderboard = Handlers.prototype.goToLeaderboard.bind(this);
     this.incrementIndex = Handlers.prototype.incrementIndex.bind(this);
 
   }
@@ -120,7 +120,7 @@ export default class Router extends React.Component {
                     />;
         break;
       case '/leaderboard' === this.state.path:
-        // toRender = <LeaderBoard onSubmit={this.signIn} errors={[]}/>;
+        toRender = <LeaderBoard onSubmit={this.signIn} errors={[]}/>;
         break;
       case '/account-pending' === this.state.path:
         toRender = <DisplayMessage text={thankYou}/>;
@@ -193,6 +193,7 @@ export default class Router extends React.Component {
             handleDrills={this.getMyAllDrills}
             goToAdminDrills={this.goToAdminDrills}
             logout={this.logout}
+            handleLeaderboard={this.goToLeaderboard}
           />
           {toRender}
         </div>
