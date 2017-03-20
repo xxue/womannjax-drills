@@ -54,6 +54,8 @@ router.get('/:userId/drill-groups/', function (req, res, next) {
   const {userId} = req.params;
   let myDrillsCollection = [];
   let drillGroupIds = [];
+  let drillGroupNames = [];
+  let responseCollection = [];
 
   MyDrills
     .findAll({
@@ -67,8 +69,38 @@ router.get('/:userId/drill-groups/', function (req, res, next) {
       myDrills.forEach( (mydrill) => { drillGroupIds.push(mydrill.DrillGroupId) })
     })
     .then(() => {
-      console.log(drillGroupIds);
-      res.send({});
+          // console.log(drillGroupIds);
+          DrillGroup
+          .findAll({
+            where: {
+              id: { $in: drillGroupIds }
+            },
+            attributes: ['name']
+          })
+          .then(
+            drillgroups => {
+              // console.log(drillgroups);
+              drillGroupNames = drillgroups;
+
+              drillgroups.forEach( (group,i,arr) => {
+                responseCollection.push(
+                  Object.assign({}, {
+                    name: drillGroupNames[i].name,
+                    UserId: userId,
+                    DrillGroupId: drillGroupIds[i],
+                    attempts: myDrillsCollection[i].attempts,
+                    score: myDrillsCollection[i].score,
+                    drillsVisible: myDrillsCollection[i].drillsVisible
+                  })
+                );
+              });
+              console.log(responseCollection);
+              res.send(JSON.stringify(responseCollection));
+            }
+          )
+          .catch(err => next(err));
+
+
     })
     // .then(myDrills => {
     //   res.send(JSON.stringify(
@@ -85,7 +117,7 @@ router.get('/:userId/drill-groups/', function (req, res, next) {
 
 
 // MyDrills#show
-// PATH: /user/:userId/drill-group/:drillGroupId/
+// PATH: /users/:userId/drill-group/:drillGroupId/
 router.get('/:userId/drill-groups/:drillGroupId/', function (req, res, next) {
   const {userId, drillGroupId}            = req.params;
 
