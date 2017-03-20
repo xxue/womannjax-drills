@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-const { User, MyDrills } = require('../models/index');
+const { User, MyDrills, DrillGroup } = require('../models/index');
 
 // users#index TODO: FOR ADMIN
 router.get('/', function(req, res, next) {
@@ -49,9 +49,11 @@ router.post('/', function(req, res, next) {
 //////// MyDrills Routes ///////////
 
 // MyDrills#index
-// PATH: /user/:userId/index
-router.get('/:userId/drill-group/:drillGroupId/', function (req, res, next) {
-  const {userId, drillGroupId}            = req.params;
+// PATH: /users/:userId/drill-groups/
+router.get('/:userId/drill-groups/', function (req, res, next) {
+  const {userId} = req.params;
+  let myDrillsCollection = [];
+  let drillGroupIds = [];
 
   MyDrills
     .findAll({
@@ -60,22 +62,31 @@ router.get('/:userId/drill-group/:drillGroupId/', function (req, res, next) {
                }
     })
     .then(myDrills => {
-      res.send(JSON.stringify(
-        {
-          UserId: userId,
-          DrillGroupId: drillGroupId,
-          attempts: myDrills[0].attempts,
-          score: myDrills[0].score,
-          drillsVisible: myDrills[0].drillsVisible
-      }));
+      myDrillsCollection = myDrills;
+
+      myDrills.forEach( (mydrill) => { drillGroupIds.push(mydrill.DrillGroupId) })
     })
+    .then(() => {
+      console.log(drillGroupIds);
+      res.send({});
+    })
+    // .then(myDrills => {
+    //   res.send(JSON.stringify(
+    //     {
+    //       UserId: userId,
+    //       DrillGroupId: drillGroupId,
+    //       attempts: myDrills[0].attempts,
+    //       score: myDrills[0].score,
+    //       drillsVisible: myDrills[0].drillsVisible
+    //   }));
+    // })
     .catch(err => next(err))
 });
 
 
 // MyDrills#show
 // PATH: /user/:userId/drill-group/:drillGroupId/
-router.get('/:userId/drill-group/:drillGroupId/', function (req, res, next) {
+router.get('/:userId/drill-groups/:drillGroupId/', function (req, res, next) {
   const {userId, drillGroupId}            = req.params;
 
   MyDrills
@@ -86,6 +97,7 @@ router.get('/:userId/drill-group/:drillGroupId/', function (req, res, next) {
                }
     })
     .then(myDrills => {
+      console.log(myDrills);
       res.send(JSON.stringify(
         {
           UserId: userId,
@@ -101,7 +113,7 @@ router.get('/:userId/drill-group/:drillGroupId/', function (req, res, next) {
 
 // MyDrills#create
 // PATH: /user/:userId/drill-group/:drillGroupId/
-router.post('/:userId/drill-group/:drillGroupId/', function (req, res, next) {
+router.post('/:userId/drill-groups/:drillGroupId/', function (req, res, next) {
   const {userId, drillGroupId}            = req.params;
   const {attempts, score, drillsVisible}  = req.body;
 
