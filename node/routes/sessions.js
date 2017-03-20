@@ -26,20 +26,8 @@ router.post('/',
   function(req, res) {
     res.setHeader('Content-Type', 'application/json');
     // found a user.check that user "is verified"
-    let sendPath = "";
-    if (req.user.token) {
-      // if token exists, account is verified.
-      // redirect to My Drills
-      sendPath = `/users/${req.user.id}/drill_groups`;
-    } else {
-      // account is not verified
-      // redirect to account pending
-      sendPath = '/account-pending';
-    }
-    res.send(JSON.stringify(Object.assign({},{
-      user: req.user,
-      path: sendPath
-    })));
+
+    res.send(JSON.stringify(req.user));
   });
 
 module.exports = router;

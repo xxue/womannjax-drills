@@ -40,5 +40,40 @@ router.post('/', function(req, res, next) {
   }
 });
 
+router.get('/:id/drill-groups', function(req,res,next){
+  res.send(JSON.stringify({
+                  myDrillGroups: [{
+                    id: 1,
+                    name:'Rails Routes',
+                    attempts: 4,
+                    score: 70.0
+                  },
+                    {
+                      id: 12,
+                      name: 'Javascript Objects',
+                    attempts: 15,
+                    score: 5.0
+                  }
+                  ],
+                  allDrillGroups:
+                    [
+                      {id:2,
+                        name: "Javascipt Arrays"},
+                      {id:5,
+                        name: "Javascipt Functions"}
+                    ]
+                  }));
+})
+
+router.post('/:id/drill-groups', function(req,res,next){
+  res.send(JSON.stringify({
+                    id: 1,
+                    name:'Rails Routes',
+                    attempts: 4,
+                    score: 70.0
+                  }));
+})
+
+
 
 module.exports = router;
