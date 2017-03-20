@@ -50,6 +50,9 @@ export default class WriteDrill extends React.Component {
 
 
   render (){
+    if(typeof this.props.drills[this.props.index] == "undefined"){
+      return <div>This has no drills</div>
+    }
 
     let answerInput = <div></div>;
     if (this.props.correctAnswers.length > 0){
@@ -68,7 +71,7 @@ export default class WriteDrill extends React.Component {
         )
     } else {
       answerInput = (
-        <Form horizontal id={this.props.drills[this.props.index].id} onSubmit={this.props.onSubmit}>
+        <Form horizontal id={ this.props.drills[this.props.index].id } onSubmit={this.props.onSubmit}>
 
           <FormGroup controlId="formHorizontalAnswer">
             <Col sm={10}>
