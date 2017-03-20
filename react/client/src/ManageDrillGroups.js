@@ -5,6 +5,7 @@ class DrillGroup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {drillGroup: props.drillGroup}
+
   }
 
   render() {
@@ -19,7 +20,7 @@ class DrillGroup extends React.Component {
           <ButtonToolbar>
             <Button href="#">View</Button>
             <Button href="#">Edit</Button>
-            <Button href="#">Delete</Button>
+            <Button onClick={this.props.onDelete}>Delete</Button>
           </ButtonToolbar>
         </div>
       </Panel>
@@ -36,7 +37,7 @@ export default class ManageDrillGroups extends React.Component {
   renderDrillGroups(drillGroups){
     let drillGroupArr = [];
     drillGroups.forEach(drillGroup=>{
-      drillGroupArr.push(<DrillGroup drillGroup={drillGroup} />);
+      drillGroupArr.push(<DrillGroup drillGroup={drillGroup} onDelete={this.props.deleteDrillGroup}/>);
     })
     return drillGroupArr;
   }

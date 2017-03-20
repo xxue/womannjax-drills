@@ -30,6 +30,7 @@ export default class Router extends React.Component {
     this.createNewDrillGroup = Handlers.prototype.createNewDrillGroup.bind(this);
     this.updateDrillGroup = Handlers.prototype.updateDrillGroup.bind(this);
     this.logout = Handlers.prototype.logout.bind(this);
+    this.deleteDrillGroup = Handlers.prototype.deleteDrillGroup.bind(this);
 
 
     this.goToSignIn = Handlers.prototype.goToSignIn.bind(this);
@@ -92,7 +93,10 @@ export default class Router extends React.Component {
         break;
       case '/admin/drill_board' === this.state.path:
         toRender = <ManageDrillGroups
-          drillGroups={this.state.drillGroups} onAddDrillGroup={this.goToAdminCreateDrillGroup}/>;
+          drillGroups={this.state.drillGroups}
+          onAddDrillGroup={this.goToAdminCreateDrillGroup}
+          deleteDrillGroup={this.deleteDrillGroup}
+        />;
         break;
       case '/admin/drill_board/new' === this.state.path:
         toRender = <CreateDrillGroup
