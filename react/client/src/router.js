@@ -30,7 +30,8 @@ export default class Router extends React.Component {
     this.createNewDrillGroup = Handlers.prototype.createNewDrillGroup.bind(this);
     this.updateDrillGroup = Handlers.prototype.updateDrillGroup.bind(this);
     this.logout = Handlers.prototype.logout.bind(this);
-    
+    this.getAdminAllDrills = Handlers.prototype.getAdminAllDrills.bind(this);
+
     this.deleteDrillGroup = Handlers.prototype.deleteDrillGroup.bind(this);
 
     this.onDrillGroupView = Handlers.prototype.onDrillGroupView.bind(this);
@@ -68,6 +69,9 @@ export default class Router extends React.Component {
         break;
       case '/users/get-drill-groups' === this.state.path:
         this.getMyAllDrills();
+        break;
+      case '/admin/get-drill-groups' === this.state.path:
+        this.getAdminAllDrills();
         break;
       case /\/users\/\d+\/drill_group/.test(this.state.path):
                   //   {
