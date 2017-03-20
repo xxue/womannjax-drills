@@ -395,7 +395,7 @@ class Handlers {
 
   finishDrillGroup (event) {
     event.preventDefault();
-    sendFetch(`/this.state.drillGroup.id`
+    // sendFetch(`/this.state.drillGroup.id`
   }
 
 }
