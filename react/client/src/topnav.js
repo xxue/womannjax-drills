@@ -11,7 +11,16 @@ export default class Topnav extends React.Component {
   };
 
   rightNav () {
-    if(this.props.user.email){
+    console.log(this.props.user);
+    if(this.props.user.is_admin){
+      return (
+
+        <Nav pullRight>
+          <NavItem href="" onClick={this.props.goToAdminDrills}><h4>Drills</h4></NavItem>
+          <NavItem href="" onClick={this.props.logout}><h4>Logout</h4></NavItem>
+        </Nav>
+      )
+    } else if (this.props.user.email) {
       return (
         <Nav pullRight>
           <NavItem disabled><h4>Hello {this.props.user.first_name}</h4></NavItem>
