@@ -29,6 +29,21 @@ function sendFetch (path, method, body, user = {}){
 
 class Handlers {
 
+  handleLeaderBoard(event){
+    event.preventDefault();
+    sendFetch('/usersboard','GET',{},{token: this.state.user.token})
+      .then(users=>{
+        this.setState(Object.assign(
+          {},
+          this.state,
+          {
+            path: '/leaderboard',
+            users: users
+          }
+        ))
+      })
+  }
+
   updateDrillGroup (event) {
     event.preventDefault();
     const {target} = event;

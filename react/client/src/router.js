@@ -30,8 +30,9 @@ export default class Router extends React.Component {
     this.createNewDrillGroup = Handlers.prototype.createNewDrillGroup.bind(this);
     this.updateDrillGroup = Handlers.prototype.updateDrillGroup.bind(this);
 
+    this.handleLeaderBoard = Handlers.prototype.handleLeaderBoard.bind(this);
+    
     this.onStart = Handlers.prototype.startDrill.bind(this);
-
     this.logout = Handlers.prototype.logout.bind(this);
 
 
@@ -48,6 +49,26 @@ export default class Router extends React.Component {
   render () {
     console.log('pathName: ', this.state.path);
     console.log('errors: ',this.state.errors);
+      return <LeaderBoard users = {[
+        {
+          "id": "1",
+          "first_name": "Bob",
+          "last_name": "Henderson",
+          "email": "xx@aa.org",
+          "password": "111",
+          "token": null,
+          "score": 1000
+        },
+        {
+          "id": 2,
+          "first_name": "Mary",
+          "last_name":"Smith",
+          "email": "xx@aa.org",
+          "password": "11",
+          "token": null,
+          "score": 2000
+        }
+      ]}/>;
 
 //     return  <div>
 
@@ -155,6 +176,7 @@ export default class Router extends React.Component {
             goToSignIn={this.goToSignIn}
             goToSignUp={this.goToSignUp}
             goToProfile={this.goToProfile}
+            handleLeaderboard={this.handleLeaderboard}
             logout={this.logout}
           />
           {toRender}
