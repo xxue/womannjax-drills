@@ -31,7 +31,6 @@ function sendFetch (path, method, body, user = {}){
 
 class Handlers {
 
-
   addNewDrill (event) {
     event.preventDefault();
     // console.dir(event.target);

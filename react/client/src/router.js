@@ -46,8 +46,6 @@ export default class Router extends React.Component {
     console.log('pathName: ', this.state.path);
     console.log('errors: ',this.state.errors);
 
-
-
     let toRender = <div></div>;
     switch(true){
       case '/' === this.state.path:
