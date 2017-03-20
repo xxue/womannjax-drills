@@ -30,7 +30,11 @@ export default class Router extends React.Component {
     this.createNewDrillGroup = Handlers.prototype.createNewDrillGroup.bind(this);
     this.updateDrillGroup = Handlers.prototype.updateDrillGroup.bind(this);
     this.logout = Handlers.prototype.logout.bind(this);
+    
     this.deleteDrillGroup = Handlers.prototype.deleteDrillGroup.bind(this);
+
+    this.onDrillGroupView = Handlers.prototype.onDrillGroupView.bind(this);
+
 
 
     this.goToSignIn = Handlers.prototype.goToSignIn.bind(this);
@@ -46,6 +50,8 @@ export default class Router extends React.Component {
     console.log('pathName: ', this.state.path);
     console.log('errors: ',this.state.errors);
 
+
+
     let toRender = <div></div>;
     switch(true){
       case '/' === this.state.path:
@@ -53,10 +59,12 @@ export default class Router extends React.Component {
         break;
       case '/sessions/new' === this.state.path:
         console.log(this.state.errors);
-        toRender = <SignIn onSubmit={this.signIn} goToForgotPassword={this.goToForgotPassword} goToSignUp={this.goToSignUp} errors={this.state.errors}/>;
+        toRender = <SignIn onSubmit={this.signIn}
+                            goToForgotPassword={this.goToForgotPassword}
+                            goToSignUp={this.goToSignUp}
+                            errors={this.state.errors}/>;
         break;
       case '/users/new' === this.state.path:
-        toRender = <SignUp onSubmit={this.signUp} errors={this.state.errors}/>;
         toRender = <SignUp onSubmit={this.signUp} errors={this.state.errors}/>;
         break;
       case /\/users\/\d+\/drill_group/.test(this.state.path):
@@ -93,10 +101,11 @@ export default class Router extends React.Component {
         break;
       case '/admin/drill_board' === this.state.path:
         toRender = <ManageDrillGroups
-          drillGroups={this.state.drillGroups}
-          onAddDrillGroup={this.goToAdminCreateDrillGroup}
-          deleteDrillGroup={this.deleteDrillGroup}
-        />;
+                      drillGroups={this.state.drillGroups}
+                      onAddDrillGroup={this.goToAdminCreateDrillGroup}
+                      onDrillGroupView={this.onDrillGroupView}
+                      deleteDrillGroup={this.deleteDrillGroup}
+                    />;
         break;
       case '/admin/drill_board/new' === this.state.path:
         toRender = <CreateDrillGroup

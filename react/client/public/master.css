@@ -1,3 +1,15 @@
 .nav > li.disabled > a {
   color: #777 !important;
 }
+
+body {
+  margin: 0px 50px;
+  padding: 20px 20px;
+  font-family: monospace;
+  background:  linear-gradient(90deg, lightblue, papayawhip);
+  font-color: black
+}
+
+.nav {
+margin-left: 50px
+}

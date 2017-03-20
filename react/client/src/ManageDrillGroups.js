@@ -14,13 +14,15 @@ class DrillGroup extends React.Component {
       justifyContent: 'flex-end'
     };
     return (
-      <Panel>
+      <Panel id={this.state.drillGroup.id}>
         <div><h4>{this.state.drillGroup.name}</h4></div>
         <div style={style}>
           <ButtonToolbar>
-            <Button href="#">View</Button>
+            <Button href="" onClick={this.props.onDrillGroupView}>View</Button>
             <Button href="#">Edit</Button>
             <Button onClick={this.props.onDelete}>Delete</Button>
+            
+ 
           </ButtonToolbar>
         </div>
       </Panel>
@@ -37,7 +39,9 @@ export default class ManageDrillGroups extends React.Component {
   renderDrillGroups(drillGroups){
     let drillGroupArr = [];
     drillGroups.forEach(drillGroup=>{
-      drillGroupArr.push(<DrillGroup drillGroup={drillGroup} onDelete={this.props.deleteDrillGroup}/>);
+
+      drillGroupArr.push(<DrillGroup onDrillGroupView={this.props.onDrillGroupView} onDelete={this.props.deleteDrillGroup} drillGroup={drillGroup} />);
+
     })
     return drillGroupArr;
   }
