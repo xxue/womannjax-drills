@@ -230,7 +230,7 @@ class Handlers {
   }
 
   getMyAllDrills () {
-    sendFetch(`/users/${this.state.user.id}/drill-groups`,'GET',{},{token: this.state.user.token })
+    sendFetch(`/my-drills/drill-groups`,'GET',{},{token: this.state.user.token })
     .then(json=>{
       this.setState(Object.assign(
                         {},
@@ -395,7 +395,7 @@ class Handlers {
 
   finishDrillGroup (event) {
     event.preventDefault();
-    // sendFetch(`/this.state.drillGroup.id`
+    sendFetch(`/my-drills/${this.state.myDrillsId}`);
   }
 
 }

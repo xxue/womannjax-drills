@@ -30,10 +30,11 @@ router.get('/drill-groups/', function (req, res, next) {
   let myDrillsCollection = [];
   let drillGroupIds = [];
   let drillGroupNames = [];
-  let responseCollection = [];
+  let responseCollectionMyDrills = [];
+  let response = {};
 
   MyDrills
-    .findAll()
+    .findAll({attributes: ['id', 'UserId','DrillGroupId','attempts','score','drillsVisible']})
     .then(myDrills => {
       myDrillsCollection = myDrills;
       myDrills.forEach( (mydrill) => { drillGroupIds.push(mydrill.DrillGroupId) })
@@ -43,10 +44,10 @@ router.get('/drill-groups/', function (req, res, next) {
           .findAll({where: {id: { $in: drillGroupIds }}, attributes: ['name']})
           .then( drillgroups => {
               drillGroupNames = drillgroups;
-
               drillgroups.forEach( (group,i,arr) => {
-                responseCollection.push(
+                responseCollectionMyDrills.push(
                   Object.assign({}, {
+                    myDrillsId: myDrillsCollection[i].id,
                     name: drillGroupNames[i].name,
                     UserId: myDrillsCollection[i].UserId,
                     DrillGroupId: drillGroupIds[i],
@@ -56,10 +57,23 @@ router.get('/drill-groups/', function (req, res, next) {
                   })
                 );
               });
-              console.log(responseCollection);
-              res.send(JSON.stringify(responseCollection));
+              // console.log(responseCollectionMyDrills);
+              Object.assign(response,{myDrillGroups: responseCollectionMyDrills})
             }
           )
+          .then(()=>{
+            console.log("------------------------------")
+             DrillGroup
+              .findAll()
+              .then(allDrillGroups=>{
+                console.log('drillGroups',allDrillGroups)
+                Object.assign(response,{allDrillGroups: allDrillGroups || []})
+              })
+              .then(()=>{
+                res.send(JSON.stringify(response));
+              })
+          })
+
           .catch(err => next(err));
     })
     .catch(err => next(err))
