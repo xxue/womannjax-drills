@@ -1,46 +1,49 @@
 const express = require('express');
 const router = express.Router();
-const {User, DrillGroup} = require('../models/index');
+const {User, DrillGroup, MyDrills} = require('../models/index');
 
 
-// MyDrillss#create
-// PATH /my-drills/:drillGroupId/drills METHOD: post
-router.post('/', function (req, res, next) {
-  const {drillGroupId} = req.params;
-  const {exercise, points, solutions} = req.body;
-  let jsonResponse = {};
-  let drillId;
-  let solutionsArray = [];
+// MyDrills#index
+// PATH: /my-drills/drill-groups/
+router.get('/drill-groups/', function (req, res, next) {
+  let myDrillsCollection = [];
+  let drillGroupIds = [];
+  let drillGroupNames = [];
+  let responseCollection = [];
 
-  Drill
-    .create({exercise, points, DrillGroupId: drillGroupId})
-    .then((drill) => {
-      drillId = drill.id;
-
-      //Create solution array with DrillId appended for bulk record creation
-      for(solution of solutions) {
-        solutionsArray.push( Object.assign( {},
-            {
-              DrillId: drillId,
-              body: solution.body
-            }
-        ));
-      }
-
-      Object.assign(jsonResponse,
-        {
-          exercise: exercise,
-          points: points,
-          DrillGroupId: drillGroupId,
-          solutions: solutions
-        }
-      );
+  MyDrills
+    .findAll()
+    .then(myDrills => {
+      myDrillsCollection = myDrills;
+      myDrills.forEach( (mydrill) => { drillGroupIds.push(mydrill.DrillGroupId) })
     })
-    .then( () => Solution.bulkCreate(solutionsArray) )
-    .then( () => res.send(JSON.stringify(jsonResponse)))
-    .catch(err => next(err));
+    .then(() => {
+          DrillGroup
+          .findAll({where: {id: { $in: drillGroupIds }}, attributes: ['name']})
+          .then( drillgroups => {
+              drillGroupNames = drillgroups;
 
+              drillgroups.forEach( (group,i,arr) => {
+                responseCollection.push(
+                  Object.assign({}, {
+                    name: drillGroupNames[i].name,
+                    UserId: myDrillsCollection[i].UserId,
+                    DrillGroupId: drillGroupIds[i],
+                    attempts: myDrillsCollection[i].attempts,
+                    score: myDrillsCollection[i].score,
+                    drillsVisible: myDrillsCollection[i].drillsVisible
+                  })
+                );
+              });
+              console.log(responseCollection);
+              res.send(JSON.stringify(responseCollection));
+            }
+          )
+          .catch(err => next(err));
+    })
+    .catch(err => next(err))
 });
+
 
 
 module.exports = router;

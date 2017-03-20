@@ -65,7 +65,6 @@ router.get('/:userId/drill-groups/', function (req, res, next) {
     })
     .then(myDrills => {
       myDrillsCollection = myDrills;
-
       myDrills.forEach( (mydrill) => { drillGroupIds.push(mydrill.DrillGroupId) })
     })
     .then(() => {
@@ -99,19 +98,7 @@ router.get('/:userId/drill-groups/', function (req, res, next) {
             }
           )
           .catch(err => next(err));
-
-
     })
-    // .then(myDrills => {
-    //   res.send(JSON.stringify(
-    //     {
-    //       UserId: userId,
-    //       DrillGroupId: drillGroupId,
-    //       attempts: myDrills[0].attempts,
-    //       score: myDrills[0].score,
-    //       drillsVisible: myDrills[0].drillsVisible
-    //   }));
-    // })
     .catch(err => next(err))
 });
 
