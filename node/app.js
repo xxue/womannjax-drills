@@ -17,6 +17,7 @@ const drillGroups = require('./routes/drillgroups');
 const drills = require('./routes/drills');
 const mydrills = require('./routes/mydrills');
 const sessions = require('./routes/sessions');
+const admin = require('./routes/admin');
 
 const config = require('./config/config.json');
 
@@ -98,6 +99,7 @@ app.use('/drill-groups', drillGroups);
 app.use('/drills', drills);
 // app.use('/mydrills', mydrills);
 app.use('/sessions', sessions);
+app.use('/admin', admin);
 
 
 // catch 404 and forward to error handler

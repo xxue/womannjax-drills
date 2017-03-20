@@ -30,9 +30,14 @@ export default class Router extends React.Component {
     this.createNewDrillGroup = Handlers.prototype.createNewDrillGroup.bind(this);
     this.updateDrillGroup = Handlers.prototype.updateDrillGroup.bind(this);
     this.logout = Handlers.prototype.logout.bind(this);
+    this.getAdminAllDrills = Handlers.prototype.getAdminAllDrills.bind(this);
+
+    this.deleteDrillGroup = Handlers.prototype.deleteDrillGroup.bind(this);
+
     this.onDrillGroupView = Handlers.prototype.onDrillGroupView.bind(this);
     this.addNewDrill = Handlers.prototype.addNewDrill.bind(this);
     this.deleteDrill = Handlers.prototype.deleteDrill.bind(this);
+    this.getMyAllDrills = Handlers.prototype.getMyAllDrills.bind(this);
 
     this.goToSignIn = Handlers.prototype.goToSignIn.bind(this);
     this.goToSignUp = Handlers.prototype.goToSignUp.bind(this);
@@ -62,25 +67,42 @@ export default class Router extends React.Component {
       case '/users/new' === this.state.path:
         toRender = <SignUp onSubmit={this.signUp} errors={this.state.errors}/>;
         break;
+      case '/users/get-drill-groups' === this.state.path:
+        this.getMyAllDrills();
+        break;
+      case '/admin/get-drill-groups' === this.state.path:
+        this.getAdminAllDrills();
+        break;
       case /\/users\/\d+\/drill_group/.test(this.state.path):
-        toRender = <UserDrillBoard state={
-                      {
-                        myDrillGroups: [{
-                          name:'Rails Routes',
-                          attempts: 4,
-                          score: 70.0
-                        },
-                          {name: 'Javascript Objects',
-                          attempts: 15,
-                          score: 5.0
-                        }
-                        ],
-                        allDrillGroups:
-                          [
-                            {name: "Javascipt Arrays"},
-                            {name: "Javascipt Functions"}
-                          ]
-                        }}/>;
+                  //   {
+                  //     myDrillGroups: [{
+                  //       name:'Rails Routes',
+                  //       attempts: 4,
+                  //       score: 70.0
+                  //     },
+                  //       {name: 'Javascript Objects',
+                  //       attempts: 15,
+                  //       score: 5.0
+                  //     }
+                  //     ],
+                  //     allDrillGroups:
+                  //       [
+                  //         {name: "Javascipt Arrays"},
+                  //         {name: "Javascipt Functions"}
+                  //       ]
+                  //     }
+        toRender = <UserDrillBoard
+                      state={
+                        Object.assign(
+                          {},
+                          {
+                            myDrillGroups: this.state.myDrillGroups,
+                            allDrillGroups: this.state.allDrillGroups
+                          }
+                        )
+                      }
+
+                    />;
         break;
       case '/leaderboard' === this.state.path:
         // toRender = <LeaderBoard onSubmit={this.signIn} errors={[]}/>;
@@ -99,6 +121,7 @@ export default class Router extends React.Component {
                       drillGroups={this.state.drillGroups}
                       onAddDrillGroup={this.goToAdminCreateDrillGroup}
                       onDrillGroupView={this.onDrillGroupView}
+                      deleteDrillGroup={this.deleteDrillGroup}
                     />;
         break;
       case '/admin/drill_board/new' === this.state.path:
@@ -139,6 +162,7 @@ export default class Router extends React.Component {
             goToSignIn={this.goToSignIn}
             goToSignUp={this.goToSignUp}
             goToProfile={this.goToProfile}
+            handleDrills={this.getMyAllDrills}
             goToAdminDrills={this.goToAdminDrills}
             logout={this.logout}
           />

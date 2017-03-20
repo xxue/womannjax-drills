@@ -75,7 +75,7 @@ export default class WriteDrill extends React.Component {
       </Form>
     )
 
-    return <div>
+    return <block>
       <h1>Drill Group: {this.state.drillGroup}</h1>
       <p>Drill: {this.state.drill}</p>
       <h3>Answer</h3>
@@ -83,6 +83,6 @@ export default class WriteDrill extends React.Component {
       { (this.state.answered === true) ? this.displayAnswers() : ''}
       {/* ternary works instead of if/else in JSX. */}
       <Button bsSize="large">Next Drill</Button>
-    </div>
+    </block>
   }
 }
