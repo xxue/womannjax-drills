@@ -86,7 +86,7 @@ render(){
   return (
     <Grid>
       <Row>
-        <h2 style={title}>Drill Group: {props.drillGroup.name}</h2>
+        <h2 style={this.state.title}>Drill Group: {this.props.drillGroup.name}</h2>
       </Row>
       <Row>
         <p>{this.props.drillGroup.description}</p>
@@ -125,7 +125,7 @@ render(){
         <div>
           <Button href="" onClick={this.addAnotherSolution}>
             Add Another Solution
-          </Button> 
+          </Button>
           <span style={style}>
             <Button bsStyle="danger" bsSize="medium" type="submit">
               Save
