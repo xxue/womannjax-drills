@@ -40,10 +40,10 @@ class MyDrill extends React.Component {
     // FUNCTIONS
     console.log(this.props);
     // RETURN
-    return (<div style={drillGroup} data-my-drill-id={this.props.myDrillId} id={this.props.id}>
+    return (<div style={drillGroup} data-id={this.props.myDrillsId} data-attempts={this.props.attempts} id={this.props.id}>
       <h3>{this.props.name}</h3>
-      <p>Taken: {this.props.attempts} Times</p>
-      <p>{this.props.score}%</p>
+      <p>Taken: {this.props.attempts} Time(s)</p>
+      <p>Points: {this.props.score}</p>
       <Button onClick={this.props.onStart}>Start</Button>
       <Button>Remove</Button>
     </div>)
@@ -94,6 +94,7 @@ export default class UserDrillBoard extends React.Component {
     // loop over array of drillGroups and call MyDrill every time,
     //  using appropriate params
     for (let i=0;i<DrillGroups.length; i++){
+      console.log('-----------', DrillGroups[i]);
       const {myDrillsId, DrillGroupId, name, attempts, score} = DrillGroups[i];
       MyDrillArray.push(<MyDrill
                           id={DrillGroupId}
