@@ -31,6 +31,7 @@ export default class Router extends React.Component {
     this.updateDrillGroup = Handlers.prototype.updateDrillGroup.bind(this);
     this.logout = Handlers.prototype.logout.bind(this);
     this.getAdminAllDrills = Handlers.prototype.getAdminAllDrills.bind(this);
+    this.addNewDrill = Handlers.prototype.addNewDrill.bind(this);
 
     this.deleteDrillGroup = Handlers.prototype.deleteDrillGroup.bind(this);
 
@@ -134,8 +135,10 @@ export default class Router extends React.Component {
       case /\/admin\/drill_group\/\d+/.test(this.state.path):
         toRender = <ShowDrillGroup
                       drillGroup={this.state.drillGroup}
+                      addNewDrill={this.addNewDrill}
                       onSubmit={this.addNewDrill}
                       deleteDrill={this.deleteDrill}
+
                     />;
         break;
       case /\/admin\/drill_group\/\d+\/edit/.test(this.state.path):

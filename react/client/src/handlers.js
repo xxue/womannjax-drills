@@ -33,30 +33,51 @@ class Handlers {
 
   addNewDrill (event) {
     event.preventDefault();
-    // console.dir(event.target);
     const {target} = event;
     const description = target.querySelector('#new-drill-description').value;
+    target.querySelector('#new-drill-description').value = "";
     const points = target.querySelector('#drill-points').value;
-    const solution = target.querySelector('#new-drill-solution').value;
+
+    target.querySelector('#drill-points').value = "";
     const drillGroupId = target.id;
-    console.log(description,points,drillGroupId);
+    // console.log(description,points,drillGroupId);
 
+    let solutionsArr = [];
+    target.querySelector('#new-drill-solution')
+        .querySelectorAll('textarea')
+        .forEach(solution=>{
+          solutionsArr.push({body: solution.value})
+          solution.value = "";
+        });
 
-    sendFetch(
+        // console.dir(solutionsArr);
+    return sendFetch(
       `/drill-groups/${drillGroupId}/drills`,
       'POST',
       {
         exercise:`${description}`,
         points: `${points}`,
-        solutions: [{body: `${solution}`}]
+        solutions: solutionsArr
       },
       {token: this.state.user.token}
     )
     .then((json)=>{
-      console.log(json)
-      this.setState(Object.assign({},
-                    this.state,
-                    {drillGroups: Object.assign({},this.drillGroup,{drills:this.drillGroup.drills.push(json) })}));
+
+      console.log("here");
+      this.setState(Object.assign(
+        {},
+        this.state,
+        {
+          drillGroup: Object.assign(
+              {},
+              this.state.drillGroup,
+              {
+                drills:this.state.drillGroup.drills.concat(json)
+              }
+            )
+        }));
+
+
     })
     .catch(console.error)
   }
