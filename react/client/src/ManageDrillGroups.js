@@ -13,16 +13,30 @@ class DrillGroup extends React.Component {
       display: 'flex',
       justifyContent: 'flex-end'
     };
+
+    const vbutton ={
+      color: 'firebrick'
+    };
+
+    const ebutton ={
+      color: 'crimson'
+    };
+
+    const dbutton ={
+      color: 'lightcoral'
+    };
+
+
     return (
       <Panel id={this.state.drillGroup.id}>
         <div><h4>{this.state.drillGroup.name}</h4></div>
         <div style={style}>
           <ButtonToolbar>
-            <Button href="" onClick={this.props.onDrillGroupView}>View</Button>
-            <Button href="#">Edit</Button>
-            <Button onClick={this.props.onDelete}>Delete</Button>
-            
- 
+
+            <Button style={vbutton} href="" onClick={this.props.onDrillGroupView}>View</Button>
+            <Button style={ebutton} href="#">Edit</Button>
+            <Button style={dbutton} onClick={this.props.onDelete}>Delete</Button>
+
           </ButtonToolbar>
         </div>
       </Panel>
@@ -40,7 +54,9 @@ export default class ManageDrillGroups extends React.Component {
     let drillGroupArr = [];
     drillGroups.forEach(drillGroup=>{
 
-      drillGroupArr.push(<DrillGroup onDrillGroupView={this.props.onDrillGroupView} onDelete={this.props.deleteDrillGroup} drillGroup={drillGroup} />);
+      drillGroupArr.push(<DrillGroup onDrillGroupView={this.props.onDrillGroupView}
+                                     onDelete={this.props.deleteDrillGroup}
+                                     drillGroup={drillGroup} />);
 
     })
     return drillGroupArr;
@@ -51,16 +67,25 @@ export default class ManageDrillGroups extends React.Component {
 
     const style = {
       display: 'flex',
-      justifyContent: 'flex-end'
+      justifyContent: 'flex-end',
+      'margin-right': '20px'
     };
+
+
+        const title = {
+          'display':'flex',
+          'flex-direction':'column',
+          'text-align': 'center'
+        };
+
 
     return (
       <Grid>
-        <Row>
+        <Row style={title}>
           <h2>Drill Groups</h2>
         </Row>
         <Row style={style}>
-          <Button href="#" onClick={this.props.onAddDrillGroup}>Add Group</Button>
+          <Button bsStyle="success" href="#" onClick={this.props.onAddDrillGroup}>Add Group</Button>
         </Row>
         <br />
         {this.renderDrillGroups(this.props.drillGroups)}

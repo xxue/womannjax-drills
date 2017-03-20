@@ -37,9 +37,8 @@ class Handlers {
     const description = target.querySelector('#new-drill-description').value;
     target.querySelector('#new-drill-description').value = "";
     const points = target.querySelector('#drill-points').value;
-    target.querySelector('#drill-points').value = "";
 
-    // const solution = target.querySelector('#new-drill-solution').value;
+    target.querySelector('#drill-points').value = "";
     const drillGroupId = target.id;
     // console.log(description,points,drillGroupId);
 
@@ -63,6 +62,7 @@ class Handlers {
       {token: this.state.user.token}
     )
     .then((json)=>{
+
       console.log("here");
       this.setState(Object.assign(
         {},
@@ -76,6 +76,7 @@ class Handlers {
               }
             )
         }));
+
 
     })
     .catch(console.error)
@@ -175,6 +176,31 @@ class Handlers {
     .catch(console.error)
   }
 
+  deleteDrill (event) {
+    event.preventDefault();
+    console.dir(event.target);
+    const {target} = event;
+    const drillId = target.parentNode.parentNode.parentNode.parentNode.id;
+    console.log(drillId);
+    
+    sendFetch(
+      `/drills/${drillId}`,
+      'DELETE',
+      {},
+      {token: this.state.user.token}
+    )
+    .then((json)=>{
+      console.log(json, "/drills/drillId: ", this.state.drill.id)
+      this.setState(Object.assign({},
+                  this.state,
+                  {
+                    path: `/admin/drill_group/${json.id}`,
+                    drillGroup: json
+                  }))
+    })
+    .catch(console.error)
+  }
+
   signIn  (event) {
     event.preventDefault();
     const {target} = event;
@@ -252,8 +278,15 @@ class Handlers {
   deleteDrillGroup (event) {
     event.preventDefault();
     const {target} = event;
-    const drillGroupId = target.parentNode.parentNode.parentNode.id
-    window.alert("Hey");
+    const drillgroupDiv = target.parentNode.parentNode.parentNode.parentNode
+    const drillGroupId = drillgroupDiv.id
+    sendFetch(`/drill-groups/${drillGroupId}`, 'DELETE', {}, {token:this.state.user.token})
+    .then((json)=>{
+      console.log(this.state.drillGroups)
+      this.setState(Object.assign({}, this.state.drillGroups, this.state.errors, this.state.user))
+    })
+    drillgroupDiv.style.visibility='hidden';
+
   }
 
   getAdminAllDrills () {
@@ -297,7 +330,8 @@ class Handlers {
 
   logout (event) {
     event.preventDefault();
-    this.setState(Object.assign({},{ path: '/', user: {}, errors: [] }));
+    this.setState(Object.assign({},{ path: '/', user: {}, errors: [] }))
+    .then(json => console.log(json))
   }
 
 }

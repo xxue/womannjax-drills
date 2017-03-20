@@ -3,8 +3,6 @@ import {Form, FormGroup, Col, Button, ControlLabel, Checkbox, FormControl} from 
 
 export default class SignIn extends React.Component {
 
-
-
   render () {
     const formInstance = (
       <Form horizontal onSubmit={this.props.onSubmit}>

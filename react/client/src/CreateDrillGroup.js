@@ -12,9 +12,16 @@ export default props => {
     );
   }
 
+  const title = {
+    'display':'flex',
+    'flex-direction':'column',
+    'text-align': 'center'
+  };
+
+
   return (
     <Grid>
-      <Row>
+      <Row style={title}>
         <h2>Create New Drill Group</h2>
       </Row>
       <Row className="show-grid">
@@ -25,11 +32,11 @@ export default props => {
               type="text"
               label="Name"
               placeholder="e.g. Rails Routes"
-            />
+            /><br/>
             <FormGroup controlId="drill-group-description">
               <ControlLabel>Description</ControlLabel>
               <FormControl componentClass="textarea" placeholder="e.g. Drills for basic routing" />
-            </FormGroup>
+            </FormGroup><br/>
 
             <FormGroup>
               <Radio name="level" value="Beginner" inline>
@@ -43,7 +50,7 @@ export default props => {
               <Radio name="level" value="Advanced" inline>
                 Advanced
               </Radio>
-            </FormGroup>
+            </FormGroup><br/>
 
             {/* <FieldGroup
               id="drill-group-points"
@@ -51,7 +58,7 @@ export default props => {
               label="Points"
             /> */}
 
-            <Button type="submit">
+            <Button bsStyle="danger" type="submit">
               Save
             </Button>
           </Form>
