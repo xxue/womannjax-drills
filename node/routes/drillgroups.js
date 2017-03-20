@@ -72,10 +72,11 @@ router.post('/', function (req, res, next) {
     .create({name, description, level})
     .then(drillGroup => {
       res.send(JSON.stringify(
-        {
+        { id: drillGroup.id,
           name: name,
           description: description,
-          level: level
+          level: level,
+          drills: []
       }));
     })
     // next is a function passed to this callback that will
@@ -133,8 +134,8 @@ router.get('/:id', function(req, res, next) {
     .then(
        ([drillgroup, drills]) => res.send(JSON.stringify(Object.assign({},
                    drillgroup.toJSON(), {drills:drills})))
+    )
 
-     )
 
     .catch(
       // The next function is a parameter passed to the callback function this is
@@ -188,6 +189,7 @@ router.put('/:id', function (req, res, next) {
     .then(drillgroup => drillgroup.update({name, description, level}))
     .then(drillgroup => res.send( JSON.stringify(
       {
+        id: drillgroup.id,
         name: drillgroup.name,
         description: drillgroup.description,
         level: drillgroup.level
