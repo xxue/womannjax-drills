@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const {User, DrillGroup, MyDrills} = require('../models/index');
+const Promise = require('bluebird');
+
 
 // MyDrills#update
 router.put('/:UserId/drill-groups/:DrillGroupId/', function(req, res, next) {
@@ -27,56 +29,48 @@ router.put('/:UserId/drill-groups/:DrillGroupId/', function(req, res, next) {
 // MyDrills#index
 // PATH: /my-drills/drill-groups/
 router.get('/drill-groups/', function (req, res, next) {
-  let myDrillsCollection = [];
-  let drillGroupIds = [];
-  let drillGroupNames = [];
-  let responseCollectionMyDrills = [];
-  let response = {};
-
+  const {id} = req.user;
   MyDrills
-    .findAll({attributes: ['id', 'UserId','DrillGroupId','attempts','score','drillsVisible']})
-    .then(myDrills => {
-      myDrillsCollection = myDrills;
-      myDrills.forEach( (mydrill) => { drillGroupIds.push(mydrill.DrillGroupId) })
+    .findAll({
+      where: {
+        UserId: id
+      },
+      attributes: [
+        'id',
+        'UserId',
+        'DrillGroupId',
+        'attempts',
+        'score',
+        'drillsVisible'
+      ]
     })
-    .then(() => {
-          DrillGroup
-          .findAll({where: {id: { $in: drillGroupIds }}, attributes: ['name']})
-          .then( drillgroups => {
-              drillGroupNames = drillgroups;
-              drillgroups.forEach( (group,i,arr) => {
-                responseCollectionMyDrills.push(
-                  Object.assign({}, {
-                    myDrillsId: myDrillsCollection[i].id,
-                    name: drillGroupNames[i].name,
-                    UserId: myDrillsCollection[i].UserId,
-                    DrillGroupId: drillGroupIds[i],
-                    attempts: myDrillsCollection[i].attempts,
-                    score: myDrillsCollection[i].score,
-                    drillsVisible: myDrillsCollection[i].drillsVisible
-                  })
-                );
-              });
-              // console.log(responseCollectionMyDrills);
-              Object.assign(response,{myDrillGroups: responseCollectionMyDrills})
-            }
-          )
-          .then(()=>{
-            console.log("------------------------------")
-             DrillGroup
-              .findAll()
-              .then(allDrillGroups=>{
-                console.log('drillGroups',allDrillGroups)
-                Object.assign(response,{allDrillGroups: allDrillGroups || []})
-              })
-              .then(()=>{
-                res.send(JSON.stringify(response));
-              })
-          })
+    .then(myDrills=>{
+      return Promise.all([myDrills,Promise.map(myDrills, (myDrill)=>{
+        return DrillGroup.findOne({where: {id: myDrill.DrillGroupId }});
+      })]);
+    })
+    .then(([myDrills,drillGroups])=>{
+      return Promise.all([myDrills,drillGroups,DrillGroup.findAll()])
+    })
+    .then(([myDrills,drillGroups,allDrillGroups])=>{
+      let myDrillGroups = [];
+      myDrills.forEach((myDrill,index)=>{
+        const values = myDrill.dataValues;
+        myDrillGroups.push(
+          Object.assign(
+            {},
+            values,
+            {name: drillGroups[index].name}
+          ))
+      })
 
-          .catch(err => next(err));
+      const response = {
+        myDrillGroups: myDrillGroups,
+        allDrillGroups: allDrillGroups
+      };
+      // console.log(response);
+      res.send(JSON.stringify(response));
     })
-    .catch(err => next(err))
 });
 
 router.put('/:id',function(req,res,next){

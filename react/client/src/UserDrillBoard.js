@@ -60,7 +60,7 @@ export default class UserDrillBoard extends React.Component {
 
   constructor(props){
     super(props)
-
+    console.log('props are ',this.props);
     this.state = Object.assign({},props.state,{activeKey: 1});
 
     this.generateMyDrillz = this.generateMyDrillz.bind(this);
