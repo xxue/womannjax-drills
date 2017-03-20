@@ -12,7 +12,7 @@ router.put('/:UserId/drill-groups/:DrillGroupId/', function(req, res, next) {
     .find({where:{UserId,DrillGroupId}})
     .then(mydrill => {
       console.log(mydrill);
-      mydrill.update({score:30,drillsVisible:false})
+      mydrill.update({drillsVisible:false})
   })
     .then(mydrill=> res.send(JSON.stringify({mydrill:"removed"})))
     .catch(err => next(err))
