@@ -11,6 +11,15 @@ module.exports = function(sequelize, DataTypes) {
         Drill.belongsTo(models.DrillGroup);
         Drill.hasMany(models.Solution);
       }
+    },
+    instanceMethods: {
+      toJSON: function(){
+        return {
+          id: this.id,
+          exercise: this.exercise,
+          points: this.points
+        }
+      }
     }
   });
   return Drill;

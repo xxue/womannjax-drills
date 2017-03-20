@@ -1,22 +1,26 @@
 const BASE_URL = 'http://localhost:3000';
 
-export const thankYou = "Thank you for registering! You will be notified when you account is approved.";
-
-export const instructions = "Password reset instructions have been sent to you.";
-
-function sendFetch (path, method, body){
-  return fetch(`${BASE_URL}${path}`,{
-    credentials: 'include',
-    method: `${method}`,
-    mode: 'cors',
-    body: JSON.stringify(body),
+function sendFetch (path, method, body, user = {}){
+  let req = {
     headers: {
+      'user': JSON.stringify(user)
+    }
+  }
+  if (method.toLowerCase() != 'get'){
+    Object.assign(req, {
+      credentials: 'include',
+      method: `${method}`,
+      mode: 'cors',
+      body: JSON.stringify(body)
+    });
+    Object.assign(req.headers,{
       'Accept': 'application/json',
       'Content-Type': 'application/json'
-    }
-  })
+    });
+  }
+  return fetch(`${BASE_URL}${path}`,req)
   .then(r=>{
-    if(r.status === 400) {
+    if(r.status === 400 || r.status === 401) {
       return {};
     }
     return r.json();
@@ -24,6 +28,21 @@ function sendFetch (path, method, body){
 }
 
 class Handlers {
+
+  handleLeaderBoard(event){
+    event.preventDefault();
+    sendFetch('/usersboard','GET',{},{token: this.state.user.token})
+      .then(users=>{
+        this.setState(Object.assign(
+          {},
+          this.state,
+          {
+            path: '/leaderboard',
+            users: users
+          }
+        ))
+      })
+  }
 
   updateDrillGroup (event) {
     event.preventDefault();
@@ -37,16 +56,17 @@ class Handlers {
         }
       });
 
-    sendFetch('/drill-groups/:id','PUT',{
-        drillGroup: {
-          name: `${name}`,
-          description:`${description}`,
-          level: `${level}`
-        },
-        user: {
-          token: this.state.user.token
-        }
-      })
+    sendFetch('/drill-groups/:id',
+              'PUT',{
+                drillGroup: {
+                name: `${name}`,
+                description:`${description}`,
+                level: `${level}`
+                }
+              },
+          {
+            token: this.state.user.token
+          })
     .then((json)=>{
       console.log("here",json)
     })
@@ -70,11 +90,10 @@ class Handlers {
           name: `${name}`,
           description:`${description}`,
           level: `${level}`
-        },
-        user: {
-          token: this.state.user.token
         }
-      })
+      },{
+          token: this.state.user.token
+        })
     .then((json)=>{
       console.log("here",json)
     })
@@ -88,7 +107,7 @@ class Handlers {
     const password = target.querySelector('#formHorizontalPassword').value;
     sendFetch('/sessions','POST',{username: `${email}`,password:`${password}`})
     .then((json)=>{
-      this.setState({ path: json.path || '/sessions/new', user: json.user, errors: json.errors || ['Could not verify your credentials']})
+      this.setState({ path: json.path || '/sessions/new', user: json.user || {}, errors: json.errors || ['Could not verify your credentials']})
     })
     .then(console.log(this.state))
     .catch(console.error)
@@ -97,30 +116,59 @@ class Handlers {
   signUp  (event) {
     event.preventDefault();
     const {target} = event;
+    const firstName = target.querySelector('#formHorizontalFirstName').value;
+    const lastName = target.querySelector('#formHorizontalLastName').value;
     const email = target.querySelector('#formHorizontalEmail').value;
     const password = target.querySelector('#formHorizontalPassword').value;
-    sendFetch('/users','POST',{username: `${email}`,password:`${password}`})
+    const passwordConfirmation = target.querySelector('#formHorizontalPasswordConfirmation').value;
+    sendFetch('/users','POST',{
+      first_name: `${firstName}`,
+      last_name: `${lastName}`,
+      email: `${email}`,
+      password:`${password}`,
+      passwordConfirmation:`${passwordConfirmation}`
+    })
     .then((json)=>{
-      this.setState({ path: json.path, user: json.user, errors: json.errors})
+      console.log(json);
+      this.setState({ path: json.path, user: json.user, errors: json.errors })
     })
     .catch(console.error)
   }
 
+  startDrill (event){
+    event.preventDefault();
+    const {currentTarget, target} = event;
+    const drillId = currentTarget.parentNode.id;
+    sendFetch(`/drill_group/${drillId}/drills`, 'GET', {}, {})
+    .then((json)=>{
+      this.setState({path: json.path, })
+    })
+  }
+
   goToSignIn (event) {
     event.preventDefault();
-    this.setState({ path: '/sessions/new', errors: [] });
+    this.setState(Object.assign({},{ path: '/sessions/new', user: this.state.user, errors: [] }));
   }
 
   goToSignUp (event) {
     event.preventDefault();
-    this.setState({ path: '/users/new', errors: [] });
+    this.setState({ path: '/users/new', user: this.state.user, errors: [] });
+  }
+
+  goToProfile (event) {
+    event.preventDefault();
+    this.setState(Object.assign({},{ path: `/users/${this.state.user.id}`, user: this.state.user, errors: [] }));
   }
 
   goToForgotPassword (event) {
     event.preventDefault();
-    this.setState({ path: '/reset_password/new', errors: [] });
+    this.setState(Object.assign({},{ path: `/reset_password/new`, user: this.state.user, errors: [] }));
   }
 
+  logout (event) {
+    event.preventDefault();
+    this.setState(Object.assign({},{ path: '/', user: {}, errors: [] }));
+  }
 }
 
 module.exports = Handlers;

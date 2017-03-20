@@ -42,7 +42,7 @@ module.exports = function(sequelize, DataTypes) {
                  last_name: this.last_name,
                  email:this.email,
                  token: this.token,
-                 isAdmin: this.is_admin
+                 is_admin: this.is_admin
                }
       },
       generateToken: function() {
