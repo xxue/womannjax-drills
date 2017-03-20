@@ -124,9 +124,10 @@ class Handlers {
     event.preventDefault();
     const {currentTarget, target} = event;
     const drillId = currentTarget.parentNode.id;
-    sendFetch(`/drill_group/${drillId}/drills`, 'GET', {}, {})
+    console.log(this.state.user.token);
+    sendFetch(`/drill-groups/1`, 'GET', {}, {token:this.state.user.token})
     .then((json)=>{
-      this.setState({path: json.path, })
+      this.setState({path: json.path})
     })
   }
 

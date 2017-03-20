@@ -34,8 +34,6 @@ export default class Router extends React.Component {
 
     this.logout = Handlers.prototype.logout.bind(this);
 
-
-
     this.goToSignIn = Handlers.prototype.goToSignIn.bind(this);
     this.goToSignUp = Handlers.prototype.goToSignUp.bind(this);
     this.goToProfile = Handlers.prototype.goToProfile.bind(this);
@@ -88,7 +86,9 @@ export default class Router extends React.Component {
         toRender = <SignUp onSubmit={this.signUp} errors={this.state.errors}/>;
         break;
       case /\/users\/\d+\/drill_group/.test(this.state.path):
-        toRender = <UserDrillBoard state={
+        toRender = <UserDrillBoard onStart={this.onStart
+        }
+                  state={
                       {
                         myDrillGroups: [{
                           name:'Rails Routes',
