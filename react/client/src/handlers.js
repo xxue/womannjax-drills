@@ -148,7 +148,6 @@ class Handlers {
           token: this.state.user.token
         })
     .then((json)=>{
-      console.log(json);
       this.setState(Object.assign({},this.state,{ path: `/admin/drill_group/${json.id}`, drillGroup: json }));
     })
     .catch(console.error)
@@ -193,11 +192,17 @@ class Handlers {
     event.preventDefault();
     const {currentTarget, target} = event;
     const drillId = currentTarget.parentNode.id;
-    console.log(this.state.user.token);
     sendFetch(`/drill-groups/1`, 'GET', {}, {token:this.state.user.token})
     .then((json)=>{
       // this.setState({path: json.path, })
     })
+  }
+
+  deleteDrillGroup (event) {
+    event.preventDefault();
+    const {target} = event;
+    const drillGroupId = target.parentNode.parentNode.parentNode.id
+    window.alert("Hey");
   }
 
   goToAdminDrills (event) {
