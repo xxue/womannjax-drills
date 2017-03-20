@@ -18,9 +18,6 @@ export default props => {
     'text-align': 'center'
   };
 
-  const savebutton = {
-    'background': '#FCE4EC'
-  };
 
   return (
     <Grid>
@@ -60,8 +57,8 @@ export default props => {
               type="text"
               label="Points"
             /> */}
-            
-            <Button style={savebutton} type="submit">
+
+            <Button bsStyle="danger" type="submit">
               Save
             </Button>
           </Form>

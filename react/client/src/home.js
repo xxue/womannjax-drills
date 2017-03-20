@@ -39,7 +39,7 @@ export default class Home extends React.Component {
             <div style={glyphBox}>
               <div></div>
 
-              <Button onClick={this.props.onClick} bsSize="large">Enter if you dare!</Button>
+              <Button onClick={this.props.onClick} bsStyle="danger" bsSize="large">Enter if you dare!</Button>
 
               <div></div>
             </div>
