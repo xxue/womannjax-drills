@@ -115,10 +115,8 @@ router.get('/', function(req, res, next) {
 // PATH: /drillgroups/:id/
 router.get('/:id', function(req, res, next) {
   const {token} = req.user;
-    console.log("Aldo")
   if (token !=null) {
     const {id} = req.params;
-        console.log("Aldo")
     // .findById is an asynchronous method that queri
     // es the database which
     // means that it returns a promise. To the get the resolved value of the promise,
@@ -127,7 +125,8 @@ router.get('/:id', function(req, res, next) {
     .findById(id)
     .then(drillgroup => Promise.all([drillgroup, drillgroup.getDrills({order: [['updatedAt', 'DESC']]})]))
     .then(
-       ([drillgroup, drills]) => res.send(JSON.stringify(Object.assign({},
+       ([drillgroup, drills]) =>
+        res.send(JSON.stringify(Object.assign({},
                    drillgroup.toJSON(), {drills:drills})))
     )
 
@@ -179,7 +178,6 @@ router.put('/:id', function (req, res, next) {
 
     DrillGroup
     .findById(id)
-
     .then(drillgroup => drillgroup.update({name, description, level}))
     .then(drillgroup => res.send( JSON.stringify(
       {

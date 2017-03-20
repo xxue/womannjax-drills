@@ -9,14 +9,9 @@ router.get('/users', function(req, res, next) {
 
   if(is_admin){
     User
-    .findAll({order: [['createdAt', 'DESC'], ['updatedAt', 'DESC']]})
+    .findAll({where: {token: null}
+  })
     .then(users => res.send(JSON.stringify((users))))
-    // .then(users => res.send(JSON.stringify(Object.assing({},{
-    //   users: users.map((user)=>{
-    //     user.toJSON()
-    //   })
-    // }
-  // ))))
   } else {
     adminError(res)
   }

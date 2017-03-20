@@ -5,22 +5,21 @@ import {Form, FormGroup, Col, Button, FormControl} from 'react-bootstrap';
 export default class WriteDrill extends React.Component {
   constructor (props) {
     super (props);
-
-    this.state = {
-      drillGroup: "Rails Routes",
-      drill: "This is not a drill.",
-      answer: '',
-      answered: false
-    };
-
-    this.submitAnswer = this.submitAnswer.bind(this);
-    this.displayAnswers = this.displayAnswers.bind(this);
+    this.renderButton = this.renderButton.bind(this);
   }
 
-  displayAnswers() {
-    let correctAnswers = ["Here is one answer",
-     "How could you get this wrong",
-     "Get your shit together Deborah"];
+  renderButton() {
+    if (this.props.correctAnswers.length > 0){
+      if(this.props.drillGroup.drills.length > this.props.index + 1){
+        return <Button bsSize="large" onClick={this.props.onNext}>Next Drill</Button>
+      } else {
+        return <Button bsSize="large" onClick={this.props.finishDrillGroup}>Finish Drill Group</Button>
+      }
+   }
+  }
+
+
+  displayAnswers(correctAnswers) {
 
    const tablestyle = {
      padding: '10px'
@@ -28,7 +27,7 @@ export default class WriteDrill extends React.Component {
 
    return(
      <div>
-       { (this.state.isCorrect === true) ?
+       { (this.props.isCorrect === true) ?
          <h1>Correct!</h1>
          :
          <h1>Incorrect!</h1>
@@ -36,53 +35,66 @@ export default class WriteDrill extends React.Component {
 
        <h5>Correct Answers:</h5>
        <table>
+         <tbody>
        { correctAnswers.map((answer, i) =>
          <tr key={i} >
-           <td style={tablestyle}> {answer} </td>
+           <td style={tablestyle}> {answer.body} </td>
            <hr />
          </tr>
        )}
+       </tbody>
      </table>
      </div>
     )
   }
 
-  submitAnswer (event) {
-    event.preventDefault();
-    const {target} = event;
-    const isCorrect = false;
-    this.setState({
-      answer: target.answer.value,
-      answered: true,
-      isCorrect: isCorrect
-    })
-  }
-
 
   render (){
 
-    const answerInput = (
-      <Form horizontal onSubmit={this.submitAnswer}>
-        <FormGroup controlId="formHorizontalAnswer">
-          <Col sm={10}>
-            <FormControl type="text" name="answer"
-              placeholder="Your Answer"/>
-          </Col>
-        </FormGroup>
-        <Button type="submit" >
-          Submit
-        </Button>
-      </Form>
-    )
+    let answerInput = <div></div>;
+    if (this.props.correctAnswers.length > 0){
+      answerInput = (
+        <Form horizontal onSubmit={this.props.onSubmit}>
+          <FormGroup controlId="formHorizontalAnswer">
+            <Col sm={10}>
+              <FormControl type="text" name="answer"
+                placeholder="Your Answer"/>
+            </Col>
+          </FormGroup>
+          <Button type="submit" disabled>
+            Submit
+          </Button>
+        </Form>
+        )
+    } else {
+      answerInput = (
+        <Form horizontal id={this.props.drills[this.props.index].id} onSubmit={this.props.onSubmit}>
+
+          <FormGroup controlId="formHorizontalAnswer">
+            <Col sm={10}>
+              <FormControl type="text" name="answer"
+                placeholder="Your Answer"/>
+              </Col>
+            </FormGroup>
+            <Button type="submit">
+              Submit
+            </Button>
+        </Form>
+        )
+    }
+
+
 
     return <block>
-      <h1>Drill Group: {this.state.drillGroup}</h1>
-      <p>Drill: {this.state.drill}</p>
+      <h1>Drill Group: {this.props.drillGroup.name}</h1>
+      <h3>Score: {this.props.score}</h3>
+      <p>Drill: {this.props.drills[this.props.index].exercise}</p>
       <h3>Answer</h3>
       {answerInput}
-      { (this.state.answered === true) ? this.displayAnswers() : ''}
+      { (this.props.correctAnswers.length > 0) ? this.displayAnswers(this.props.correctAnswers) : ''}
       {/* ternary works instead of if/else in JSX. */}
-      <Button bsSize="large">Next Drill</Button>
+      {this.renderButton()}
+
     </block>
   }
 }

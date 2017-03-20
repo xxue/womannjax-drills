@@ -176,7 +176,6 @@ class Handlers {
     .catch(console.error)
   }
 
-
   signIn  (event) {
     event.preventDefault();
     const {target} = event;
@@ -244,10 +243,21 @@ class Handlers {
   startDrill (event){
     event.preventDefault();
     const {currentTarget, target} = event;
-    const drillId = currentTarget.parentNode.id;
-    sendFetch(`/drill-groups/1`, 'GET', {}, {token:this.state.user.token})
+    const drillGroupId = currentTarget.parentNode.id;
+    sendFetch(`/drill-groups/${drillGroupId}`, 'GET', {}, {token:this.state.user.token})
     .then((json)=>{
-      // this.setState({path: json.path, })
+      console.log(json)
+      this.setState(Object.assign(
+        {},
+        this.state,
+        {
+          path: '/drill_baby_drill',
+          drillGroup: json,
+          index: 0,
+          correctAnswers: [],
+          score: 0
+        }
+      ))
     })
   }
 
@@ -306,6 +316,34 @@ class Handlers {
 
   }
 
+  submitAnswer (event) {
+    event.preventDefault();
+    const {target} = event;
+    const userAnswer = target.querySelector('#formHorizontalAnswer').value;
+    target.querySelector('#formHorizontalAnswer').value = "";
+    const drillId = target.id;
+    sendFetch(`/drills/${drillId}`,'POST',{
+      userAnswer: userAnswer
+    },{
+      token: this.state.user.token
+    })
+    .then(json=>{
+      let points = 0;
+      if (json.isCorrect) {
+        points = json.points;
+      }
+      this.setState(Object.assign(
+        {},
+        this.state,
+        {
+          isCorrect: json.isCorrect,
+          correctAnswers: json.correctAnswers,
+          score: this.state.score + points
+        }
+      ))
+    })
+  }
+
   getAdminAllDrills () {
     sendFetch('/drill-groups','GET',{},{token: this.state.user.token})
     .then(json=>{
@@ -349,6 +387,23 @@ class Handlers {
     event.preventDefault();
     this.setState(Object.assign({},{ path: '/', user: {}, errors: [] }))
     .then(json => console.log(json))
+  }
+
+  incrementIndex (event) {
+    event.preventDefault();
+    this.setState(Object.assign(
+      {},
+      this.state,
+      {
+        index: this.state.index + 1,
+        correctAnswers: []
+      }
+    ))
+  }
+
+  finishDrillGroup (event) {
+    event.preventDefault();
+    // sendFetch(`/this.state.drillGroup.id`
   }
 
 }
