@@ -1,5 +1,7 @@
 const BASE_URL = 'http://localhost:3000';
 
+// sendFetch('/drill-groups','GET',{},{ token: this.state.user.token })
+// sendFetch('/drill-groups','POST',{some: data, other: stuff},{ token: this.state.user.token })
 function sendFetch (path, method, body, user = {}){
   let req = {
     headers: {
@@ -31,31 +33,55 @@ class Handlers {
 
 
   addNewDrill (event) {
-      event.preventDefault();
-      // console.dir(event.target);
-      const {target} = event;
-      const description = target.querySelector('#new-drill-description').value;
-      const points = target.querySelector('#drill-points').value;
-      // const solution = target.querySelector('#new-drill-solution').value;
-      const drillGroupId = target.id;
-      console.log(description,points,drillGroupId);
+    event.preventDefault();
+    // console.dir(event.target);
+    const {target} = event;
+    const description = target.querySelector('#new-drill-description').value;
+    const points = target.querySelector('#drill-points').value;
+    // const solution = target.querySelector('#new-drill-solution').value;
+    const drillGroupId = target.id;
+    console.log(description,points,drillGroupId);
 
 
-      sendFetch(
-        `/drill-groups/${drillGroupId}/drills`,
-        'POST',
-        {
-          exercise:`${description}`,
-          points: `${points}`
-          // solutions: [{body: `${solution}`}]
-        },
-        {token: this.state.user.token}
-      )
-      .then((json)=>{
-        console.log(json)
-      })
-      .catch(console.error)
-    }
+    sendFetch(
+      `/drill-groups/${drillGroupId}/drills`,
+      'POST',
+      {
+        exercise:`${description}`,
+        points: `${points}`
+        // solutions: [{body: `${solution}`}]
+      },
+      {token: this.state.user.token}
+    )
+    .then((json)=>{
+      console.log(json)
+    })
+    .catch(console.error)
+  }
+
+  onDrillGroupView (event) {
+    event.preventDefault();
+    // console.dir(event.target);
+    const {target} = event;
+    const drillGroupId = target.parentNode.parentNode.parentNode.parentNode.id;
+
+    sendFetch(
+      `/drill-groups/${drillGroupId}`,
+      'GET',
+      {},
+      {token: this.state.user.token}
+    )
+    .then((json)=>{
+      console.log(json)
+      this.setState(Object.assign({},
+                  this.state,
+                  {
+                    path: `/admin/drill_group/${json.id}`,
+                    drillGroup: json
+                  }))
+    })
+    .catch(console.error)
+  }
 
   handleLeaderBoard(event){
     event.preventDefault();
