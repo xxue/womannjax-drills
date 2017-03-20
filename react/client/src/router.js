@@ -84,7 +84,7 @@ export default class Router extends React.Component {
       case '/admin/get-drill-groups' === this.state.path:
         this.getAdminAllDrills();
         break;
-      case /\/users\/\d+\/drill_group/.test(this.state.path):
+      case /\/users\/\d+\/drill_groups/.test(this.state.path):
                   //   {
                   //     myDrillGroups: [{
                   //       name:'Rails Routes',
