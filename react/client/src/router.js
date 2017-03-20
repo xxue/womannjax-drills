@@ -12,6 +12,7 @@ import UserDrillBoard from './UserDrillBoard';
 import CreateDrillGroup from './CreateDrillGroup';
 import ManageDrillGroups from './ManageDrillGroups';
 import ShowDrillGroup from './ShowDrillGroup';
+import UserVerify from './UserVerify';
 
 
 import Handlers from './handlers';
@@ -30,18 +31,37 @@ export default class Router extends React.Component {
     this.createNewDrillGroup = Handlers.prototype.createNewDrillGroup.bind(this);
     this.updateDrillGroup = Handlers.prototype.updateDrillGroup.bind(this);
     this.logout = Handlers.prototype.logout.bind(this);
+    this.getAdminAllDrills = Handlers.prototype.getAdminAllDrills.bind(this);
+    this.addNewDrill = Handlers.prototype.addNewDrill.bind(this);
+    this.addToMyDrills = Handlers.prototype.addToMyDrills.bind(this);
+
+    this.startDrill = Handlers.prototype.startDrill.bind(this);
+    this.finishDrillGroup = Handlers.prototype.finishDrillGroup.bind(this);
+    this.removeFromMyDrills = Handlers.prototype.removeFromMyDrills.bind(this);
+    this.getVerifyUsers = Handlers.prototype.getVerifyUsers.bind(this);
 
 
+    this.deleteDrillGroup = Handlers.prototype.deleteDrillGroup.bind(this);
+    this.onDrillGroupView = Handlers.prototype.onDrillGroupView.bind(this);
+    this.addNewDrill = Handlers.prototype.addNewDrill.bind(this);
+
+    this.deleteDrill = Handlers.prototype.deleteDrill.bind(this);
+    this.verifyUser = Handlers.prototype.verifyUser.bind(this);
+
+    this.getMyAllDrills = Handlers.prototype.getMyAllDrills.bind(this);
+    this.submitAnswer = Handlers.prototype.submitAnswer.bind(this);
+
+
+    this.getMyAllDrills = Handlers.prototype.getMyAllDrills.bind(this);
     this.goToSignIn = Handlers.prototype.goToSignIn.bind(this);
     this.goToSignUp = Handlers.prototype.goToSignUp.bind(this);
     this.goToProfile = Handlers.prototype.goToProfile.bind(this);
     this.goToAdminDrills = Handlers.prototype.goToAdminDrills.bind(this);
     this.goToForgotPassword = Handlers.prototype.goToForgotPassword.bind(this);
     this.goToAdminCreateDrillGroup = Handlers.prototype.goToAdminCreateDrillGroup.bind(this);
+    this.goToLeaderboard = Handlers.prototype.goToLeaderboard.bind(this);
+    this.incrementIndex = Handlers.prototype.incrementIndex.bind(this);
 
-  }
-  goToSignIn (event) {
-    this.setState({path: 'user/SignIn'})
   }
 
   render () {
@@ -55,34 +75,55 @@ export default class Router extends React.Component {
         break;
       case '/sessions/new' === this.state.path:
         console.log(this.state.errors);
-        toRender = <SignIn onSubmit={this.signIn} goToForgotPassword={this.goToForgotPassword} goToSignUp={this.goToSignUp} errors={this.state.errors}/>;
+        toRender = <SignIn onSubmit={this.signIn}
+                            goToForgotPassword={this.goToForgotPassword}
+                            goToSignUp={this.goToSignUp}
+                            errors={this.state.errors}/>;
         break;
       case '/users/new' === this.state.path:
         toRender = <SignUp onSubmit={this.signUp} errors={this.state.errors}/>;
-        toRender = <SignUp onSubmit={this.signUp} errors={this.state.errors}/>;
         break;
-      case /\/users\/\d+\/drill_group/.test(this.state.path):
-        toRender = <UserDrillBoard state={
-                      {
-                        myDrillGroups: [{
-                          name:'Rails Routes',
-                          attempts: 4,
-                          score: 70.0
-                        },
-                          {name: 'Javascript Objects',
-                          attempts: 15,
-                          score: 5.0
-                        }
-                        ],
-                        allDrillGroups:
-                          [
-                            {name: "Javascipt Arrays"},
-                            {name: "Javascipt Functions"}
-                          ]
-                        }}/>;
+      case '/users/get-drill-groups' === this.state.path:
+        this.getMyAllDrills();
+        break;
+      case '/admin/get-drill-groups' === this.state.path:
+        this.getAdminAllDrills();
+        break;
+      case /\/users\/\d+\/drill_groups/.test(this.state.path):
+                  //   {
+                  //     myDrillGroups: [{
+                  //       name:'Rails Routes',
+                  //       attempts: 4,
+                  //       score: 70.0
+                  //     },
+                  //       {name: 'Javascript Objects',
+                  //       attempts: 15,
+                  //       score: 5.0
+                  //     }
+                  //     ],
+                  //     allDrillGroups:
+                  //       [
+                  //         {name: "Javascipt Arrays"},
+                  //         {name: "Javascipt Functions"}
+                  //       ]
+                  //     }
+        toRender = <UserDrillBoard
+                      state={
+                        Object.assign(
+                          {},
+                          {
+                            myDrillGroups: this.state.myDrillGroups,
+                            allDrillGroups: this.state.allDrillGroups
+                          }
+                        )
+                      }
+                      onStart={this.startDrill}
+                      onAddToMyDrills={this.addToMyDrills}
+                      onRemove={this.removeFromMyDrills}
+                    />;
         break;
       case '/leaderboard' === this.state.path:
-        // toRender = <LeaderBoard onSubmit={this.signIn} errors={[]}/>;
+        toRender = <LeaderBoard onSubmit={this.signIn} errors={[]}/>;
         break;
       case '/account-pending' === this.state.path:
         toRender = <DisplayMessage text={thankYou}/>;
@@ -94,7 +135,12 @@ export default class Router extends React.Component {
         toRender = <DisplayMessage text={instructions}/>;
         break;
       case '/admin/drill_board' === this.state.path:
-        toRender = <ManageDrillGroups onAddDrillGroup={this.goToAdminCreateDrillGroup}/>;
+        toRender = <ManageDrillGroups
+                      drillGroups={this.state.drillGroups}
+                      onAddDrillGroup={this.goToAdminCreateDrillGroup}
+                      onDrillGroupView={this.onDrillGroupView}
+                      deleteDrillGroup={this.deleteDrillGroup}
+                    />;
         break;
       case '/admin/drill_board/new' === this.state.path:
         toRender = <CreateDrillGroup
@@ -103,19 +149,41 @@ export default class Router extends React.Component {
                       drillGroup={{}}
                     />;
         break;
+      case '/admin/users' === this.state.path:
+        toRender = <UserVerify
+                      verifyUser={this.verifyUser}
+                      // deleteUser={this.deleteUser}
+                      users={this.state.users}
+                    />;
+        break;
       case /\/admin\/drill_group\/\d+/.test(this.state.path):
         toRender = <ShowDrillGroup
                       drillGroup={this.state.drillGroup}
+                      addNewDrill={this.addNewDrill}
+                      onSubmit={this.addNewDrill}
+                      deleteDrill={this.deleteDrill}
+
                     />;
         break;
-      case /\/admin\/\/drill_group\/\d+\/edit/.test(this.state.path):
+      case /\/admin\/drill_group\/\d+\/edit/.test(this.state.path):
       toRender = <CreateDrillGroup
                     onSubmit={this.updateDrillGroup}
                     drillGroup={{}/* TODO: find drill group and put it here */}
                   />;
         break;
       case '/drill_baby_drill' === this.state.path:
-        // toRender = <SignIn onSubmit={this.signIn} errors={[]}/>;
+        toRender = <WriteDrill
+                    onSubmit={this.submitAnswer}
+                    drillGroup={this.state.drillGroup}
+                    onNext={this.incrementIndex}
+                    index={this.state.index}
+                    drills={this.state.drillGroup.drills || [{}]}
+                    correctAnswers={this.state.correctAnswers}
+                    max={this.state.drillGroup.drills.length}
+                    score={this.state.score}
+                    isCorrect={this.state.isCorrect}
+                    finishDrillGroup={this.finishDrillGroup}
+                  />;
         break;
       case /\/users\/\d+/.test(this.state.path):
         toRender = <DisplayMessage text="This will be a profile"/>;
@@ -132,8 +200,11 @@ export default class Router extends React.Component {
             goToSignIn={this.goToSignIn}
             goToSignUp={this.goToSignUp}
             goToProfile={this.goToProfile}
+            handleDrills={this.getMyAllDrills}
             goToAdminDrills={this.goToAdminDrills}
             logout={this.logout}
+            handleLeaderboard={this.goToLeaderboard}
+            goToUsers={this.getVerifyUsers}
           />
           {toRender}
         </div>

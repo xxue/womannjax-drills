@@ -15,8 +15,9 @@ const index = require('./routes/index');
 const users = require('./routes/users');
 const drillGroups = require('./routes/drillgroups');
 const drills = require('./routes/drills');
-const mydrills = require('./routes/mydrills');
+const myDrills = require('./routes/mydrills');
 const sessions = require('./routes/sessions');
+const admin = require('./routes/admin');
 
 const config = require('./config/config.json');
 
@@ -31,6 +32,7 @@ const app = express();
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", `${BASE_URL}`);
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, user");
+  res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Credentials', true);
   next();
 });
@@ -66,7 +68,6 @@ app.use(function(req, res, next){
     db.User
       .find({ where: user })
       .then(user=>{
-        console.log(user);
         req.user = user;
         next();
       });
@@ -96,8 +97,10 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/drill-groups', drillGroups);
 app.use('/drills', drills);
-// app.use('/mydrills', mydrills);
+
+app.use('/my-drills', myDrills);
 app.use('/sessions', sessions);
+app.use('/admin', admin);
 
 
 // catch 404 and forward to error handler

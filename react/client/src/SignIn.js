@@ -3,11 +3,10 @@ import {Form, FormGroup, Col, Button, ControlLabel, Checkbox, FormControl} from 
 
 export default class SignIn extends React.Component {
 
-
-
   render () {
     const formInstance = (
-      <Form horizontal onSubmit={this.props.onSubmit}>
+      <div style={signinform}>
+      <Form  horizontal onSubmit={this.props.onSubmit}>
         <FormGroup controlId="formHorizontalEmail">
           <Col componentClass={ControlLabel} sm={2}>
             Email
@@ -40,7 +39,14 @@ export default class SignIn extends React.Component {
           </Col>
         </FormGroup>
       </Form>
+    </div>
 );
+
+const signinform={
+  'display':'flex',
+  'justify-content': 'flex-start',
+  'background-color': 'grey'
+}
 
 const main={
     'display':'flex',

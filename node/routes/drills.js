@@ -6,23 +6,6 @@ const {Drill} = require('../models/index');
 //     res.send ({name:"hello"})
 // })
 
-//drill#edit
-//PATH /drills/:id/edit
-//works
-router.get('/:id/edit', function (req, res, next) {
-  const {id} = req.params;
-  console.log(req.params);
-  Drill
-    .findById(id)
-    .then(drill => res.send(JSON.stringify({
-        exercise: drill.exercise,
-        points: drill.points,
-        DrillGroupId: drill.DrillGroupId
-      }
-    )))
-    .catch(err => next(err))
-})
-
 //drill#update
 //PATH /drills/:id/edit
 //works
@@ -48,6 +31,8 @@ router.patch('/:id/edit', function (req, res, next) {
 router.delete('/:id', function(req, res, next) {
   const {id} = req.params;
   // const id = req.params.id;
+
+  console.log("id", id);
   Drill
     .findById(id)
     .then(drill  => drill.destroy())
@@ -55,6 +40,29 @@ router.delete('/:id', function(req, res, next) {
       {drill:"deleted"}))
     )
     .catch(err => next(err))
+});
+
+router.post('/:id', function(req, res, next) {
+  const {id} = req.params;
+  const {userAnswer} = req.body;
+
+  // const id = req.params.id;
+  Drill
+    .findById(id)
+    .then(drill  => Promise.all([drill,drill.getSolutions()]))
+    .then(([drill,solutions])=>{
+      let isCorrect = false;
+      solutions.forEach(solution=>{
+        if (solution.body == userAnswer) {
+          isCorrect = true;
+        }
+      })
+      res.send(JSON.stringify({
+        isCorrect: isCorrect,
+        correctAnswers: solutions,
+        points: drill.points
+      }));
+    })
 });
 
 
