@@ -279,7 +279,8 @@ class Handlers {
           path: '/drill_baby_drill',
           drillGroup: json,
           index: 0,
-          correctAnswers: []
+          correctAnswers: [],
+          score: 0
         }
       ))
     })
@@ -319,12 +320,17 @@ class Handlers {
       token: this.state.user.token
     })
     .then(json=>{
+      let points = 0;
+      if (json.isCorrect) {
+        points = json.points;
+      }
       this.setState(Object.assign(
         {},
         this.state,
         {
           isCorrect: json.isCorrect,
-          correctAnswers: json.correctAnswers
+          correctAnswers: json.correctAnswers,
+          score: this.state.score + points
         }
       ))
     })
@@ -385,6 +391,11 @@ class Handlers {
         correctAnswers: []
       }
     ))
+  }
+
+  finishDrillGroup (event) {
+    event.preventDefault();
+    sendFetch(`/this.state.drillGroup.id`
   }
 
 }

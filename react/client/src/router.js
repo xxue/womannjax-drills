@@ -33,6 +33,7 @@ export default class Router extends React.Component {
     this.getAdminAllDrills = Handlers.prototype.getAdminAllDrills.bind(this);
     this.addNewDrill = Handlers.prototype.addNewDrill.bind(this);
     this.startDrill = Handlers.prototype.startDrill.bind(this);
+    this.finishDrillGroup = Handlers.prototype.finishDrillGroup.bind(this);
 
     this.deleteDrillGroup = Handlers.prototype.deleteDrillGroup.bind(this);
 
@@ -160,7 +161,9 @@ export default class Router extends React.Component {
                     drills={this.state.drillGroup.drills}
                     correctAnswers={this.state.correctAnswers}
                     max={this.state.drillGroup.drills.length}
+                    score={this.state.score}
                     isCorrect={this.state.isCorrect}
+                    finishDrillGroup={this.finishDrillGroup}
                   />;
         break;
       case /\/users\/\d+/.test(this.state.path):

@@ -5,8 +5,19 @@ import {Form, FormGroup, Col, Button, FormControl} from 'react-bootstrap';
 export default class WriteDrill extends React.Component {
   constructor (props) {
     super (props);
-
+    this.renderButton = this.renderButton.bind(this);
   }
+
+  renderButton() {
+    if (this.props.correctAnswers.length > 0){
+      if(this.props.drillGroup.drills.length > this.props.index + 1){
+        return <Button bsSize="large" onClick={this.props.onNext}>Next Drill</Button>
+      } else {
+        return <Button bsSize="large" onClick={this.props.finishDrillGroup}>Finish Drill Group</Button>
+      }
+   }
+  }
+
 
   displayAnswers(correctAnswers) {
 
@@ -76,12 +87,13 @@ export default class WriteDrill extends React.Component {
 
     return <block>
       <h1>Drill Group: {this.props.drillGroup.name}</h1>
+      <h3>Score: {this.props.score}</h3>
       <p>Drill: {this.props.drills[this.props.index].exercise}</p>
       <h3>Answer</h3>
       {answerInput}
       { (this.props.correctAnswers.length > 0) ? this.displayAnswers(this.props.correctAnswers) : ''}
       {/* ternary works instead of if/else in JSX. */}
-       <Button bsSize="large" onClick={this.props.onNext}>Next Drill</Button>
+      {this.renderButton()}
 
     </block>
   }

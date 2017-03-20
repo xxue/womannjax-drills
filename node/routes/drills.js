@@ -49,8 +49,8 @@ router.post('/:id', function(req, res, next) {
   // const id = req.params.id;
   Drill
     .findById(id)
-    .then(drill  => drill.getSolutions())
-    .then(solutions=>{
+    .then(drill  => Promise.all([drill,drill.getSolutions()]))
+    .then(([drill,solutions])=>{
       let isCorrect = false;
       solutions.forEach(solution=>{
         if (solution.body == userAnswer) {
@@ -59,7 +59,8 @@ router.post('/:id', function(req, res, next) {
       })
       res.send(JSON.stringify({
         isCorrect: isCorrect,
-        correctAnswers: solutions
+        correctAnswers: solutions,
+        points: drill.points
       }));
     })
 });
