@@ -104,10 +104,7 @@ router.get('/', function(req, res, next) {
     .findAll({order: [['createdAt', 'DESC'], ['updatedAt', 'DESC']]})
     .then(
       drillgroups => {
-        res.send(JSON.stringify(
-          {
-            drillgroups
-          }));
+        res.send(JSON.stringify(drillgroups));
       }
     )
     .catch(err => next(err))
