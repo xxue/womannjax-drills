@@ -1,6 +1,29 @@
 import React from 'react';
 import { Grid, Row, Panel, ButtonToolbar, Button, Accordion, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 
+class DrillGroup extends React.Component {
+  constructor(props){
+    
+  }
+  render () {
+    return (
+      <Accordion>
+        <Panel header={"< Drill 1 >"} eventKey="1">
+          <div>
+            {"< Drill: Create a route to do a 'get' request that goes to the campaigns controller index action >"}
+          </div>
+          <div style={style}>
+            <ButtonToolbar>
+              <Button href="#">Edit</Button>
+              <Button href="#">Delete</Button>
+            </ButtonToolbar>
+          </div>
+        </Panel>
+      </Accordion>
+    )
+  }
+}
+
 export default props => {
   const style = {
     display: 'flex',
@@ -20,32 +43,20 @@ export default props => {
   return (
     <Grid>
       <Row>
-        <h2>Drill Group: {"< Rails Routes >"}</h2>
+        <h2>Drill Group: {props.drillGroup.name}</h2>
       </Row>
       <Row>
-        <p>{"< Drills for Rails basic routing >"}</p>
+        <p>{props.drillGroup.description}</p>
       </Row>
       <Row style={style}>
         <Button href="#">
-          Add Group
+          Edit Group
         </Button>
       </Row>
 
       <br />
 
-      <Accordion>
-        <Panel header={"< Drill 1 >"} eventKey="1">
-          <div>
-            {"< Drill: Create a route to do a 'get' request that goes to the campaigns controller index action >"}
-          </div>
-          <div style={style}>
-            <ButtonToolbar>
-              <Button href="#">Edit</Button>
-              <Button href="#">Delete</Button>
-            </ButtonToolbar>
-          </div>
-        </Panel>
-      </Accordion>
+
       <br />
 
       <Panel header={"Add New Drill"}>

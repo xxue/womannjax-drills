@@ -35,7 +35,10 @@ export default class Router extends React.Component {
     this.goToSignIn = Handlers.prototype.goToSignIn.bind(this);
     this.goToSignUp = Handlers.prototype.goToSignUp.bind(this);
     this.goToProfile = Handlers.prototype.goToProfile.bind(this);
+    this.goToAdminDrills = Handlers.prototype.goToAdminDrills.bind(this);
     this.goToForgotPassword = Handlers.prototype.goToForgotPassword.bind(this);
+    this.goToAdminCreateDrillGroup = Handlers.prototype.goToAdminCreateDrillGroup.bind(this);
+
   }
   goToSignIn (event) {
     this.setState({path: 'user/SignIn'})
@@ -91,18 +94,18 @@ export default class Router extends React.Component {
         toRender = <DisplayMessage text={instructions}/>;
         break;
       case '/admin/drill_board' === this.state.path:
-        toRender = <ManageDrillGroups />;
+        toRender = <ManageDrillGroups onAddDrillGroup={this.goToAdminCreateDrillGroup}/>;
         break;
-      case '/admin/drill_group/new' === this.state.path:
+      case '/admin/drill_board/new' === this.state.path:
         toRender = <CreateDrillGroup
                       onSubmit={this.createNewDrillGroup}
                       errors={this.state.errors}
                       drillGroup={{}}
                     />;
         break;
-      case /\/admin\/\/drill_group\/\d+/.test(this.state.path):
+      case /\/admin\/drill_group\/\d+/.test(this.state.path):
         toRender = <ShowDrillGroup
-                      drillGroup={{}/*TODO: put drillgroup here*/}
+                      drillGroup={this.state.drillGroup}
                     />;
         break;
       case /\/admin\/\/drill_group\/\d+\/edit/.test(this.state.path):
@@ -117,6 +120,9 @@ export default class Router extends React.Component {
       case /\/users\/\d+/.test(this.state.path):
         toRender = <DisplayMessage text="This will be a profile"/>;
         break;
+      default:
+        toRender = <DisplayMessage text="You did not write your react route correctly"/>;
+        break;
     }
     if ('/' !== this.state.path){
       toRender = (
@@ -126,6 +132,7 @@ export default class Router extends React.Component {
             goToSignIn={this.goToSignIn}
             goToSignUp={this.goToSignUp}
             goToProfile={this.goToProfile}
+            goToAdminDrills={this.goToAdminDrills}
             logout={this.logout}
           />
           {toRender}

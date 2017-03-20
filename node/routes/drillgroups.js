@@ -55,7 +55,7 @@ router.post('/', function (req, res, next) {
     .create({name, description, level})
     .then(drillGroup => {
       res.send(JSON.stringify(
-        {
+        { id: drillGroup.id,
           name: name,
           description: description,
           level: level
@@ -134,6 +134,7 @@ router.patch('/:id', function (req, res, next) {
     .then(drillgroup => drillgroup.update({name, description, level}))
     .then(drillgroup => res.send( JSON.stringify(
       {
+        id: drillgroup.id,
         name: drillgroup.name,
         description: drillgroup.description,
         level: drillgroup.level

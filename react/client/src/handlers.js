@@ -29,6 +29,33 @@ function sendFetch (path, method, body, user = {}){
 
 class Handlers {
 
+  addNewDrill (event) {
+      event.preventDefault();
+      // console.dir(event.target);
+      const {target} = event;
+      const description = target.querySelector('#new-drill-description').value;
+      const points = target.querySelector('#drill-points').value;
+      // const solution = target.querySelector('#new-drill-solution').value;
+      const drillGroupId = target.id;
+      console.log(description,points,drillGroupId);
+
+
+      sendFetch(
+        `/drill-groups/${drillGroupId}/drills`,
+        'POST',
+        {
+          exercise:`${description}`,
+          points: `${points}`
+          // solutions: [{body: `${solution}`}]
+        },
+        {token: this.state.user.token}
+      )
+      .then((json)=>{
+        console.log(json)
+      })
+      .catch(console.error)
+    }
+
   updateDrillGroup (event) {
     event.preventDefault();
     const {target} = event;
@@ -71,16 +98,15 @@ class Handlers {
       });
 
     sendFetch('/drill-groups','POST',{
-        drillGroup: {
           name: `${name}`,
           description:`${description}`,
           level: `${level}`
-        }
-      },{
+        },{
           token: this.state.user.token
         })
     .then((json)=>{
-      console.log("here",json)
+      console.log(json);
+      this.setState(Object.assign({},this.state,{ path: `/admin/drill_group/${json.id}`, drillGroup: json }));
     })
     .catch(console.error)
   }
@@ -140,10 +166,21 @@ class Handlers {
     this.setState(Object.assign({},{ path: `/reset_password/new`, user: this.state.user, errors: [] }));
   }
 
+  goToAdminDrills (event) {
+    event.preventDefault();
+    this.setState(Object.assign({},this.state,{ path: `/admin/drill_board` }));
+  }
+
+  goToAdminCreateDrillGroup (event) {
+    event.preventDefault();
+    this.setState(Object.assign({},this.state,{ path: `/admin/drill_board/new` }));
+  }
+
   logout (event) {
     event.preventDefault();
     this.setState(Object.assign({},{ path: '/', user: {}, errors: [] }));
   }
+
 
 }
 
