@@ -44,8 +44,16 @@ export default props => {
 
   const style = {
     display: 'flex',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    'margin-right': '20px'
   };
+
+  const title = {
+    'display':'flex',
+    'flex-direction':'column',
+    'text-align': 'center'
+  };
+
 
   function FieldGroup({ id, label, help, ...props }) {
     return (
@@ -60,7 +68,7 @@ export default props => {
   return (
     <Grid>
       <Row>
-        <h2>Drill Group: {props.drillGroup.name}</h2>
+        <h2 style={title}>Drill Group: {props.drillGroup.name}</h2>
       </Row>
       <Row>
         <p>{props.drillGroup.description}</p>
@@ -87,16 +95,18 @@ export default props => {
         </FormGroup>
 
         <div>
-          <Button href="#">
+          <span><Button bsStyle="success" bsSize="medium" href="#">
             Add Another Solution
-          </Button>
+          </Button></span>
+          <span style={style}>
+            <Button bsStyle="danger" bsSize="medium" type="submit">
+              Save
+            </Button>
+          </span>
+
         </div>
 
-        <div style={style}>
-          <Button type="submit">
-            Save
-          </Button>
-        </div>
+
       </Panel>
     </Grid>
   )
