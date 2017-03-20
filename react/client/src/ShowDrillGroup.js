@@ -1,5 +1,8 @@
 import React from 'react';
-import { Grid, Row, Panel, ButtonToolbar, Button, Accordion, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
+import { Grid, Row, Panel, ButtonToolbar, Button, Accordion, FormGroup, ControlLabel, FormControl, HelpBlock, Form } from 'react-bootstrap';
+import FieldGroup from './FieldGroup';
+
+
 
 class Drill extends React.Component {
   constructor(props){
@@ -42,16 +45,23 @@ export default class ShowDrillGroup extends React.Component{
     this.state = {count:1}
     this.addAnotherSolution = this.addAnotherSolution.bind(this);
     this.renderSolutions = this.renderSolutions.bind(this);
+    this.submitButton = this.submitButton.bind(this);
   }
 
   addAnotherSolution() {
     this.setState({count: this.state.count+1})
   }
 
+  submitButton(event){
+    event.preventDefault();
+    this.props.addNewDrill(event)
+    .then(()=>this.setState({count: 1}))
+  }
+
   renderDrills(drills) {
     let drillsArr = [];
-    drills.forEach(drill=>{
-      drillsArr.push(<Drill drill={drill}/>)
+    drills.forEach((drill,i)=>{
+      drillsArr.push(<Drill key={i} drill={drill}/>)
     })
     return drillsArr;
   }
@@ -59,7 +69,7 @@ export default class ShowDrillGroup extends React.Component{
   renderSolutions() {
     let retArr = [];
     for(let i = 0; i < this.state.count; i++){
-      retArr.push(<FormControl componentClass="textarea" placeholder="e.g. Drills for basic routing" />)
+      retArr.push(<FormControl key={i} id={`${i}`}  componentClass="textarea" placeholder="e.g. Drills for basic routing" />)
     }
     return retArr;
   }
@@ -90,16 +100,24 @@ render(){
       {this.renderDrills(this.props.drillGroup.drills)}
       <br />
 
-      <Panel header={"Add New Drill"}>
+      <Panel header={"Add New Drill"} >
+        <Form onSubmit={this.submitButton} id={this.props.drillGroup.id}>
         <FormGroup controlId="new-drill-description">
           <ControlLabel>Description</ControlLabel>
           <FormControl componentClass="textarea" placeholder="e.g. Drills for basic routing" />
         </FormGroup>
-
-        <FormGroup controlId="new-drill-solution">
-          <ControlLabel>Solution</ControlLabel>
-          {this.renderSolutions()}
-        </FormGroup>
+        <FieldGroup
+          id="drill-points"
+          type="integer"
+          label="Points"
+          placeholder="e.g. 10"
+        />
+        <div id="new-drill-solution">
+          <FormGroup>
+            <ControlLabel>Solution</ControlLabel>
+            {this.renderSolutions()}
+          </FormGroup>
+        </div>
 
         <div>
           <Button href="" onClick={this.addAnotherSolution}>
@@ -112,6 +130,7 @@ render(){
             Save
           </Button>
         </div>
+      </Form>
       </Panel>
     </Grid>
   )
