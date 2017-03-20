@@ -282,10 +282,18 @@ class Handlers {
     const drillGroupId = drillgroupDiv.id
     sendFetch(`/drill-groups/${drillGroupId}`, 'DELETE', {}, {token:this.state.user.token})
     .then((json)=>{
-      console.log(this.state.drillGroups)
-      this.setState(Object.assign({}, this.state.drillGroups, this.state.errors, this.state.user))
+      console.log(this.state.drillGroups);
+      function isNotDeleted(object){
+        console.log(object.id)
+        console.log(drillGroupId)
+        return object.id!=drillGroupId
+      };
+      let newdrillGroups = this.state.drillGroups.filter(isNotDeleted);
+      console.log(newdrillGroups);
+
+      this.setState(Object.assign({}, {drillGroups:newdrillGroups}, this.state.errors, this.state.user))
     })
-    drillgroupDiv.style.visibility='hidden';
+    // drillgroupDiv.style.visibility='hidden';
 
   }
 
