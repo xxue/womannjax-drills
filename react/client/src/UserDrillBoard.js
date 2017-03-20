@@ -7,23 +7,43 @@ class MyDrill extends React.Component {
   render() {
     // STYLES
     const drillGroup= {
-      'width': '40%',
+      'width': '45%',
       'height': '40%',
-      border: 'solid darkseagreen'
+      'max-height': '40%',
+      border: '1px solid lightgrey',
+      'margin-right': '5px',
+      'margin-top':'5px',
+      'padding-letf': '5px',
+      'background-color':'white'
     }
     const h3={
-      'font-size': '3.1vw'
+      'font-size': '2vw'
     }
+
+    const boxtext={
+      'margin-left':'8px',
+      'margin-bottom':'8px'
+    }
+
+    const downbutton={
+      'display': 'flex',
+      'justify-content': 'space-around'
+    }
+
     // FUNCTIONS
     console.log(this.props);
     // RETURN
 
     return (<div style={drillGroup} data-id={this.props.myDrillsId} data-attempts={this.props.attempts} id={this.props.id}>
+      <div style={boxtext}>
       <h3 style={h3}>{this.props.name}</h3>
       <p>Taken: {this.props.attempts} Time(s)</p>
       <p>Points: {this.props.score}</p>
-      <Button onClick={this.props.onStart}>Start</Button>
-      <Button onClick={this.props.onRemove}>Remove</Button>
+      <div style={downbutton}>
+      <Button  bsStyle="primary" bsSize="medium" onClick={this.props.onStart}>Start</Button>
+      <Button bsStyle="default" onClick={this.props.onRemove}>Remove</Button>
+    </div>
+    </div>
     </div>)
   }
 }
@@ -34,21 +54,32 @@ function AllDrill ({id, name}, onAddToMyDrills){
 
   // STYLES
   const drillGroup= {
-    'width': '40%',
-    'height': '40%',
-    border: 'solid goldenrod'
+    'width': '45%',
+    'height': '45%',
+    'max-height': '45%',
+    border: '1px solid grey',
+    'margin-right': '5px',
+    'margin-top':'5px',
+    'padding-letf': '5px',
+    'background-color':'white'
   }
   const h3={
-    'font-size': '3.1vw'
+    'font-size': '2vw'
+  }
+
+  const boxtext={
+    'margin-left':'8px',
+    'margin-bottom':'8px'
   }
   // FUNCTIONS
 
   // RETURN
 
   return (<div style={drillGroup} id={id}>
-
+            <div style={boxtext}>
               <h3 style={h3}>{name}</h3>
-              <Button onClick={onAddToMyDrills}>Add To My Drillz</Button>
+              <Button bsStyle="danger" bsSize="small" onClick={onAddToMyDrills}>Add To My Drillz</Button>
+            </div>
 
           </div>)
 }
@@ -136,11 +167,11 @@ export default class UserDrillBoard extends React.Component {
     const displayBox ={
       // this will probably need to be changed when we render the
       // topnav as well, probably should switch to 65vh/w
-      width: '80%',
+      width: '90%',
       'min-width': '400px',
       height:'80%',
       'min-height': '250px',
-      border: 'solid black',
+      border: 'solid grey',
       'display': 'flex',
       'justifyContent': 'space-around',
       'alignContent':'space-around',

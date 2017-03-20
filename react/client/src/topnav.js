@@ -26,6 +26,10 @@ export default class Topnav extends React.Component {
   }
 
   rightNav () {
+    const rightitems = {
+     'margin-right': '10px',
+    };
+
     console.log(this.props.user);
     if(this.props.user.is_admin){
       return (
@@ -38,7 +42,7 @@ export default class Topnav extends React.Component {
       )
     } else if (this.props.user.email) {
       return (
-        <Nav pullRight>
+        <Nav pullRight style={rightitems}>
           <NavItem disabled><h4>Hello {this.props.user.first_name}</h4></NavItem>
           {/* <NavItem href="" onClick={this.props.goToProfile}><h4>Profile</h4></NavItem> */}
           <NavItem href="" onClick={this.props.logout}><h4>Logout</h4></NavItem>
@@ -46,7 +50,7 @@ export default class Topnav extends React.Component {
       )
     } else {
       return (
-        <Nav pullRight>
+        <Nav pullRight style={rightitems}>
           <NavItem href="" onClick={this.props.goToSignUp}><h4>Sign Up</h4></NavItem>
           <NavItem href="" onClick={this.props.goToSignIn}><h4>Login</h4></NavItem>
         </Nav>
@@ -59,7 +63,7 @@ export default class Topnav extends React.Component {
       fontSize: '10em',
       height: '120px',
       marginLeft: '-10px',
-      marginRight: '5px',
+      marginRight: '0px',
       border: '1px solid wheat'
      };
 

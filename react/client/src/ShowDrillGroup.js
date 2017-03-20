@@ -33,10 +33,6 @@ class Drill extends React.Component {
   }
 }
 
-
-
-
-
 export default class ShowDrillGroup extends React.Component{
 
   constructor(props){
