@@ -182,7 +182,6 @@ router.put('/:id', function (req, res, next) {
 
     DrillGroup
     .findById(id)
-
     .then(drillgroup => drillgroup.update({name, description, level}))
     .then(drillgroup => res.send( JSON.stringify(
       {

@@ -97,7 +97,7 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/drill-groups', drillGroups);
 app.use('/drills', drills);
-// app.use('/mydrills', mydrills);
+app.use('/mydrills', mydrills);
 app.use('/sessions', sessions);
 app.use('/admin', admin);
 
