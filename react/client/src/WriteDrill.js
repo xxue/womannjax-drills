@@ -76,7 +76,6 @@ export default class WriteDrill extends React.Component {
     )
 
     return <block>
-
       <h1>Drill Group: {this.state.drillGroup}</h1>
       <p>Drill: {this.state.drill}</p>
       <h3>Answer</h3>
