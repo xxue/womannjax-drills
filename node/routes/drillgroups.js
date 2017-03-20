@@ -131,7 +131,12 @@ router.get('/:id', function(req, res, next) {
     .findById(id)
     .then(drillgroup => Promise.all([drillgroup, drillgroup.getDrills({order: [['updatedAt', 'DESC']]})]))
     .then(
-      ([drillgroup, drills]) =>  res.send(JSON.stringify({drillgroup, drills}))
+
+      ([drillgroup, drills]) =>  {
+                  res.send(JSON.stringify(Object.assign({},
+                    drillgroup.toJSON(),{drills:drills})))
+                }
+
     )
 
     .catch(
