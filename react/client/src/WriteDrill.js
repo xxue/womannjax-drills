@@ -1,74 +1,75 @@
 import React from 'react';
 import {Form, FormGroup, Col, Button, FormControl} from 'react-bootstrap';
 
-// The refs are nots fully operational here. Will fix! :)
-
- function CheckAnswer (drill, userAnswer) {
-   return false;
- }
-
- function CorrectAnswers (drill, userAnswer){
-   let isCorrect = CheckAnswer(drill, userAnswer)
-   let correctAnswers = ["Here is one answer",
-    "How could you get this wrong",
-    "Get your shit together Deborah"];
-   const tablestyle = {
-     padding: '10px'
-   }
-   return <div>
-     if(isCorrect){
-       <h1>Correct!</h1>
-     } else {
-       <h1>Incorrect!</h1>
-     };
-     <h5>Correct Answers:</h5>
-
-     { correctAnswers.map((answer, i) =>
-       <tr key={i} >
-         <td style={tablestyle}> {answer} </td>
-         <hr />
-       </tr>
-
-     )}
-  </div>
- }
-
-
 
 export default class WriteDrill extends React.Component {
-
   constructor (props) {
     super (props);
+
     this.state = {
       drillGroup: "Rails Routes",
       drill: "This is not a drill.",
-      answer: ''
-    }
+      answer: '',
+      answered: false
+    };
 
-    this.submit= this.submit.bind(this);
-  };
-
-
-  submit (event) {
-    event.preventDefault();
-    let drill = this.state.drill;
-    let answer = this.refs.answer.value;
-    console.log(
-      event, drill, answer);
-    return CorrectAnswers(drill, answer);
+    this.submitAnswer = this.submitAnswer.bind(this);
+    this.displayAnswers = this.displayAnswers.bind(this);
   }
+
+  displayAnswers() {
+    let correctAnswers = ["Here is one answer",
+     "How could you get this wrong",
+     "Get your shit together Deborah"];
+
+   const tablestyle = {
+     padding: '10px'
+   };
+
+   return(
+     <div>
+       { (this.state.isCorrect === true) ?
+         <h1>Correct!</h1>
+         :
+         <h1>Incorrect!</h1>
+       }
+
+       <h5>Correct Answers:</h5>
+       <table>
+       { correctAnswers.map((answer, i) =>
+         <tr key={i} >
+           <td style={tablestyle}> {answer} </td>
+           <hr />
+         </tr>
+       )}
+     </table>
+     </div>
+    )
+  }
+
+  submitAnswer (event) {
+    event.preventDefault();
+    const {target} = event;
+    const isCorrect = false;
+    this.setState({
+      answer: target.answer.value,
+      answered: true,
+      isCorrect: isCorrect
+    })
+  }
+
 
   render (){
 
     const answerInput = (
-      <Form horizontal onSubmit={this.submit}>
+      <Form horizontal onSubmit={this.submitAnswer}>
         <FormGroup controlId="formHorizontalAnswer">
-         <h3>Answer</h3>
           <Col sm={10}>
-            <FormControl type="answer" placeholder="Your Answer" />
+            <FormControl type="text" name="answer"
+              placeholder="Your Answer"/>
           </Col>
         </FormGroup>
-        <Button type="submit" block>
+        <Button type="submit" >
           Submit
         </Button>
       </Form>
@@ -77,7 +78,10 @@ export default class WriteDrill extends React.Component {
     return <div>
       <h1>Drill Group: {this.state.drillGroup}</h1>
       <p>Drill: {this.state.drill}</p>
+      <h3>Answer</h3>
       {answerInput}
+      { (this.state.answered === true) ? this.displayAnswers() : ''}
+      {/* ternary works instead of if/else in JSX. */}
       <Button bsSize="large">Next Drill</Button>
     </div>
   }
