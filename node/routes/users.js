@@ -167,28 +167,46 @@ router.get('/:userId/drill-groups/:drillGroupId/', function (req, res, next) {
 
 // MyDrills#create
 // PATH: /user/:userId/drill-group/:drillGroupId/
-router.post('/:userId/drill-groups/:drillGroupId/', function (req, res, next) {
-  const {userId, drillGroupId}            = req.params;
-  const {attempts, score, drillsVisible}  = req.body;
-
-  MyDrills
-    .create({
-        UserId: userId,
-        DrillGroupId: drillGroupId,
-        attempts, score, drillsVisible
+router.post('/:UserId/drill-groups/:DrillGroupId/', function (req, res, next) {
+  const {token} = req.user
+  const {UserId, DrillGroupId}            = req.params;
+  mydrillExists(UserId,DrillGroupId)
+  .then(drillExists=>{
+    if(token != null && !drillExists){
+      const {attempts, score}  = req.body;
+      MyDrills
+      .create({
+        UserId,
+        DrillGroupId,
+        attempts,
+        score,
+        drillsVisible:true
       })
-    .then(myDrills => {
-      res.send(JSON.stringify(
-        {
-          UserId: userId,
-          DrillGroupId: drillGroupId,
-          attempts: attempts,
-          score: score,
-          drillsVisible: drillsVisible
-      }));
+      .then(myDrills => {
+        res.send(JSON.stringify({myDrill:"created"}))
+        })
+        .catch(err => next(err))
+    } else {
+      MyDrills
+      .find({where:{UserId,DrillGroupId}})
+      .then(mydrill => {
+        mydrill.update({drillsVisible:true})
+      })
+      .then(response => res.send(JSON.stringify({drillGroup:"added"})))
+      .catch(err => next(err))
+    }
+  });
+
+  function mydrillExists(UserId,DrillGroupId) {
+    return MyDrills
+    .find({where:{UserId,DrillGroupId}})
+    .then(response => {
+      // console.log(response != null )
+       return response != null
     })
-    .catch(err => next(err))
+}
 });
+
 
 
 
