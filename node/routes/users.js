@@ -43,8 +43,8 @@ router.post('/', function(req, res, next) {
 router.get('/:id/drill-groups', function(req,res,next){
   res.send(JSON.stringify({
                   myDrillGroups: [{
-                    id: 1,
-                    name:'Rails Routes',
+                    id: 24,
+                    name:'This is the newest one',
                     attempts: 4,
                     score: 70.0
                   },
