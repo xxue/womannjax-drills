@@ -76,11 +76,10 @@ export default class UserDrillBoard extends React.Component {
   constructor(props){
     super(props)
 
-    this.state = Object.assign({},props.state,{mydrills_not_alldrills: true});
+    this.state = Object.assign({},props.state,{activeKey: 1});
     this.generateMyDrillz = this.generateMyDrillz.bind(this);
     this.generateAllDrillz = this.generateAllDrillz.bind(this);
-    this.changeToMyDrills = this.changeToMyDrills.bind(this);
-    this.changeToAllDrills = this.changeToAllDrills.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
   }
 
 
@@ -109,15 +108,10 @@ export default class UserDrillBoard extends React.Component {
     return AllDrillArray
   }
 
-  changeToMyDrills (event) {
-    event.preventDefault();
-    this.setState(Object.assign({},this.state,{mydrills_not_alldrills: true}));
+  handleSelect(selectedKey) {
+    this.setState(Object.assign({},this.state,{activeKey: selectedKey}));
   }
 
-  changeToAllDrills (event) {
-    event.preventDefault();
-    this.setState(Object.assign({},this.state,{mydrills_not_alldrills: false}));
-  }
 // STYLES
 
   render () {
@@ -160,14 +154,14 @@ export default class UserDrillBoard extends React.Component {
     // CHUNKS OF BOOTSTRAP/HTML
 
     const DrillzTabs= (
-      <Nav bsStyle="tabs" activeKey={1} onSelect={()=>{}}>
-        <NavItem style={li} eventKey={1} onClick={this.changeToMyDrills}>My Drillz</NavItem>
-        <NavItem style={li} eventKey={2} onClick={this.changeToAllDrills}>All Drillz</NavItem>
+      <Nav bsStyle="tabs" activeKey={this.state.activeKey} onSelect={this.handleSelect}>
+        <NavItem style={li} eventKey={1}>My Drillz</NavItem>
+        <NavItem style={li} eventKey={2}>All Drillz</NavItem>
       </Nav>
     )
 
      // RETURN
-     let toReturn = this.state.mydrills_not_alldrills ?
+     let toReturn = this.state.activeKey === 1 ?
      this.generateMyDrillz(this.state.myDrillGroups) :
      this.generateAllDrillz(this.state.allDrillGroups);
 
