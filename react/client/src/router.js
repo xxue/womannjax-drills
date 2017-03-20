@@ -29,8 +29,12 @@ export default class Router extends React.Component {
     this.signUp = Handlers.prototype.signUp.bind(this);
     this.createNewDrillGroup = Handlers.prototype.createNewDrillGroup.bind(this);
     this.updateDrillGroup = Handlers.prototype.updateDrillGroup.bind(this);
+
     this.handleLeaderBoard = Handlers.prototype.handleLeaderBoard.bind(this);
+    
+    this.onStart = Handlers.prototype.startDrill.bind(this);
     this.logout = Handlers.prototype.logout.bind(this);
+
 
 
     this.goToSignIn = Handlers.prototype.goToSignIn.bind(this);
@@ -66,6 +70,31 @@ export default class Router extends React.Component {
         }
       ]}/>;
 
+//     return  <div>
+
+//           <UserDrillBoard onStart={this.onStart}
+//             state={
+//               {
+//                 myDrillGroups: [{
+//                   id: 1,
+//                   name:'Rails Routes',
+//                   attempts: 4,
+//                   score: 70.0
+//                 },
+//                   {id:3,
+//                    name: 'Javascript Objects',
+//                    attempts: 15,
+//                    score: 5.0
+//                 }
+//                 ],
+//                 allDrillGroups:
+//                   [
+//                     {id: 2, name: "Javascipt Arrays"},
+//                     {id: 54, name: "Javascipt Functions"}
+//                   ]
+//                 }
+//             }/>
+
     let toRender = <div></div>;
     switch(true){
       case '/' === this.state.path:
@@ -80,7 +109,24 @@ export default class Router extends React.Component {
         toRender = <SignUp onSubmit={this.signUp} errors={this.state.errors}/>;
         break;
       case /\/users\/\d+\/drill_group/.test(this.state.path):
-        toRender = <UserDrillBoard user={this.state.user}/>;
+        toRender = <UserDrillBoard state={
+                      {
+                        myDrillGroups: [{
+                          name:'Rails Routes',
+                          attempts: 4,
+                          score: 70.0
+                        },
+                          {name: 'Javascript Objects',
+                          attempts: 15,
+                          score: 5.0
+                        }
+                        ],
+                        allDrillGroups:
+                          [
+                            {name: "Javascipt Arrays"},
+                            {name: "Javascipt Functions"}
+                          ]
+                        }}/>;
         break;
       case '/leaderboard' === this.state.path:
         // toRender = <LeaderBoard onSubmit={this.signIn} errors={[]}/>;
@@ -134,9 +180,9 @@ export default class Router extends React.Component {
             logout={this.logout}
           />
           {toRender}
-        </div>
-      );
-    }
+
+        </div>)
+      }
     return (
       <div>
         {toRender}
