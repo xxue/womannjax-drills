@@ -169,7 +169,16 @@ class Handlers {
     const drillId = currentTarget.parentNode.id;
     sendFetch(`/drill_group/${drillId}/drills`, 'GET', {}, {})
     .then((json)=>{
-      this.setState({path: json.path, })
+      // this.setState({path: json.path, })
+    })
+  }
+
+  goToAdminDrills (event) {
+    event.preventDefault();
+    sendFetch('/drill-groups','GET',{},{token: this.state.user.token})
+    .then(json=>{
+      console.log(json);
+      this.setState(Object.assign({},this.state,{ path: `/admin/drill_board`, drillGroups: json }));
     })
   }
 
@@ -193,10 +202,6 @@ class Handlers {
     this.setState(Object.assign({},{ path: `/reset_password/new`, user: this.state.user, errors: [] }));
   }
 
-  goToAdminDrills (event) {
-    event.preventDefault();
-    this.setState(Object.assign({},this.state,{ path: `/admin/drill_board` }));
-  }
 
   goToAdminCreateDrillGroup (event) {
     event.preventDefault();

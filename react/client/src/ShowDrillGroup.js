@@ -12,7 +12,7 @@ class Drill extends React.Component {
       display: 'flex',
       justifyContent: 'flex-end'
     };
-    
+
     return (
       <Accordion>
         <Panel header={"< Drill 1 >"} eventKey="1">
