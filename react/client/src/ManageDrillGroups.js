@@ -78,6 +78,9 @@ export default class ManageDrillGroups extends React.Component {
           'text-align': 'center'
         };
 
+        const addbutton = {
+          'background': '#FCE4EC'
+        };
 
     return (
       <Grid>
@@ -85,7 +88,7 @@ export default class ManageDrillGroups extends React.Component {
           <h2>Drill Groups</h2>
         </Row>
         <Row style={style}>
-          <Button bsStyle="success" href="#" onClick={this.props.onAddDrillGroup}>Add Group</Button>
+          <Button style={addbutton} href="#" onClick={this.props.onAddDrillGroup}>Add Group</Button>
         </Row>
         <br />
         {this.renderDrillGroups(this.props.drillGroups)}
