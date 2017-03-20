@@ -1,32 +1,6 @@
 import React from 'react';
 import { Glyphicon, Nav, NavItem, Button } from 'react-bootstrap';
 
-// How to use in router!!!!
-//     return  <div>
-
-//           <UserDrillBoard
-//             state={
-//               {
-//                 myDrillGroups: [{
-//                   name:'Rails Routes',
-//                   attempts: 4,
-//                   score: 70.0
-//                 },
-//                   {name: 'Javascript Objects',
-//                   attempts: 15,
-//                   score: 5.0
-//                 }
-//                 ],
-//                 allDrillGroups:
-//                   [
-//                     {name: "Javascipt Arrays"},
-//                     {name: "Javascipt Functions"}
-//                   ]
-//                 }
-//             }/>
-//         </div>
-
-
 // render a single Drill group in MyDrillz
 
 class MyDrill extends React.Component {
@@ -37,22 +11,26 @@ class MyDrill extends React.Component {
       'height': '40%',
       border: 'solid darkseagreen'
     }
+    const h3={
+      'font-size': '3.1vw'
+    }
     // FUNCTIONS
-
+    console.log(this.props);
     // RETURN
-    return (<div style={drillGroup} id={this.props.id}>
-      <h3>{this.props.name}</h3>
-      <p>Taken: {this.props.attempts} Times</p>
-      <p>{this.props.score}%</p>
+
+    return (<div style={drillGroup} data-id={this.props.myDrillsId} data-attempts={this.props.attempts} id={this.props.id}>
+      <h3 style={h3}>{this.props.name}</h3>
+      <p>Taken: {this.props.attempts} Time(s)</p>
+      <p>Points: {this.props.score}</p>
       <Button onClick={this.props.onStart}>Start</Button>
-      <Button>Remove</Button>
+      <Button onClick={this.props.onRemove}>Remove</Button>
     </div>)
   }
 }
 
 // render a single drill group in AllDrillz
 
-function AllDrill ({id, name}){
+function AllDrill ({id, name}, onAddToMyDrills){
 
   // STYLES
   const drillGroup= {
@@ -60,13 +38,18 @@ function AllDrill ({id, name}){
     'height': '40%',
     border: 'solid goldenrod'
   }
+  const h3={
+    'font-size': '3.1vw'
+  }
   // FUNCTIONS
 
   // RETURN
 
   return (<div style={drillGroup} id={id}>
-              <h3>{name}</h3>
-              <Button>Add To My Drillz</Button>
+
+              <h3 style={h3}>{name}</h3>
+              <Button onClick={onAddToMyDrills}>Add To My Drillz</Button>
+
           </div>)
 }
 
@@ -77,7 +60,7 @@ export default class UserDrillBoard extends React.Component {
 
   constructor(props){
     super(props)
-
+    console.log('props are ',this.props);
     this.state = Object.assign({},props.state,{activeKey: 1});
 
     this.generateMyDrillz = this.generateMyDrillz.bind(this);
@@ -94,14 +77,20 @@ export default class UserDrillBoard extends React.Component {
     // loop over array of drillGroups and call MyDrill every time,
     //  using appropriate params
     for (let i=0;i<DrillGroups.length; i++){
-      const {id, name, attempts, score} = DrillGroups[i];
-      MyDrillArray.push(<MyDrill
-                          id={id}
-                          name={name}
-                          attempts={attempts}
-                          score={score}
-                          onStart={this.props.onStart}
-                        />);
+      console.log('-----------', DrillGroups[i]);
+      const {id, DrillGroupId, name, attempts, score} = DrillGroups[i];
+      console.dir(DrillGroups[i]);
+      if (DrillGroups[i].drillsVisible){
+        MyDrillArray.push(<MyDrill
+          id={DrillGroupId}
+          myDrillsId={id}
+          name={name}
+          attempts={attempts}
+          score={score}
+          onStart={this.props.onStart}
+          onRemove={this.props.onRemove}
+        />);
+      }
     }
     return MyDrillArray
   }
@@ -113,7 +102,7 @@ export default class UserDrillBoard extends React.Component {
     //  using appropriate title param
 
     for (let i=0;i<DrillGroups.length;i++){
-      AllDrillArray.push(AllDrill(DrillGroups[i]))
+      AllDrillArray.push(AllDrill(DrillGroups[i],this.props.onAddToMyDrills))
 
     }
 
@@ -133,28 +122,30 @@ export default class UserDrillBoard extends React.Component {
       'alignItems':'center',
       'flexDirection': 'column',
       // this will likely need changing when we render the topNav as well
-       width: '100vw',
-       height:'100vh',
+       width: '90%',
+       height:'90%',
     }
 
     const nav ={
       'display': 'flex',
       'flexDirection':'row',
       'justifyContent': 'flex-start',
-      'width': '80vw',
+      'width': '80%',
     }
 
     const displayBox ={
       // this will probably need to be changed when we render the
       // topnav as well, probably should switch to 65vh/w
-      width: '80vw',
-      height:'80vh',
+      width: '80%',
+      'min-width': '400px',
+      height:'80%',
+      'min-height': '250px',
       border: 'solid black',
       'display': 'flex',
       'justifyContent': 'space-around',
-      'alignContent':'center',
+      'alignContent':'space-around',
       'flexDirection':'row',
-      'flexWrap': 'wrap'
+      'flex-wrap': 'wrap'
     }
 
     const li= {

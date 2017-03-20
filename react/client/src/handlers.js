@@ -23,7 +23,7 @@ function sendFetch (path, method, body, user = {}){
   return fetch(`${BASE_URL}${path}`,req)
   .then(r=>{
     if(r.status === 400 || r.status === 401) {
-      return {};
+      return null;
     }
     return r.json();
   })
@@ -33,30 +33,51 @@ class Handlers {
 
   addNewDrill (event) {
     event.preventDefault();
-    // console.dir(event.target);
     const {target} = event;
     const description = target.querySelector('#new-drill-description').value;
+    target.querySelector('#new-drill-description').value = "";
     const points = target.querySelector('#drill-points').value;
-    const solution = target.querySelector('#new-drill-solution').value;
+
+    target.querySelector('#drill-points').value = "";
     const drillGroupId = target.id;
-    console.log(description,points,drillGroupId);
+    // console.log(description,points,drillGroupId);
 
+    let solutionsArr = [];
+    target.querySelector('#new-drill-solution')
+        .querySelectorAll('textarea')
+        .forEach(solution=>{
+          solutionsArr.push({body: solution.value})
+          solution.value = "";
+        });
 
-    sendFetch(
+        // console.dir(solutionsArr);
+    return sendFetch(
       `/drill-groups/${drillGroupId}/drills`,
       'POST',
       {
         exercise:`${description}`,
         points: `${points}`,
-        solutions: [{body: `${solution}`}]
+        solutions: solutionsArr
       },
       {token: this.state.user.token}
     )
     .then((json)=>{
-      console.log(json)
-      this.setState(Object.assign({},
-                    this.state,
-                    {drillGroups: Object.assign({},this.drillGroup,{drills:this.drillGroup.drills.push(json) })}));
+
+      console.log("here");
+      this.setState(Object.assign(
+        {},
+        this.state,
+        {
+          drillGroup: Object.assign(
+              {},
+              this.state.drillGroup,
+              {
+                drills:this.state.drillGroup.drills.concat(json)
+              }
+            )
+        }));
+
+
     })
     .catch(console.error)
   }
@@ -155,31 +176,6 @@ class Handlers {
     .catch(console.error)
   }
 
-  deleteDrill (event) {
-    event.preventDefault();
-    console.dir(event.target);
-    const {target} = event;
-    const drillId = target.parentNode.parentNode.parentNode.parentNode.id;
-    console.log(drillId);
-    
-    sendFetch(
-      `/drills/${drillId}`,
-      'DELETE',
-      {},
-      {token: this.state.user.token}
-    )
-    .then((json)=>{
-      console.log(json, "/drills/drillId: ", this.state.drill.id)
-      this.setState(Object.assign({},
-                  this.state,
-                  {
-                    path: `/admin/drill_group/${json.id}`,
-                    drillGroup: json
-                  }))
-    })
-    .catch(console.error)
-  }
-
   signIn  (event) {
     event.preventDefault();
     const {target} = event;
@@ -196,6 +192,8 @@ class Handlers {
         } else {
           path = '/account-pending'
         }
+      } else {
+        alert('Username and/or Password do not match');
       }
         this.setState(Object.assign(
                           {},
@@ -209,15 +207,17 @@ class Handlers {
   }
 
   getMyAllDrills () {
-    sendFetch(`/users/${this.state.user.id}/drill-groups`,'GET',{},{token: this.state.user.token })
+    sendFetch(`/my-drills/drill-groups`,'GET',{},{token: this.state.user.token })
     .then(json=>{
+      let t = this.state.t || 0;
       this.setState(Object.assign(
                         {},
                         this.state,
                         {
                           path: `/users/${this.state.user.id}/drill_groups`,
                           myDrillGroups: json.myDrillGroups,
-                          allDrillGroups: json.allDrillGroups
+                          allDrillGroups: json.allDrillGroups,
+                          t: t + 1
                         }));
     })
   }
@@ -247,11 +247,53 @@ class Handlers {
   startDrill (event){
     event.preventDefault();
     const {currentTarget, target} = event;
-    const drillId = currentTarget.parentNode.id;
-    sendFetch(`/drill-groups/1`, 'GET', {}, {token:this.state.user.token})
+    const drillGroupId = currentTarget.parentNode.id;
+    const myDrillId = currentTarget.parentNode.getAttribute('data-id');
+    const attempts = currentTarget.parentNode.getAttribute('data-attempts');
+    sendFetch(`/drill-groups/${drillGroupId}`, 'GET', {}, {token:this.state.user.token})
     .then((json)=>{
-      // this.setState({path: json.path, })
+      console.log(json)
+      this.setState(Object.assign(
+        {},
+        this.state,
+        {
+          path: '/drill_baby_drill',
+          drillGroup: json,
+          index: 0,
+          correctAnswers: [],
+          score: 0,
+          myDrillId: myDrillId,
+          attempts: attempts
+        }
+      ))
     })
+  }
+
+  deleteDrill (event) {
+    event.preventDefault();
+    // window.alert("You've successfully called the handler") Fuck yes i did
+    const {target} = event;
+    const drillNode = target.parentNode.parentNode.parentNode.parentNode
+    const drillId = drillNode.id;
+    sendFetch(
+      `/drills/${drillId}`,
+      'DELETE',
+      {},
+      {token: this.state.user.token}
+    )
+    .then((json)=>{
+      function isNotDeleted(drill){
+          // console.log(drill.id)
+          // console.log(drillId)
+        return drill.id!=drillId
+      }
+      let newDrillGroups = this.state.drillGroup.drills.filter(isNotDeleted);
+
+
+    })
+    .catch(console.error)
+    // drillNode.parentNode.style.visibility='hidden';
+
   }
 
   deleteDrillGroup (event) {
@@ -261,11 +303,73 @@ class Handlers {
     const drillGroupId = drillgroupDiv.id
     sendFetch(`/drill-groups/${drillGroupId}`, 'DELETE', {}, {token:this.state.user.token})
     .then((json)=>{
-      console.log(this.state.drillGroups)
-      this.setState(Object.assign({}, this.state.drillGroups, this.state.errors, this.state.user))
-    })
-    drillgroupDiv.style.visibility='hidden';
+      // console.log(this.state.drillGroups);
+      //
+      // function isNotDeleted(object){
+      //   console.log(object.id)
+      //   console.log(drillGroupId)
+      //   return object.id!=drillGroupId
+      // };
+      // let newdrillGroups = this.state.drillGroups.filter(isNotDeleted);
+      this.setState(Object.assign(
+        {},
+        this.state,
+        { path: '/admin/get-drill-groups' }
+      ));
 
+
+    })
+    // drillgroupDiv.style.visibility='hidden';
+
+  }
+
+  verifyUser(event) {
+    event.preventDefault();
+    const {target} = event;
+    const userId = target.getAttribute('data-id');
+    sendFetch(`/admin/users/${userId}`,'POST',{},{token:this.state.user.token})
+    .then(()=>{
+      this.getVerifyUsers(event);
+    })
+  }
+
+  getVerifyUsers (event) {
+    event.preventDefault();
+    sendFetch('/admin/users','GET',{},{token: this.state.user.token})
+    .then(json=>{
+      console.log(json)
+      this.setState(Object.assign({},this.state,{path: '/admin/users',
+      users: json
+      }))
+    })
+  }
+
+  submitAnswer (event) {
+    event.preventDefault();
+    const {target} = event;
+    const userAnswer = target.querySelector('#formHorizontalAnswer').value;
+    target.querySelector('#formHorizontalAnswer').value = "";
+    const drillId = target.id;
+    sendFetch(`/drills/${drillId}`,'POST',{
+      userAnswer: userAnswer
+    },{
+      token: this.state.user.token
+    })
+    .then(json=>{
+      let points = 0;
+      if (json.isCorrect) {
+        points = json.points;
+      }
+      this.setState(Object.assign(
+        {},
+        this.state,
+        {
+          isCorrect: json.isCorrect,
+          correctAnswers: json.correctAnswers,
+          score: this.state.score + points
+        }
+      ))
+    })
   }
 
   getAdminAllDrills () {
@@ -300,6 +404,10 @@ class Handlers {
     event.preventDefault();
     this.setState(Object.assign({},{ path: `/reset_password/new`, user: this.state.user, errors: [] }));
   }
+  goToLeaderboard (event) {
+    event.preventDefault();
+    this.setState(Object.assign({},{ path: `/leaderboard`, user: this.state.user, errors: [] }));
+  }
 
 
   goToAdminCreateDrillGroup (event) {
@@ -311,6 +419,66 @@ class Handlers {
     event.preventDefault();
     this.setState(Object.assign({},{ path: '/', user: {}, errors: [] }))
     .then(json => console.log(json))
+  }
+
+  incrementIndex (event) {
+    event.preventDefault();
+    this.setState(Object.assign(
+      {},
+      this.state,
+      {
+        index: this.state.index + 1,
+        correctAnswers: []
+      }
+    ))
+  }
+
+  finishDrillGroup (event) {
+    event.preventDefault();
+    sendFetch(`/my-drills/${this.state.myDrillId}`,'PUT',
+          {
+            attempts: parseInt(this.state.attempts) + 1,
+            score: this.state.score
+          })
+          .then(json=>{
+            this.setState(Object.assign(
+              {},
+              this.state,
+            {
+              path: '/users/get-drill-groups'
+            }))
+          })
+  }
+
+  addToMyDrills (event) {
+    event.preventDefault();
+    const {target} = event;
+    const drillGroupId = target.parentNode.id;
+    sendFetch(`/users/${this.state.user.id}/drill-groups/${drillGroupId}`,
+      'post',
+      {},
+      {
+        token: this.state.user.token
+      })
+      .then(()=>{
+        this.setState(Object.assign({},this.state,{path:'/users/get-drill-groups'}))
+      })
+
+  }
+
+  removeFromMyDrills (event) {
+    event.preventDefault();
+    const {target} = event;
+    const drillGroupId = target.parentNode.id;
+    sendFetch(`/my-drills/${this.state.user.id}/drill-groups/${drillGroupId}`,
+      'put',
+      {},
+      {
+        token: this.state.user.token
+      })
+    .then(()=>{
+      this.setState(Object.assign({},this.state,{path:'/users/get-drill-groups'}))
+    })
   }
 
 }

@@ -24,9 +24,8 @@ router.get('/new', function(req, res, next) {
 router.post('/',
   passport.authenticate('local'),
   function(req, res) {
-    res.setHeader('Content-Type', 'application/json');
+    // res.setHeader('Content-Type', 'application/json');
     // found a user.check that user "is verified"
-
     res.send(JSON.stringify(req.user));
   });
 

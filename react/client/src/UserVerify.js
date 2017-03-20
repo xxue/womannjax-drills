@@ -1,100 +1,143 @@
 import React from 'react';
-import {Button, ButtonToolbar} from 'react-bootstrap';
+import {Form, FormGroup, Col, Button, ControlLabel, Checkbox, FormControl} from 'react-bootstrap';
 
-// PROBABLY TALK TO ANNIE FOR AN EXPLANATION :)
+// THIS IS A WORK IN PROGRESS.
 
-function getPendingUsers() {
- let pendingUsers = (["Neal", "XinXin", "Max", "Aldo", "Nicole", "John", "Annie"]);
- return pendingUsers;
+class User extends React.Component{
+
+  constructor(props){
+    super(props);
+    // this.renderUser = this.renderUser.bind(this);
+    // this.renderUsers = this.renderUsers.bind(this);
+  }
+
+  render(){
+    const form = {
+      display: 'flex'
+    };
+    const space = {
+      margin: '10px 20px'
+    }
+    return (
+
+      <Form horizontal style={form}>
+        <FormGroup controlId="formHorizontalEmail">
+          <Col componentClass={ControlLabel} style={space} sm={2}>
+            {this.props.user.first_name}
+          </Col>
+        </FormGroup>
+
+        <FormGroup controlId="formHorizontalPassword">
+          <Col componentClass={ControlLabel} style={space} sm={2}>
+            {this.props.user.last_name}
+          </Col>
+        </FormGroup>
+
+        <FormGroup controlId="formHorizontalPassword">
+          <Col componentClass={ControlLabel} style={space} sm={2}>
+            {this.props.user.email}
+          </Col>
+        </FormGroup>
+        <div style={form}>
+          <Button style={space} data-id={this.props.user.id} onClick={this.props.verifyUser} href="#">Verify</Button>
+          <Button style={space} data-id={this.props.user.id} onClick={this.props.deleteUser} href="#">Delete</Button>
+        </div>
+      </Form>
+    )
+
+  }
 }
 
-class UserRow extends React.Component {
-  constructor (props) {
-    super (props);
-    this.state = {
-      isClicked: "false"
-    };
+class Users extends React.Component {
 
-    this.userVerify = this.userVerify.bind(this);
-    this.userDeny = this.userDeny.bind(this);
-    this.renderTableButtons = this.renderTableButtons.bind(this);
+  constructor(props){
+    super(props);
+    // this.renderUser = this.renderUser.bind(this);
+    // this.renderUsers = this.renderUsers.bind(this);
   }
 
-  userVerify () {
-    this.setState({
-      isClicked: "verify"
+  renderUsers( users) {
+    let retArr = [];
+    users.forEach(user=>{
+      retArr.push(<User
+            user={user}
+            verifyUser={this.props.verifyUser}
+            deleteUser={this.props.deleteUser}
+           />)
     })
+    return retArr;
   }
 
-  userDeny () {
-    this.setState({
-      isClicked: "deny"
-    })
+  render() {
+    return <div>
+            {this.renderUsers(this.props.users)}
+          </div>
   }
 
-  renderTableButtons(){
-    if (this.state.isClicked === "false"){
-      return <ButtonToolbar>
-             <Button bsStyle="primary" id={this.props.i} onClick={this.userVerify}>Approve User</Button>
-             <Button id={this.props.i} onClick={this.userDeny}>Deny User</Button>
-             </ButtonToolbar>
-   } else if (this.state.isClicked === "verify") {
-     return  <h5>You have approved this user.</h5>
-   } else {
-     return  <h5>You have denied this user.</h5>
-   }
-  }
-  render(){
-    const namestyle = {
-      padding: '15px',
-      fontSize: '2rem'
-    }
-    const buttonstyle = {
-      paddingLeft: '400px',
-      fontSize: '2rem'
-    }
-
-    return (
-      <tr key={this.props.i} >
-       <td style={namestyle}> {this.props.user}</td>
-       <td style={buttonstyle} >
-        {this.renderTableButtons()}
-       </td>
-      </tr>
-    )
-    }
-  }
+}
 
 export default class UserVerify extends React.Component {
-  constructor (props) {
-    super (props);
-    this.state = { };
 
-    this.controlBoard = this.controlBoard.bind(this);
+  constructor(props){
+    super(props);
+    // this.renderUser = this.renderUser.bind(this);
+    // this.renderUsers = this.renderUsers.bind(this);
   }
 
-  controlBoard () {
-   let userArray = getPendingUsers();
-
-   const controlboardstyle={
-     paddingLeft: '100px'
-   }
-
-   return( <div style={controlboardstyle}>
-     <h1>Pending Users</h1>
-     <table>
-       { userArray.map((user, i) => {
-         return <UserRow key={i} user={user} i={i}/>;
-       })}
-     </table>
-   </div>
-    )
+  render() {
+    return <div>
+            <Users
+              users={this.props.users}
+              verifyUser={this.props.verifyUser}
+              deleteUser={this.props.deleteUser}
+            />
+          </div>
   }
 
- render () {
-   return <div>
-     {this.controlBoard()}
-           </div>
- }
+//   renderUsers(){
+//     let retArr = [];
+//     console.log(this.props.users)
+//     this.props.users.forEach(user=>{
+//       retArr.push(this.renderUsers(user));
+//     })
+//     return retArr;
+//   }
+//
+//   renderUser(user){
 
+//     return(
+//
+//
+//       </Form>
+//     )
+//   }
+//
+//
+//  render () {
+//    const form = {
+//      display: 'flex'
+//    };
+//
+//
+//
+//
+//
+// const main={
+//    'display':'flex',
+//    'flex-direction':'column'
+// }
+//
+// const links={
+//  'display':'flex',
+//  'flex-direction': 'row',
+//  'justify-content': 'space-around'
+// }
+//    return <div style={main} className="container">
+//              <h2>Pending Users</h2>
+//              {this.renderUsers()}
+//              <div style={links}>
+//
+//              </div>
+//            </div>
+ // }
 }

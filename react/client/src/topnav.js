@@ -10,12 +10,28 @@ export default class Topnav extends React.Component {
     this.rightNav = this.rightNav.bind(this);
   };
 
+  leftNav() {
+    console.log('left ',this.props.user);
+    if(this.props.user.is_admin){
+      return <div></div>
+    } else if (this.props.user.email){
+      return (<Nav>
+        <NavItem href="" onClick={this.props.handleDrills}><h4>Drillz</h4></NavItem>
+        <NavItem href="" onClick={this.props.handleLeaderboard}><h4>Leaderboard</h4></NavItem>
+      </Nav>
+      )
+    } else {
+      return <div></div>
+    }
+  }
+
   rightNav () {
     console.log(this.props.user);
     if(this.props.user.is_admin){
       return (
 
         <Nav pullRight>
+          <NavItem href="" onClick={this.props.goToUsers}><h4>Users</h4></NavItem>
           <NavItem href="" onClick={this.props.goToAdminDrills}><h4>Drillz</h4></NavItem>
           <NavItem href="" onClick={this.props.logout}><h4>Logout</h4></NavItem>
         </Nav>
@@ -46,7 +62,7 @@ export default class Topnav extends React.Component {
       marginRight: '5px',
       border: '1px solid wheat'
      };
-     
+
     const logostyle = {
       height: '100px',
       paddingLeft: '30px'
@@ -58,7 +74,7 @@ export default class Topnav extends React.Component {
       paddingTop: '10px'
      };
 
-    return <div><Navbar style={navstyle}  >
+    return <div><Navbar style={navstyle} >
         <Navbar.Header style={leftbar}>
           <Navbar.Brand>
           <img src={logo} style={logostyle}/>
@@ -66,10 +82,7 @@ export default class Topnav extends React.Component {
          <h5>Codecore Drillz</h5>
         </Navbar.Header>
         <div style={linkstyle}>
-        <Nav>
-          <NavItem href="" onClick={this.props.handleDrills}><h4>Drillz</h4></NavItem>
-          <NavItem href="" onClick={this.props.handleLeaderboard}><h4>Leaderboard</h4></NavItem>
-        </Nav>
+          {this.leftNav()}
           {this.rightNav()}
        </div>
      </Navbar></div>
