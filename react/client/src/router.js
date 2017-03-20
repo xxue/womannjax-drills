@@ -33,19 +33,29 @@ export default class Router extends React.Component {
     this.getAdminAllDrills = Handlers.prototype.getAdminAllDrills.bind(this);
     this.addNewDrill = Handlers.prototype.addNewDrill.bind(this);
 
-    this.deleteDrillGroup = Handlers.prototype.deleteDrillGroup.bind(this);
+    this.startDrill = Handlers.prototype.startDrill.bind(this);
+    this.finishDrillGroup = Handlers.prototype.finishDrillGroup.bind(this);
 
+
+    this.deleteDrillGroup = Handlers.prototype.deleteDrillGroup.bind(this);
     this.onDrillGroupView = Handlers.prototype.onDrillGroupView.bind(this);
     this.addNewDrill = Handlers.prototype.addNewDrill.bind(this);
-    this.deleteDrill = Handlers.prototype.deleteDrill.bind(this);
-    this.getMyAllDrills = Handlers.prototype.getMyAllDrills.bind(this);
 
+    this.deleteDrill = Handlers.prototype.deleteDrill.bind(this);
+
+    this.getMyAllDrills = Handlers.prototype.getMyAllDrills.bind(this);
+    this.submitAnswer = Handlers.prototype.submitAnswer.bind(this);
+
+
+    this.getMyAllDrills = Handlers.prototype.getMyAllDrills.bind(this);
     this.goToSignIn = Handlers.prototype.goToSignIn.bind(this);
     this.goToSignUp = Handlers.prototype.goToSignUp.bind(this);
     this.goToProfile = Handlers.prototype.goToProfile.bind(this);
     this.goToAdminDrills = Handlers.prototype.goToAdminDrills.bind(this);
     this.goToForgotPassword = Handlers.prototype.goToForgotPassword.bind(this);
     this.goToAdminCreateDrillGroup = Handlers.prototype.goToAdminCreateDrillGroup.bind(this);
+
+    this.incrementIndex = Handlers.prototype.incrementIndex.bind(this);
 
   }
 
@@ -102,7 +112,7 @@ export default class Router extends React.Component {
                           }
                         )
                       }
-
+                      onStart={this.startDrill}
                     />;
         break;
       case '/leaderboard' === this.state.path:
@@ -148,7 +158,18 @@ export default class Router extends React.Component {
                   />;
         break;
       case '/drill_baby_drill' === this.state.path:
-        // toRender = <SignIn onSubmit={this.signIn} errors={[]}/>;
+        toRender = <WriteDrill
+                    onSubmit={this.submitAnswer}
+                    drillGroup={this.state.drillGroup}
+                    onNext={this.incrementIndex}
+                    index={this.state.index}
+                    drills={this.state.drillGroup.drills}
+                    correctAnswers={this.state.correctAnswers}
+                    max={this.state.drillGroup.drills.length}
+                    score={this.state.score}
+                    isCorrect={this.state.isCorrect}
+                    finishDrillGroup={this.finishDrillGroup}
+                  />;
         break;
       case /\/users\/\d+/.test(this.state.path):
         toRender = <DisplayMessage text="This will be a profile"/>;
