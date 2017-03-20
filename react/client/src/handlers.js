@@ -33,27 +33,51 @@ class Handlers {
 
   addNewDrill (event) {
     event.preventDefault();
-    // console.dir(event.target);
     const {target} = event;
     const description = target.querySelector('#new-drill-description').value;
+    target.querySelector('#new-drill-description').value = "";
     const points = target.querySelector('#drill-points').value;
-    // const solution = target.querySelector('#new-drill-solution').value;
+
+    target.querySelector('#drill-points').value = "";
     const drillGroupId = target.id;
-    console.log(description,points,drillGroupId);
+    // console.log(description,points,drillGroupId);
 
+    let solutionsArr = [];
+    target.querySelector('#new-drill-solution')
+        .querySelectorAll('textarea')
+        .forEach(solution=>{
+          solutionsArr.push({body: solution.value})
+          solution.value = "";
+        });
 
-    sendFetch(
+        // console.dir(solutionsArr);
+    return sendFetch(
       `/drill-groups/${drillGroupId}/drills`,
       'POST',
       {
         exercise:`${description}`,
-        points: `${points}`
-        // solutions: [{body: `${solution}`}]
+        points: `${points}`,
+        solutions: solutionsArr
       },
       {token: this.state.user.token}
     )
     .then((json)=>{
-      console.log(json)
+
+      console.log("here");
+      this.setState(Object.assign(
+        {},
+        this.state,
+        {
+          drillGroup: Object.assign(
+              {},
+              this.state.drillGroup,
+              {
+                drills:this.state.drillGroup.drills.concat(json)
+              }
+            )
+        }));
+
+
     })
     .catch(console.error)
   }
@@ -152,6 +176,31 @@ class Handlers {
     .catch(console.error)
   }
 
+  deleteDrill (event) {
+    event.preventDefault();
+    console.dir(event.target);
+    const {target} = event;
+    const drillId = target.parentNode.parentNode.parentNode.parentNode.id;
+    console.log(drillId);
+    
+    sendFetch(
+      `/drills/${drillId}`,
+      'DELETE',
+      {},
+      {token: this.state.user.token}
+    )
+    .then((json)=>{
+      console.log(json, "/drills/drillId: ", this.state.drill.id)
+      this.setState(Object.assign({},
+                  this.state,
+                  {
+                    path: `/admin/drill_group/${json.id}`,
+                    drillGroup: json
+                  }))
+    })
+    .catch(console.error)
+  }
+
   signIn  (event) {
     event.preventDefault();
     const {target} = event;
@@ -229,8 +278,23 @@ class Handlers {
   deleteDrillGroup (event) {
     event.preventDefault();
     const {target} = event;
-    const drillGroupId = target.parentNode.parentNode.parentNode.id
-    window.alert("Hey");
+    const drillgroupDiv = target.parentNode.parentNode.parentNode.parentNode
+    const drillGroupId = drillgroupDiv.id
+    sendFetch(`/drill-groups/${drillGroupId}`, 'DELETE', {}, {token:this.state.user.token})
+    .then((json)=>{
+      console.log(this.state.drillGroups);
+      function isNotDeleted(object){
+        console.log(object.id)
+        console.log(drillGroupId)
+        return object.id!=drillGroupId
+      };
+      let newdrillGroups = this.state.drillGroups.filter(isNotDeleted);
+      console.log(newdrillGroups);
+
+      this.setState(Object.assign({}, {drillGroups:newdrillGroups}, this.state.errors, this.state.user))
+    })
+    // drillgroupDiv.style.visibility='hidden';
+
   }
 
   getAdminAllDrills () {

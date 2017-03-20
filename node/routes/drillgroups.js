@@ -6,7 +6,6 @@ const router = express.Router();
 // models.DrillGroup ð gets DrillGroup model object
 const {DrillGroup, Drill, Solution} = require('../models/index');
 
-
 // Drills#create
 // PATH /drill-groups/:drillgroupId/drills METHOD: post
 router.post('/:drillgroupId/drills', function (req, res, next) {
@@ -19,7 +18,6 @@ router.post('/:drillgroupId/drills', function (req, res, next) {
     let jsonResponse = {};
     let drillId;
     let solutionsArray = [];
-
 
     Drill
     .create({exercise, points, DrillGroupId: drillgroupId})
@@ -179,7 +177,6 @@ router.put('/:id', function (req, res, next) {
     const {id} = req.params;
     const {name, description, level} = req.body;
 
-
     DrillGroup
     .findById(id)
     .then(drillgroup => drillgroup.update({name, description, level}))
@@ -204,7 +201,7 @@ router.delete('/:id', function(req, res, next) {
 
   if (is_admin) {
     const {id} = req.params;
-
+    console.log('hi Aldo')
     DrillGroup
     .findById(id)
     .then(drillgroup  => drillgroup.destroy())
@@ -220,8 +217,5 @@ router.delete('/:id', function(req, res, next) {
 function adminError(res) {
   return res.send(JSON.stringify({error: "You can't tho"}))
 }
-
-
-
 
 module.exports = router;
