@@ -125,7 +125,7 @@ render(){
         <div>
           <Button href="" onClick={this.addAnotherSolution}>
             Add Another Solution
-          </Button></span>
+          </Button> 
           <span style={style}>
             <Button bsStyle="danger" bsSize="medium" type="submit">
               Save
