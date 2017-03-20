@@ -28,9 +28,11 @@ router.patch('/:id/edit', function (req, res, next) {
 //drill#destroy
 //PATH /drills/:id
 //works
-router.delete('/drill-groups/:drillgroupId/drills/:id', function(req, res, next) {
+router.delete('/:id', function(req, res, next) {
   const {id} = req.params;
   // const id = req.params.id;
+
+  console.log("id", id);
   Drill
     .findById(id)
     .then(drill  => drill.destroy())
