@@ -10,6 +10,21 @@ export default class Topnav extends React.Component {
     this.rightNav = this.rightNav.bind(this);
   };
 
+  leftNav() {
+    console.log('left ',this.props.user);
+    if(this.props.user.is_admin){
+      return <div></div>
+    } else if (this.props.user.email){
+      return (<Nav>
+        <NavItem href="" onClick={this.props.handleDrills}><h4>Drillz</h4></NavItem>
+        <NavItem href="" onClick={this.props.handleLeaderboard}><h4>Leaderboard</h4></NavItem>
+      </Nav>
+      )
+    } else {
+      return <div></div>
+    }
+  }
+
   rightNav () {
     console.log(this.props.user);
     if(this.props.user.is_admin){
@@ -67,10 +82,7 @@ export default class Topnav extends React.Component {
          <h5>Codecore Drillz</h5>
         </Navbar.Header>
         <div style={linkstyle}>
-        <Nav>
-          <NavItem href="" onClick={this.props.handleDrills}><h4>Drillz</h4></NavItem>
-          <NavItem href="" onClick={this.props.handleLeaderboard}><h4>Leaderboard</h4></NavItem>
-        </Nav>
+          {this.leftNav()}
           {this.rightNav()}
        </div>
      </Navbar></div>
