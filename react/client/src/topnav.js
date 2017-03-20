@@ -42,7 +42,7 @@ export default class Topnav extends React.Component {
     const navstyle = {
       fontSize: '10em',
       height: '120px',
-      marginLeft: '-200px',
+      marginLeft: '10px',
      };
     const logostyle = {
       height: '100px'
@@ -51,7 +51,7 @@ export default class Topnav extends React.Component {
       fontSize: '10em'
      };
      const linkstyle = {
-      paddingTop: '20px'
+      paddingTop: '10px'
      };
 
     return <Navbar style={navstyle}  >
