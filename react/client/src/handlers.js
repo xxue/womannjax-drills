@@ -176,31 +176,6 @@ class Handlers {
     .catch(console.error)
   }
 
-  deleteDrill (event) {
-    event.preventDefault();
-    console.dir(event.target);
-    const {target} = event;
-    const drillId = target.parentNode.parentNode.parentNode.parentNode.id;
-    console.log(drillId);
-
-    sendFetch(
-      `/drills/${drillId}`,
-      'DELETE',
-      {},
-      {token: this.state.user.token}
-    )
-    .then((json)=>{
-      console.log(json, "/drills/drillId: ", this.state.drill.id)
-      this.setState(Object.assign({},
-                  this.state,
-                  {
-                    path: `/admin/drill_group/${json.id}`,
-                    drillGroup: json
-                  }))
-    })
-    .catch(console.error)
-  }
-
   signIn  (event) {
     event.preventDefault();
     const {target} = event;
@@ -286,6 +261,38 @@ class Handlers {
     })
   }
 
+  deleteDrill (event) {
+    event.preventDefault();
+    // window.alert("You've successfully called the handler") Fuck yes i did
+    const {target} = event;
+    const drillNode = target.parentNode.parentNode.parentNode.parentNode
+    const drillId = drillNode.id;
+    sendFetch(
+      `/drills/${drillId}`,
+      'DELETE',
+      {},
+      {token: this.state.user.token}
+    )
+    .then((json)=>{
+      function isNotDeleted(drill){
+          // console.log(drill.id)
+          // console.log(drillId)
+        return drill.id!=drillId
+      }
+      let newDrillGroup = this.state.drillGroup.drills.filter(isNotDeleted)
+      // console.log(this.state)
+      // console.log(newDrillGroup)
+      // console.log(this.state.drillGroups)
+      // console.log(this.state.errors)
+      // console.log(this.state.path)
+      // console.log(this.state.user)
+      this.setState(Object.assign({}, {drillGroup:{drills:newDrillGroup}}, {drillgroups:this.state.drillGroups}, this.state.errors, this.state.path, this.state.user))
+    })
+    .catch(console.error)
+    // drillNode.parentNode.style.visibility='hidden';
+
+  }
+
   deleteDrillGroup (event) {
     event.preventDefault();
     const {target} = event;
@@ -294,6 +301,7 @@ class Handlers {
     sendFetch(`/drill-groups/${drillGroupId}`, 'DELETE', {}, {token:this.state.user.token})
     .then((json)=>{
       console.log(this.state.drillGroups);
+
       function isNotDeleted(object){
         console.log(object.id)
         console.log(drillGroupId)

@@ -32,17 +32,22 @@ export default class Router extends React.Component {
     this.logout = Handlers.prototype.logout.bind(this);
     this.getAdminAllDrills = Handlers.prototype.getAdminAllDrills.bind(this);
     this.addNewDrill = Handlers.prototype.addNewDrill.bind(this);
+
     this.startDrill = Handlers.prototype.startDrill.bind(this);
     this.finishDrillGroup = Handlers.prototype.finishDrillGroup.bind(this);
 
-    this.deleteDrillGroup = Handlers.prototype.deleteDrillGroup.bind(this);
 
+    this.deleteDrillGroup = Handlers.prototype.deleteDrillGroup.bind(this);
     this.onDrillGroupView = Handlers.prototype.onDrillGroupView.bind(this);
     this.addNewDrill = Handlers.prototype.addNewDrill.bind(this);
+
     this.deleteDrill = Handlers.prototype.deleteDrill.bind(this);
+
     this.getMyAllDrills = Handlers.prototype.getMyAllDrills.bind(this);
     this.submitAnswer = Handlers.prototype.submitAnswer.bind(this);
 
+
+    this.getMyAllDrills = Handlers.prototype.getMyAllDrills.bind(this);
     this.goToSignIn = Handlers.prototype.goToSignIn.bind(this);
     this.goToSignUp = Handlers.prototype.goToSignUp.bind(this);
     this.goToProfile = Handlers.prototype.goToProfile.bind(this);
