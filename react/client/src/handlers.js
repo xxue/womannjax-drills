@@ -159,10 +159,37 @@ class Handlers {
     const password = target.querySelector('#formHorizontalPassword').value;
     sendFetch('/sessions','POST',{username: `${email}`,password:`${password}`})
     .then((json)=>{
-      this.setState({ path: json.path || '/sessions/new', user: json.user || {}, errors: json.errors || ['Could not verify your credentials']})
+      let path = '/sessions/new'
+      if (json){
+        if(json.token){
+          path = '/users/get-drill-groups';
+        } else {
+          path = '/account-pending'
+        }
+      }
+        this.setState(Object.assign(
+                          {},
+                          this.state,
+                          { path: path, user: json || {}}
+          )
+        );
     })
     .then(console.log(this.state))
     .catch(console.error)
+  }
+
+  getMyAllDrills () {
+    sendFetch(`/users/${this.state.user.id}/drill-groups`,'GET',{},{token: this.state.user.token })
+    .then(json=>{
+      this.setState(Object.assign(
+                        {},
+                        this.state,
+                        {
+                          path: `/users/${this.state.user.id}/drill_groups`,
+                          myDrillGroups: json.myDrillGroups,
+                          allDrillGroups: json.allDrillGroups
+                        }));
+    })
   }
 
   signUp  (event) {
