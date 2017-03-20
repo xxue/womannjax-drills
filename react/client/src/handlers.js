@@ -201,8 +201,15 @@ class Handlers {
   deleteDrillGroup (event) {
     event.preventDefault();
     const {target} = event;
-    const drillGroupId = target.parentNode.parentNode.parentNode.id
-    window.alert("Hey");
+    const drillgroupDiv = target.parentNode.parentNode.parentNode.parentNode
+    const drillGroupId = drillgroupDiv.id
+    sendFetch(`/drill-groups/${drillGroupId}`, 'DELETE', {}, {token:this.state.user.token})
+    .then((json)=>{
+      console.log(this.state.drillGroups)
+      this.setState(Object.assign({}, this.state.drillGroups, this.state.errors, this.state.user))
+    })
+    drillgroupDiv.style.visibility='hidden';
+
   }
 
   goToAdminDrills (event) {
