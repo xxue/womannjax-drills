@@ -274,7 +274,8 @@ class Handlers {
 
   logout (event) {
     event.preventDefault();
-    this.setState(Object.assign({},{ path: '/', user: {}, errors: [] }));
+    this.setState(Object.assign({},{ path: '/', user: {}, errors: [] }))
+    .then(json => console.log(json))
   }
 
 }
