@@ -173,13 +173,12 @@ router.post('/:UserId/drill-groups/:DrillGroupId/', function (req, res, next) {
   mydrillExists(UserId,DrillGroupId)
   .then(drillExists=>{
     if(token != null && !drillExists){
-      const {attempts, score}  = req.body;
       MyDrills
       .create({
         UserId,
         DrillGroupId,
-        attempts,
-        score,
+        attempts: 0,
+        score: 0,
         drillsVisible:true
       })
       .then(myDrills => {

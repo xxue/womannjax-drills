@@ -32,9 +32,11 @@ export default class Router extends React.Component {
     this.logout = Handlers.prototype.logout.bind(this);
     this.getAdminAllDrills = Handlers.prototype.getAdminAllDrills.bind(this);
     this.addNewDrill = Handlers.prototype.addNewDrill.bind(this);
+    this.addToMyDrills = Handlers.prototype.addToMyDrills.bind(this);
 
     this.startDrill = Handlers.prototype.startDrill.bind(this);
     this.finishDrillGroup = Handlers.prototype.finishDrillGroup.bind(this);
+    this.removeFromMyDrills = Handlers.prototype.removeFromMyDrills.bind(this);
 
 
     this.deleteDrillGroup = Handlers.prototype.deleteDrillGroup.bind(this);
@@ -113,6 +115,8 @@ export default class Router extends React.Component {
                         )
                       }
                       onStart={this.startDrill}
+                      onAddToMyDrills={this.addToMyDrills}
+                      onRemove={this.removeFromMyDrills}
                     />;
         break;
       case '/leaderboard' === this.state.path:

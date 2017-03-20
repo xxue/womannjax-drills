@@ -422,6 +422,37 @@ class Handlers {
           })
   }
 
+  addToMyDrills (event) {
+    event.preventDefault();
+    const {target} = event;
+    const drillGroupId = target.parentNode.id;
+    sendFetch(`/users/${this.state.user.id}/drill-groups/${drillGroupId}`,
+      'post',
+      {},
+      {
+        token: this.state.user.token
+      })
+      .then(()=>{
+        this.setState(Object.assign({},this.state,{path:'/users/get-drill-groups'}))
+      })
+
+  }
+
+  removeFromMyDrills (event) {
+    event.preventDefault();
+    const {target} = event;
+    const drillGroupId = target.parentNode.id;
+    sendFetch(`/my-drills/${this.state.user.id}/drill-groups/${drillGroupId}`,
+      'put',
+      {},
+      {
+        token: this.state.user.token
+      })
+    .then(()=>{
+      this.setState(Object.assign({},this.state,{path:'/users/get-drill-groups'}))
+    })
+  }
+
 }
 
 module.exports = Handlers;
