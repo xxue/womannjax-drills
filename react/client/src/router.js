@@ -32,6 +32,7 @@ export default class Router extends React.Component {
     this.logout = Handlers.prototype.logout.bind(this);
     this.getAdminAllDrills = Handlers.prototype.getAdminAllDrills.bind(this);
     this.addNewDrill = Handlers.prototype.addNewDrill.bind(this);
+    this.startDrill = Handlers.prototype.startDrill.bind(this);
 
     this.deleteDrillGroup = Handlers.prototype.deleteDrillGroup.bind(this);
 
@@ -39,6 +40,7 @@ export default class Router extends React.Component {
     this.addNewDrill = Handlers.prototype.addNewDrill.bind(this);
     this.deleteDrill = Handlers.prototype.deleteDrill.bind(this);
     this.getMyAllDrills = Handlers.prototype.getMyAllDrills.bind(this);
+    this.submitAnswer = Handlers.prototype.submitAnswer.bind(this);
 
     this.goToSignIn = Handlers.prototype.goToSignIn.bind(this);
     this.goToSignUp = Handlers.prototype.goToSignUp.bind(this);
@@ -46,6 +48,8 @@ export default class Router extends React.Component {
     this.goToAdminDrills = Handlers.prototype.goToAdminDrills.bind(this);
     this.goToForgotPassword = Handlers.prototype.goToForgotPassword.bind(this);
     this.goToAdminCreateDrillGroup = Handlers.prototype.goToAdminCreateDrillGroup.bind(this);
+
+    this.incrementIndex = Handlers.prototype.incrementIndex.bind(this);
 
   }
 
@@ -102,7 +106,7 @@ export default class Router extends React.Component {
                           }
                         )
                       }
-
+                      onStart={this.startDrill}
                     />;
         break;
       case '/leaderboard' === this.state.path:
@@ -148,7 +152,16 @@ export default class Router extends React.Component {
                   />;
         break;
       case '/drill_baby_drill' === this.state.path:
-        // toRender = <SignIn onSubmit={this.signIn} errors={[]}/>;
+        toRender = <WriteDrill
+                    onSubmit={this.submitAnswer}
+                    drillGroup={this.state.drillGroup}
+                    onNext={this.incrementIndex}
+                    index={this.state.index}
+                    drills={this.state.drillGroup.drills}
+                    correctAnswers={this.state.correctAnswers}
+                    max={this.state.drillGroup.drills.length}
+                    isCorrect={this.state.isCorrect}
+                  />;
         break;
       case /\/users\/\d+/.test(this.state.path):
         toRender = <DisplayMessage text="This will be a profile"/>;

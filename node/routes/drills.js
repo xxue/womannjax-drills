@@ -42,5 +42,27 @@ router.delete('/:id', function(req, res, next) {
     .catch(err => next(err))
 });
 
+router.post('/:id', function(req, res, next) {
+  const {id} = req.params;
+  const {userAnswer} = req.body;
+
+  // const id = req.params.id;
+  Drill
+    .findById(id)
+    .then(drill  => drill.getSolutions())
+    .then(solutions=>{
+      let isCorrect = false;
+      solutions.forEach(solution=>{
+        if (solution.body == userAnswer) {
+          isCorrect = true;
+        }
+      })
+      res.send(JSON.stringify({
+        isCorrect: isCorrect,
+        correctAnswers: solutions
+      }));
+    })
+});
+
 
 module.exports = router;
