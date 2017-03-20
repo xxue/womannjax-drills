@@ -1,13 +1,16 @@
 import React from 'react';
 import {Col, Row, Grid} from 'react-bootstrap';
 
+
+
 function getUserData() {
   let userArray = (["Neal", "XinXin", "Max", "Aldo", "Nicole", "John", "Annie"]);
   return userArray;
 }
 
- function userBoard () {
-  let userArray = getUserData();
+ function userBoard (users) {
+  let userArray = users
+  console.log(userArray);
   const userboardstyle={
     paddingLeft: '100px'
   }
@@ -22,10 +25,10 @@ function getUserData() {
   return<div style={userboardstyle}>
     <h1>LeaderBoard</h1>
     <table>
-      { userArray.map((user, i) =>
-        <tr key={i} >
-          <td style={tablestyle}> {user} </td>
-          <td style={statsstyle}> {user} / {user}</td>
+      { users.map((user) =>
+        <tr key={user.id} >
+          <td style={tablestyle}> {user.id} </td>
+          <td style={statsstyle}> {user.first_name} {user.last_name} / {user.score}</td>
         </tr>
       )}
     </table>
@@ -53,14 +56,29 @@ export default class Leaderboard extends React.Component {
 
   constructor (props) {
     super (props);
-    this.state = null;
+    this.state = {
+      users: props.users
+    };
+
   };
+
+  componentDidMount() {
+    console.log('attempt to fetch')
+    fetch('http://localhost:3000/users.json')
+    .then((response) => response.json())
+    .then((json)=>{
+      console.log(json)
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+  }
 
   render (){
     return <Grid>
             <Row className="show-grid">
               <Col xs={8}>
-                {userBoard()}
+                {userBoard(this.state.users)}
               </Col>
               <Col xs={4}>
                 {userModule()}

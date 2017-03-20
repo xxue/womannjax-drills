@@ -8,6 +8,15 @@ module.exports = function(sequelize, DataTypes) {
     description: DataTypes.TEXT,
     level: DataTypes.STRING
   }, {
+    instanceMethods:{
+      toJSON: function(){
+        return {
+                id: this.id,
+                name: this.name,
+                level: this.level
+              }
+      }
+    },
     classMethods: {
       associate: function(models) {
         // associations can be defined here

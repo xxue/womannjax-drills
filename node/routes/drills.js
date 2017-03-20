@@ -6,23 +6,6 @@ const {Drill} = require('../models/index');
 //     res.send ({name:"hello"})
 // })
 
-//drill#edit
-//PATH /drills/:id/edit
-//works
-router.get('/:id/edit', function (req, res, next) {
-  const {id} = req.params;
-  console.log(req.params);
-  Drill
-    .findById(id)
-    .then(drill => res.send(JSON.stringify({
-        exercise: drill.exercise,
-        points: drill.points,
-        DrillGroupId: drill.DrillGroupId
-      }
-    )))
-    .catch(err => next(err))
-})
-
 //drill#update
 //PATH /drills/:id/edit
 //works
@@ -45,7 +28,7 @@ router.patch('/:id/edit', function (req, res, next) {
 //drill#destroy
 //PATH /drills/:id
 //works
-router.delete('/:id', function(req, res, next) {
+router.delete('/drill-groups/:drillgroupId/drills/:id', function(req, res, next) {
   const {id} = req.params;
   // const id = req.params.id;
   Drill

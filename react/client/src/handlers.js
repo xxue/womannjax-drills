@@ -29,6 +29,7 @@ function sendFetch (path, method, body, user = {}){
 
 class Handlers {
 
+
   addNewDrill (event) {
       event.preventDefault();
       // console.dir(event.target);
@@ -55,6 +56,22 @@ class Handlers {
       })
       .catch(console.error)
     }
+
+  handleLeaderBoard(event){
+    event.preventDefault();
+    sendFetch('/usersboard','GET',{},{token: this.state.user.token})
+      .then(users=>{
+        this.setState(Object.assign(
+          {},
+          this.state,
+          {
+            path: '/leaderboard',
+            users: users
+          }
+        ))
+      })
+  }
+
 
   updateDrillGroup (event) {
     event.preventDefault();
@@ -146,6 +163,16 @@ class Handlers {
     .catch(console.error)
   }
 
+  startDrill (event){
+    event.preventDefault();
+    const {currentTarget, target} = event;
+    const drillId = currentTarget.parentNode.id;
+    sendFetch(`/drill_group/${drillId}/drills`, 'GET', {}, {})
+    .then((json)=>{
+      this.setState({path: json.path, })
+    })
+  }
+
   goToSignIn (event) {
     event.preventDefault();
     this.setState(Object.assign({},{ path: '/sessions/new', user: this.state.user, errors: [] }));
@@ -180,7 +207,6 @@ class Handlers {
     event.preventDefault();
     this.setState(Object.assign({},{ path: '/', user: {}, errors: [] }));
   }
-
 
 }
 
