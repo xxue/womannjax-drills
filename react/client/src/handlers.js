@@ -161,7 +161,9 @@ class Handlers {
     .then((json)=>{
       let path = '/sessions/new'
       if (json){
-        if(json.token){
+        if(json.is_admin){
+          path = '/admin/get-drill-groups';
+        } else if(json.token){
           path = '/users/get-drill-groups';
         } else {
           path = '/account-pending'
@@ -231,13 +233,17 @@ class Handlers {
     window.alert("Hey");
   }
 
-  goToAdminDrills (event) {
-    event.preventDefault();
+  getAdminAllDrills () {
     sendFetch('/drill-groups','GET',{},{token: this.state.user.token})
     .then(json=>{
       console.log(json);
       this.setState(Object.assign({},this.state,{ path: `/admin/drill_board`, drillGroups: json }));
     })
+  }
+
+  goToAdminDrills(event){
+    event.preventDefault();
+    this.setState(Object.assign({},this.state, { path: '/admin/get-drill-groups'} ));
   }
 
   goToSignIn (event) {
