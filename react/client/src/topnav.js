@@ -16,6 +16,7 @@ export default class Topnav extends React.Component {
       return (
 
         <Nav pullRight>
+          <NavItem href="" onClick={this.props.goToUsers}><h4>Users</h4></NavItem>
           <NavItem href="" onClick={this.props.goToAdminDrills}><h4>Drillz</h4></NavItem>
           <NavItem href="" onClick={this.props.logout}><h4>Logout</h4></NavItem>
         </Nav>

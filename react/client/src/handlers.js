@@ -323,6 +323,27 @@ class Handlers {
 
   }
 
+  verifyUser(event) {
+    event.preventDefault();
+    const {target} = event;
+    const userId = target.getAttribute('data-id');
+    sendFetch(`/admin/users/${userId}`,'POST',{},{token:this.state.user.token})
+    .then(()=>{
+      this.getVerifyUsers(event);
+    })
+  }
+
+  getVerifyUsers (event) {
+    event.preventDefault();
+    sendFetch('/admin/users','GET',{},{token: this.state.user.token})
+    .then(json=>{
+      console.log(json)
+      this.setState(Object.assign({},this.state,{path: '/admin/users',
+      users: json
+      }))
+    })
+  }
+
   submitAnswer (event) {
     event.preventDefault();
     const {target} = event;

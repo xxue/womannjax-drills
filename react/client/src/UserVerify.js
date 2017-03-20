@@ -3,79 +3,141 @@ import {Form, FormGroup, Col, Button, ControlLabel, Checkbox, FormControl} from 
 
 // THIS IS A WORK IN PROGRESS.
 
+class User extends React.Component{
+
+  constructor(props){
+    super(props);
+    // this.renderUser = this.renderUser.bind(this);
+    // this.renderUsers = this.renderUsers.bind(this);
+  }
+
+  render(){
+    const form = {
+      display: 'flex'
+    };
+    const space = {
+      margin: '10px 20px'
+    }
+    return (
+
+      <Form horizontal style={form}>
+        <FormGroup controlId="formHorizontalEmail">
+          <Col componentClass={ControlLabel} style={space} sm={2}>
+            {this.props.user.first_name}
+          </Col>
+        </FormGroup>
+
+        <FormGroup controlId="formHorizontalPassword">
+          <Col componentClass={ControlLabel} style={space} sm={2}>
+            {this.props.user.last_name}
+          </Col>
+        </FormGroup>
+
+        <FormGroup controlId="formHorizontalPassword">
+          <Col componentClass={ControlLabel} style={space} sm={2}>
+            {this.props.user.email}
+          </Col>
+        </FormGroup>
+        <div style={form}>
+          <Button style={space} data-id={this.props.user.id} onClick={this.props.verifyUser} href="#">Verify</Button>
+          <Button style={space} data-id={this.props.user.id} onClick={this.props.deleteUser} href="#">Delete</Button>
+        </div>
+      </Form>
+    )
+
+  }
+}
+
+class Users extends React.Component {
+
+  constructor(props){
+    super(props);
+    // this.renderUser = this.renderUser.bind(this);
+    // this.renderUsers = this.renderUsers.bind(this);
+  }
+
+  renderUsers( users) {
+    let retArr = [];
+    users.forEach(user=>{
+      retArr.push(<User
+            user={user}
+            verifyUser={this.props.verifyUser}
+            deleteUser={this.props.deleteUser}
+           />)
+    })
+    return retArr;
+  }
+
+  render() {
+    return <div>
+            {this.renderUsers(this.props.users)}
+          </div>
+  }
+
+}
+
 export default class UserVerify extends React.Component {
 
- render () {
-   const formInstance = (
-     <Form horizontal onSubmit={this.props.onSubmit}>
-       <FormGroup controlId="formHorizontalEmail">
-         <Col componentClass={ControlLabel} sm={2}>
-           First Name
-         </Col>
-         <Col sm={10}>
-           <FormControl type="email" placeholder="Email" />
-         </Col>
-       </FormGroup>
+  constructor(props){
+    super(props);
+    // this.renderUser = this.renderUser.bind(this);
+    // this.renderUsers = this.renderUsers.bind(this);
+  }
 
-       <FormGroup controlId="formHorizontalPassword">
-         <Col componentClass={ControlLabel} sm={2}>
-           Last Name
-         </Col>
-         <Col sm={10}>
-           <FormControl type="password" placeholder="Password" />
-         </Col>
-       </FormGroup>
+  render() {
+    return <div>
+            <Users
+              users={this.props.users}
+              verifyUser={this.props.verifyUser}
+              deleteUser={this.props.deleteUser}
+            />
+          </div>
+  }
 
-       <FormGroup controlId="formHorizontalPassword">
-         <Col componentClass={ControlLabel} sm={2}>
-           Email
-         </Col>
-         <Col sm={10}>
-           <FormControl type="password" placeholder="Password" />
-         </Col>
-       </FormGroup>
+//   renderUsers(){
+//     let retArr = [];
+//     console.log(this.props.users)
+//     this.props.users.forEach(user=>{
+//       retArr.push(this.renderUsers(user));
+//     })
+//     return retArr;
+//   }
+//
+//   renderUser(user){
 
-       <FormGroup>
-         <Col smOffset={2} sm={10}>
-           <Checkbox>Verify User</Checkbox>
-           <Checkbox>Delete User</Checkbox>
-         </Col>
-       </FormGroup>
-
-
-             <table>
-                 <thead>
-                     <tr>
-                         <th>First_Name</th>
-                         <th>Last_Name</th>
-                         <th>Email</th>
-                     </tr>
-                 </thead>
-                 <tbody>{rows}</tbody>
-             </table>
-
-     </Form>
-);
-
-
-
-const main={
-   'display':'flex',
-   'flex-direction':'column'
-}
-
-const links={
- 'display':'flex',
- 'flex-direction': 'row',
- 'justify-content': 'space-around'
-}
-
-   return <div style={main} className="container">
-             <h2>Pending Users</h2>
-             {formInstance}
-             <div style={links}>
-
-             </div>
-           </div>
- }
+//     return(
+//
+//
+//       </Form>
+//     )
+//   }
+//
+//
+//  render () {
+//    const form = {
+//      display: 'flex'
+//    };
+//
+//
+//
+//
+//
+// const main={
+//    'display':'flex',
+//    'flex-direction':'column'
+// }
+//
+// const links={
+//  'display':'flex',
+//  'flex-direction': 'row',
+//  'justify-content': 'space-around'
+// }
+//    return <div style={main} className="container">
+//              <h2>Pending Users</h2>
+//              {this.renderUsers()}
+//              <div style={links}>
+//
+//              </div>
+//            </div>
+ // }
 }
