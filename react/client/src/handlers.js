@@ -38,7 +38,7 @@ class Handlers {
     const {target} = event;
     const description = target.querySelector('#new-drill-description').value;
     const points = target.querySelector('#drill-points').value;
-    // const solution = target.querySelector('#new-drill-solution').value;
+    const solution = target.querySelector('#new-drill-solution').value;
     const drillGroupId = target.id;
     console.log(description,points,drillGroupId);
 
@@ -48,13 +48,16 @@ class Handlers {
       'POST',
       {
         exercise:`${description}`,
-        points: `${points}`
-        // solutions: [{body: `${solution}`}]
+        points: `${points}`,
+        solutions: [{body: `${solution}`}]
       },
       {token: this.state.user.token}
     )
     .then((json)=>{
       console.log(json)
+      this.setState(Object.assign({},
+                    this.state,
+                    {drillGroups: Object.assign({},this.drillGroup,{drills:this.drillGroup.drills.push(json) })}));
     })
     .catch(console.error)
   }
@@ -150,6 +153,31 @@ class Handlers {
     .then((json)=>{
       console.log(json);
       this.setState(Object.assign({},this.state,{ path: `/admin/drill_group/${json.id}`, drillGroup: json }));
+    })
+    .catch(console.error)
+  }
+
+  deleteDrill (event) {
+    event.preventDefault();
+    console.dir(event.target);
+    const {target} = event;
+    const drillId = target.parentNode.parentNode.parentNode.parentNode.id;
+    console.log(drillId);
+    
+    sendFetch(
+      `/drills/${drillId}`,
+      'DELETE',
+      {},
+      {token: this.state.user.token}
+    )
+    .then((json)=>{
+      console.log(json, "/drills/drillId: ", this.state.drill.id)
+      this.setState(Object.assign({},
+                  this.state,
+                  {
+                    path: `/admin/drill_group/${json.id}`,
+                    drillGroup: json
+                  }))
     })
     .catch(console.error)
   }

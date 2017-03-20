@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Row, Panel, ButtonToolbar, Button, Accordion, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
+import { Grid, Row, Panel, ButtonToolbar, Button, Accordion, Form, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 
 class Drill extends React.Component {
   constructor(props){
@@ -15,14 +15,14 @@ class Drill extends React.Component {
 
     return (
       <Accordion>
-        <Panel header={"< Drill 1 >"} eventKey="1">
+        <Panel id={this.state.drill.id} header={`Drill ${this.props.index}`} eventKey="1">
           <div>
             {this.state.drill.exercise}
           </div>
           <div style={style}>
             <ButtonToolbar>
               <Button href="#">Edit</Button>
-              <Button href="#">Delete</Button>
+              <Button onClick={this.props.deleteDrill} href="#">Delete</Button>
             </ButtonToolbar>
           </div>
         </Panel>
@@ -36,8 +36,8 @@ export default props => {
 
   function renderDrills(drills) {
     let drillsArr = [];
-    drills.forEach(drill=>{
-      drillsArr.push(<Drill drill={drill}/>)
+    drills.forEach((drill, i)=>{
+      drillsArr.push(<Drill index={i+1} drill={drill} />)
     })
     return drillsArr;
   }
@@ -76,10 +76,18 @@ export default props => {
       <br />
 
       <Panel header={"Add New Drill"}>
+        <Form onSubmit={props.onSubmit} id={props.drillGroup.id}>
         <FormGroup controlId="new-drill-description">
           <ControlLabel>Description</ControlLabel>
           <FormControl componentClass="textarea" placeholder="e.g. Drills for basic routing" />
         </FormGroup>
+
+        <FieldGroup
+          id="drill-points"
+          type="integer"
+          label="Points"
+          placeholder="e.g. 10"
+        />
 
         <FormGroup controlId="new-drill-solution">
           <ControlLabel>Solution</ControlLabel>
@@ -97,6 +105,7 @@ export default props => {
             Save
           </Button>
         </div>
+      </Form>
       </Panel>
     </Grid>
   )
