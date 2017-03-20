@@ -1,16 +1,23 @@
 import React from 'react';
 import { Grid, Row, Panel, ButtonToolbar, Button, Accordion, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 
-class DrillGroup extends React.Component {
+class Drill extends React.Component {
   constructor(props){
-    
+    super(props);
+    this.state = { drill: props.drill }
   }
   render () {
+
+    const style = {
+      display: 'flex',
+      justifyContent: 'flex-end'
+    };
+    
     return (
       <Accordion>
         <Panel header={"< Drill 1 >"} eventKey="1">
           <div>
-            {"< Drill: Create a route to do a 'get' request that goes to the campaigns controller index action >"}
+            {this.state.drill.exercise}
           </div>
           <div style={style}>
             <ButtonToolbar>
@@ -24,7 +31,17 @@ class DrillGroup extends React.Component {
   }
 }
 
+
 export default props => {
+
+  function renderDrills(drills) {
+    let drillsArr = [];
+    drills.forEach(drill=>{
+      drillsArr.push(<Drill drill={drill}/>)
+    })
+    return drillsArr;
+  }
+
   const style = {
     display: 'flex',
     justifyContent: 'flex-end'
@@ -53,10 +70,9 @@ export default props => {
           Edit Group
         </Button>
       </Row>
-
       <br />
 
-
+      {renderDrills(props.drillGroup.drills)}
       <br />
 
       <Panel header={"Add New Drill"}>

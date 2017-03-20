@@ -58,7 +58,8 @@ router.post('/', function (req, res, next) {
         { id: drillGroup.id,
           name: name,
           description: description,
-          level: level
+          level: level,
+          drills: []
       }));
     })
     // next is a function passed to this callback that will
