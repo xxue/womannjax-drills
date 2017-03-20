@@ -12,6 +12,7 @@ import UserDrillBoard from './UserDrillBoard';
 import CreateDrillGroup from './CreateDrillGroup';
 import ManageDrillGroups from './ManageDrillGroups';
 import ShowDrillGroup from './ShowDrillGroup';
+import UserVerify from './UserVerify';
 
 
 import Handlers from './handlers';
@@ -37,6 +38,7 @@ export default class Router extends React.Component {
     this.startDrill = Handlers.prototype.startDrill.bind(this);
     this.finishDrillGroup = Handlers.prototype.finishDrillGroup.bind(this);
     this.removeFromMyDrills = Handlers.prototype.removeFromMyDrills.bind(this);
+    this.getVerifyUsers = Handlers.prototype.getVerifyUsers.bind(this);
 
 
     this.deleteDrillGroup = Handlers.prototype.deleteDrillGroup.bind(this);
@@ -44,6 +46,7 @@ export default class Router extends React.Component {
     this.addNewDrill = Handlers.prototype.addNewDrill.bind(this);
 
     this.deleteDrill = Handlers.prototype.deleteDrill.bind(this);
+    this.verifyUser = Handlers.prototype.verifyUser.bind(this);
 
     this.getMyAllDrills = Handlers.prototype.getMyAllDrills.bind(this);
     this.submitAnswer = Handlers.prototype.submitAnswer.bind(this);
@@ -146,6 +149,13 @@ export default class Router extends React.Component {
                       drillGroup={{}}
                     />;
         break;
+      case '/admin/users' === this.state.path:
+        toRender = <UserVerify
+                      verifyUser={this.verifyUser}
+                      // deleteUser={this.deleteUser}
+                      users={this.state.users}
+                    />;
+        break;
       case /\/admin\/drill_group\/\d+/.test(this.state.path):
         toRender = <ShowDrillGroup
                       drillGroup={this.state.drillGroup}
@@ -194,6 +204,7 @@ export default class Router extends React.Component {
             goToAdminDrills={this.goToAdminDrills}
             logout={this.logout}
             handleLeaderboard={this.goToLeaderboard}
+            goToUsers={this.getVerifyUsers}
           />
           {toRender}
         </div>
