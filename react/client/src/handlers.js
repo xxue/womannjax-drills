@@ -244,6 +244,8 @@ class Handlers {
     event.preventDefault();
     const {currentTarget, target} = event;
     const drillGroupId = currentTarget.parentNode.id;
+    const myDrillId = currentTarget.parentNode.getAttribute('data-id');
+    const attempts = currentTarget.parentNode.getAttribute('data-attempts');
     sendFetch(`/drill-groups/${drillGroupId}`, 'GET', {}, {token:this.state.user.token})
     .then((json)=>{
       console.log(json)
@@ -255,7 +257,9 @@ class Handlers {
           drillGroup: json,
           index: 0,
           correctAnswers: [],
-          score: 0
+          score: 0,
+          myDrillId: myDrillId,
+          attempts: attempts
         }
       ))
     })
@@ -407,7 +411,50 @@ class Handlers {
 
   finishDrillGroup (event) {
     event.preventDefault();
-    sendFetch(`/my-drills/${this.state.myDrillsId}`);
+    sendFetch(`/my-drills/${this.state.myDrillId}`,'PUT',
+          {
+            attempts: parseInt(this.state.attempts) + 1,
+            score: this.state.score
+          })
+          .then(json=>{
+            this.setState(Object.assign(
+              {},
+              this.state,
+            {
+              path: '/users/get-drill-groups'
+            }))
+          })
+  }
+
+  addToMyDrills (event) {
+    event.preventDefault();
+    const {target} = event;
+    const drillGroupId = target.parentNode.id;
+    sendFetch(`/users/${this.state.user.id}/drill-groups/${drillGroupId}`,
+      'post',
+      {},
+      {
+        token: this.state.user.token
+      })
+      .then(()=>{
+        this.setState(Object.assign({},this.state,{path:'/users/get-drill-groups'}))
+      })
+
+  }
+
+  removeFromMyDrills (event) {
+    event.preventDefault();
+    const {target} = event;
+    const drillGroupId = target.parentNode.id;
+    sendFetch(`/my-drills/${this.state.user.id}/drill-groups/${drillGroupId}`,
+      'put',
+      {},
+      {
+        token: this.state.user.token
+      })
+    .then(()=>{
+      this.setState(Object.assign({},this.state,{path:'/users/get-drill-groups'}))
+    })
   }
 
 }

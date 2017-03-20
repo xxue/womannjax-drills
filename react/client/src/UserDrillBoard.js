@@ -15,21 +15,22 @@ class MyDrill extends React.Component {
       'font-size': '3.1vw'
     }
     // FUNCTIONS
-
+    console.log(this.props);
     // RETURN
-    return (<div style={drillGroup} id={this.props.id}>
+
+    return (<div style={drillGroup} data-id={this.props.myDrillsId} data-attempts={this.props.attempts} id={this.props.id}>
       <h3 style={h3}>{this.props.name}</h3>
-      <p>Taken: {this.props.attempts} Times</p>
-      <p>{this.props.score}%</p>
+      <p>Taken: {this.props.attempts} Time(s)</p>
+      <p>Points: {this.props.score}</p>
       <Button onClick={this.props.onStart}>Start</Button>
-      <Button>Remove</Button>
+      <Button onClick={this.props.onRemove}>Remove</Button>
     </div>)
   }
 }
 
 // render a single drill group in AllDrillz
 
-function AllDrill ({id, name}){
+function AllDrill ({id, name}, onAddToMyDrills){
 
   // STYLES
   const drillGroup= {
@@ -45,8 +46,10 @@ function AllDrill ({id, name}){
   // RETURN
 
   return (<div style={drillGroup} id={id}>
+
               <h3 style={h3}>{name}</h3>
-              <Button>Add To My Drillz</Button>
+              <Button onClick={onAddToMyDrills}>Add To My Drillz</Button>
+
           </div>)
 }
 
@@ -74,14 +77,20 @@ export default class UserDrillBoard extends React.Component {
     // loop over array of drillGroups and call MyDrill every time,
     //  using appropriate params
     for (let i=0;i<DrillGroups.length; i++){
-      const {id, name, attempts, score} = DrillGroups[i];
-      MyDrillArray.push(<MyDrill
-                          id={id}
-                          name={name}
-                          attempts={attempts}
-                          score={score}
-                          onStart={this.props.onStart}
-                        />);
+      console.log('-----------', DrillGroups[i]);
+      const {myDrillsId, DrillGroupId, name, attempts, score} = DrillGroups[i];
+      console.dir(DrillGroups[i]);
+      if (DrillGroups[i].drillsVisible){
+        MyDrillArray.push(<MyDrill
+          id={DrillGroupId}
+          myDrillsId={myDrillsId}
+          name={name}
+          attempts={attempts}
+          score={score}
+          onStart={this.props.onStart}
+          onRemove={this.props.onRemove}
+        />);
+      }
     }
     return MyDrillArray
   }
@@ -93,7 +102,7 @@ export default class UserDrillBoard extends React.Component {
     //  using appropriate title param
 
     for (let i=0;i<DrillGroups.length;i++){
-      AllDrillArray.push(AllDrill(DrillGroups[i]))
+      AllDrillArray.push(AllDrill(DrillGroups[i],this.props.onAddToMyDrills))
 
     }
 

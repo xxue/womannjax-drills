@@ -79,6 +79,17 @@ router.get('/drill-groups/', function (req, res, next) {
     .catch(err => next(err))
 });
 
+router.put('/:id',function(req,res,next){
+  const {id} = req.params;
+  const {attempts, score} = req.body;
+  MyDrills
+    .find({where: {id: id}})
+    .then(myDrill=>{
+      myDrill.update({attempts:attempts,score:score})
+    })
+    .then(res.send(JSON.stringify({})))
+});
+
 
 function adminError(res) {
   return res.send(JSON.stringify({error: "You can't tho"}))
