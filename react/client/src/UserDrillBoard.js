@@ -78,12 +78,12 @@ export default class UserDrillBoard extends React.Component {
     //  using appropriate params
     for (let i=0;i<DrillGroups.length; i++){
       console.log('-----------', DrillGroups[i]);
-      const {myDrillsId, DrillGroupId, name, attempts, score} = DrillGroups[i];
+      const {id, DrillGroupId, name, attempts, score} = DrillGroups[i];
       console.dir(DrillGroups[i]);
       if (DrillGroups[i].drillsVisible){
         MyDrillArray.push(<MyDrill
           id={DrillGroupId}
-          myDrillsId={myDrillsId}
+          myDrillsId={id}
           name={name}
           attempts={attempts}
           score={score}
