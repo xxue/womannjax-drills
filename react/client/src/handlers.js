@@ -23,7 +23,7 @@ function sendFetch (path, method, body, user = {}){
   return fetch(`${BASE_URL}${path}`,req)
   .then(r=>{
     if(r.status === 400 || r.status === 401) {
-      return {};
+      return null;
     }
     return r.json();
   })
@@ -192,6 +192,8 @@ class Handlers {
         } else {
           path = '/account-pending'
         }
+      } else {
+        alert('Username and/or Password do not match');
       }
         this.setState(Object.assign(
                           {},
@@ -207,13 +209,15 @@ class Handlers {
   getMyAllDrills () {
     sendFetch(`/my-drills/drill-groups`,'GET',{},{token: this.state.user.token })
     .then(json=>{
+      let t = this.state.t || 0;
       this.setState(Object.assign(
                         {},
                         this.state,
                         {
                           path: `/users/${this.state.user.id}/drill_groups`,
                           myDrillGroups: json.myDrillGroups,
-                          allDrillGroups: json.allDrillGroups
+                          allDrillGroups: json.allDrillGroups,
+                          t: t + 1
                         }));
     })
   }
@@ -283,14 +287,9 @@ class Handlers {
           // console.log(drillId)
         return drill.id!=drillId
       }
-      let newDrillGroup = this.state.drillGroup.drills.filter(isNotDeleted)
-      // console.log(this.state)
-      // console.log(newDrillGroup)
-      // console.log(this.state.drillGroups)
-      // console.log(this.state.errors)
-      // console.log(this.state.path)
-      // console.log(this.state.user)
-      this.setState(Object.assign({}, {drillGroup:{drills:newDrillGroup}}, {drillgroups:this.state.drillGroups}, this.state.errors, this.state.path, this.state.user))
+      let newDrillGroups = this.state.drillGroup.drills.filter(isNotDeleted);
+
+
     })
     .catch(console.error)
     // drillNode.parentNode.style.visibility='hidden';
@@ -304,17 +303,21 @@ class Handlers {
     const drillGroupId = drillgroupDiv.id
     sendFetch(`/drill-groups/${drillGroupId}`, 'DELETE', {}, {token:this.state.user.token})
     .then((json)=>{
-      console.log(this.state.drillGroups);
+      // console.log(this.state.drillGroups);
+      //
+      // function isNotDeleted(object){
+      //   console.log(object.id)
+      //   console.log(drillGroupId)
+      //   return object.id!=drillGroupId
+      // };
+      // let newdrillGroups = this.state.drillGroups.filter(isNotDeleted);
+      this.setState(Object.assign(
+        {},
+        this.state,
+        { path: '/admin/get-drill-groups' }
+      ));
 
-      function isNotDeleted(object){
-        console.log(object.id)
-        console.log(drillGroupId)
-        return object.id!=drillGroupId
-      };
-      let newdrillGroups = this.state.drillGroups.filter(isNotDeleted);
-      console.log(newdrillGroups);
 
-      this.setState(Object.assign({}, {drillGroups:newdrillGroups}, this.state.errors, this.state.user))
     })
     // drillgroupDiv.style.visibility='hidden';
 

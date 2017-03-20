@@ -22,12 +22,12 @@ passport.use(new LocalStrategy(
     console.log('username ', email);
 		db.User.findOne({where: {email: email}})
       .then((user) => {
-        if(!user) return done(null, false);
         console.log(user)
+        if(!user) return done(null, false);
         return Promise.all([user,db.User.validPassword(password, user.password)])
       })
       .then(([user,isMatch]) => {
-        console.log(isMatch)
+        console.log('\n\n\n\n----isMatch----\n\n',isMatch);
           if (!isMatch) {
             return done(null, false)
           } else {
