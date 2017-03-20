@@ -127,7 +127,8 @@ class Handlers {
     console.log(this.state.user.token);
     sendFetch(`/drill-groups/1`, 'GET', {}, {token:this.state.user.token})
     .then((json)=>{
-      this.setState({path: json.path})
+      console.log(json)
+      this.setState(Object.assign({}, {path:`/drill-groups/1`, drillGroup:json}))
     })
   }
 
