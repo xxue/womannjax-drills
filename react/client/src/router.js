@@ -179,7 +179,6 @@ export default class Router extends React.Component {
                     index={this.state.index}
                     drills={this.state.drillGroup.drills || [{}]}
                     correctAnswers={this.state.correctAnswers}
-                    max={this.state.drillGroup.drills.length}
                     score={this.state.score}
                     isCorrect={this.state.isCorrect}
                     finishDrillGroup={this.finishDrillGroup}

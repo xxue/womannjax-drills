@@ -247,12 +247,14 @@ class Handlers {
   startDrill (event){
     event.preventDefault();
     const {currentTarget, target} = event;
-    const drillGroupId = currentTarget.parentNode.id;
-    const myDrillId = currentTarget.parentNode.getAttribute('data-id');
-    const attempts = currentTarget.parentNode.getAttribute('data-attempts');
+
+    const drillGroupId = currentTarget.parentNode.parentNode.parentNode.id;
+    const myDrillId = currentTarget.parentNode.parentNode.parentNode.getAttribute('data-id');
+    console.log(drillGroupId,myDrillId);
+    const attempts = currentTarget.parentNode.parentNode.parentNode.getAttribute('data-attempts');
     sendFetch(`/drill-groups/${drillGroupId}`, 'GET', {}, {token:this.state.user.token})
     .then((json)=>{
-      console.log(json)
+      console.log('This is what we got ',json)
       this.setState(Object.assign(
         {},
         this.state,

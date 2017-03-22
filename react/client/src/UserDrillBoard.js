@@ -40,8 +40,8 @@ class MyDrill extends React.Component {
       <p>Taken: {this.props.attempts} Time(s)</p>
       <p>Points: {this.props.score}</p>
       <div style={downbutton}>
-      <Button  bsStyle="primary" bsSize="medium" onClick={this.props.onStart}>Start</Button>
-      <Button bsStyle="default" onClick={this.props.onRemove}>Remove</Button>
+      <Button  bsStyle="primary" bsSize="large" onClick={this.props.onStart}>Start</Button>
+      <Button bsStyle="default"  onClick={this.props.onRemove}>Remove</Button>
     </div>
     </div>
     </div>)
